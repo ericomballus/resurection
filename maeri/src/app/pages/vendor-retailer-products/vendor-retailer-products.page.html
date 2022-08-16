@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/vendor-retailer-list"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!totalPrice" (click)="openCart()">
+        <ion-badge slot="end">{{ totalItems }}</ion-badge>
+        <ion-icon color="dark" slot="end" name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col
+      size-sm="12"
+      size-md="12"
+      size-xm="12"
+      size-lg="12"
+      class="ion-align-self-center"
+      [ngClass]="'separationBlock'"
+    >
+      <div
+        class="ion-text-center ion-text-uppercase taille"
+        (click)="displayOrders()"
+      >
+        stock {{retailer.retailerId.company}}
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-list *ngIf="productsItem " lines="full">
+    <ion-item *ngFor="let prod of productsItem" lines="full">
+      <ion-thumbnail class="thumbnailM" slot="start">
+        <img src="{{ prod.url }}" />
+      </ion-thumbnail>
+
+      <ion-input
+        slot="end"
+        placeholder="Entrer commande"
+        type="number"
+        debounce="1500"
+        (ionChange)="getValue($event, prod)"
+      ></ion-input>
+      <ion-label>
+        <p class="instock">
+          {{ 'MENU.in_stock' | translate}}: {{ prod.cassier ? prod.cassier: 0}}
+          cassier
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

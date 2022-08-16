@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>confim-order</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="Close()">
+        <ion-icon slot="end" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      Recent
+    </ion-list-header>
+
+    <ion-item
+      *ngFor="let order of oderTab"
+      (click)="dismiss(order)"
+      detail
+      lines="full"
+    >
+      <ion-icon color="success" name="cash" slot="start"></ion-icon>
+      <ion-label>
+        <p class="totalprice">
+          {{ order.commande.cartdetails.totalPrice }}FCFA
+        </p>
+        <p class="thedate">{{ order.created | date:'medium' }}</p>
+
+        <p class="userName">{{ order.userName}}</p>
+        <p class="tableNumber"><a>table:</a>{{ order.tableNumber}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,63 @@
+<ion-row class="header">
+  <ion-col size="4" size-md="3" size-sm="4">
+    <div class="ion-text-center">name</div>
+  </ion-col>
+
+  <ion-col size="2" size-md="2" size-sm="2">
+    <div class="ion-text-center">Qty</div>
+  </ion-col>
+
+  <ion-col size="3" size-md="3" size-sm="3">
+    <div class="ion-text-center">price</div>
+  </ion-col>
+  <ion-col size="3" size-md="2" size-sm="3" class="ion-align-self-center">
+    <div class="ion-text-center">T.price</div>
+  </ion-col>
+  <ion-col
+    size="2"
+    size-md="2"
+    size-sm="0"
+    class="ion-align-self-center ion-hide-sm-down"
+  >
+    <div class="ion-text-center"></div>
+  </ion-col>
+</ion-row>
+<ion-row
+  *ngFor="let row of products; let i = index"
+  class="data-row data-update"
+  [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+>
+  <ion-col size="4" size-md="3" size-sm="4">
+    <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+      <small class="namesmall"> {{ row.name }}</small>
+    </div>
+  </ion-col>
+
+  <ion-col size="2" size-md="2">
+    <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+      <small>
+        {{ row.quantityRandom ? row.quantityRandom : row.toRemove }}
+      </small>
+    </div>
+  </ion-col>
+
+  <ion-col size="3" size-md="3">
+    <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+      <small class="pricesmall"> {{ row.sellingPrice }}</small>
+    </div>
+  </ion-col>
+  <ion-col size="3" size-md="2" size-sm="3">
+    <div class="ion-text-center ion-text-nowrap">
+      <small class="pricesmall">
+        {{
+          row.quantityRandom
+            ? row.quantityRandom * row.sellingPrice
+            : row.toRemove * row.sellingPrice
+        }}</small
+      >
+    </div>
+  </ion-col>
+  <ion-col class="divIcon ion-hide-sm-down" size="2" size-md="2">
+    <ion-row class="ion-justify-content-between"> </ion-row>
+  </ion-col>
+</ion-row>

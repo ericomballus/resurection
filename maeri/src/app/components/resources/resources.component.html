@@ -1,0 +1,52 @@
+<ion-row class="header-component">
+  <ion-col size-sm="2" size-md="2" size-lg="2">
+    <div class="ion-text-center">name</div>
+  </ion-col>
+  <ion-col size-sm="1" size-md="1" size-lg="1">
+    <div class="ion-text-center">Unit</div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="3">
+    <div class="ion-text-center">En stock</div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="3">
+    <div class="ion-text-center">En vente</div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="3">
+    <div class="ion-text-center">Total</div>
+  </ion-col>
+</ion-row>
+
+<ion-row
+  *ngFor="let prod of products; let i = index"
+  class="data-row data-update"
+  [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+>
+  <ion-col size-sm="2" size-md="2" size-lg="2">
+    <div class="ion-text-start ion-text-uppercase smallSize">
+      {{ prod.name }}
+    </div>
+  </ion-col>
+  <ion-col size-sm="1" size-md="1" size-lg="1">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.sizeUnit }}{{ prod.unitName }}
+    </div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="3">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.quantityItems }}
+    </div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="3">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.quantityStoreFixed }}
+    </div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="3">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.total }}
+    </div>
+  </ion-col>
+</ion-row>

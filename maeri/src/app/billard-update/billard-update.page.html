@@ -1,0 +1,264 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="product">
+    <ion-card *ngIf="product.url">
+      <img [src]="product.url" />
+    </ion-card>
+  </ion-list>
+  <ion-row color="primary">
+    <ion-col size="12">
+      <div padding>
+        <ion-item>
+          <ion-label>Name</ion-label>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="name"
+            type="text"
+            placeholder="Name"
+            [(ngModel)]="product.name"
+            required
+          ></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="!tabRoles.includes(7)">
+          <ion-label
+            >{{ 'MENU.categories' | translate}}: {{product.categoryName ?
+            product.categoryName: ''}}</ion-label
+          >
+          <ion-select interface="popover" (ionChange)="test($event)">
+            <ion-select-option
+              *ngFor="let prod of categorys"
+              value="{{ prod._id }}"
+              >{{ prod.name }}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+        <!--
+          <ion-item>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="purchasingPrice"
+            type="number"
+            placeholder="prix d'achat"
+            [(ngModel)]="product.purchasingPrice"
+            required
+          ></ion-input>
+        </ion-item>
+       -->
+        <ion-item>
+          <ion-label>Selling Price</ion-label>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="sellingPrice"
+            type="number"
+            placeholder="prix de vente"
+            [(ngModel)]="product.sellingPrice"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item *ngIf="saveRandom.getSetting().change_price">
+          <ion-label>Min Selling Price</ion-label>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="acceptPrice"
+            type="number"
+            placeholder="prix de vente min"
+            [(ngModel)]="product.acceptPrice"
+            required
+          ></ion-input>
+        </ion-item>
+        <!--
+          <ion-item>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="superMarketPrice"
+            type="number"
+            placeholder="prix super Marché"
+            [(ngModel)]="product.superMarketPrice"
+            required
+          ></ion-input>
+        </ion-item>
+       -->
+        <ion-item *ngIf="saveRandom.getSetting().sale_Gaz">
+          <ion-label>prix bouteille vide</ion-label>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="bottle_empty_Price"
+            type="number"
+            placeholder="bouteille vide"
+            [(ngModel)]="product.bottle_empty_Price"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item *ngIf="saveRandom.getSetting().sale_Gaz">
+          <ion-label>bouteille pleine</ion-label>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="bottle_full"
+            type="number"
+            placeholder="prix de vente min"
+            [(ngModel)]="product.bottle_full"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item *ngIf="saveRandom.getSetting().sale_Gaz">
+          <ion-label>bouteille vide</ion-label>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="bottle_empty"
+            type="number"
+            placeholder="prix de vente min"
+            [(ngModel)]="product.bottle_empty"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item *ngIf="saveRandom.getSetting().sale_Gaz">
+          <ion-label>bouteille total</ion-label>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="bottle_total"
+            type="number"
+            placeholder="prix de vente min"
+            [(ngModel)]="product.bottle_total"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item *ngIf="userStore.length == 1">
+          <ion-label>{{userStore[0].name}}</ion-label>
+        </ion-item>
+        <ion-item *ngIf="userStore.length > 1 && !tabRoles.includes(7)">
+          <ion-label>{{ 'MENU.store' | translate}}</ion-label>
+          <ion-select
+            cancelText="cancel"
+            okText="Okay"
+            interface="popover"
+            (ionChange)="assignStore($event)"
+          >
+            <ion-select-option
+              *ngFor="let role of userStore"
+              value="{{ role.id }}"
+              >{{ role.name }}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+        <!--
+          <ion-item>
+          <ion-label class="ion-text-wrap">
+            <h2>Masse (g):</h2>
+          </ion-label>
+          <ion-input type="number" [(ngModel)]="product.masse"></ion-input>
+        </ion-item>
+       -->
+        <ion-item *ngIf="useBonus">
+          <ion-label>Bonus</ion-label>
+          <ion-input
+            desabled="!tabRoles.includes(7)"
+            name="bonus"
+            type="number"
+            placeholder="product point"
+            [(ngModel)]="product.bonus"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            name="image"
+            type="file"
+            (change)="readUrl($event)"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <h2>Stock Min Alert</h2>
+          </ion-label>
+          <ion-input type="number" [(ngModel)]="stock_min"></ion-input>
+        </ion-item>
+        <ion-item
+          button
+          (click)="pickResource()"
+          *ngIf="saveRandom.getSetting().use_resource"
+        >
+          <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+          <ion-label>Resources</ion-label>
+        </ion-item>
+      </div>
+      <ion-row *ngIf="resourceList && resourceList.length">
+        <ion-col size="12">
+          <div class="ion-text-uppercase ion-text-center">
+            <small>resources</small>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="header-row" *ngIf="resourceList && resourceList.length">
+        <ion-col size="3" class="ion-align-self-center">
+          <div class="ion-text-center">{{ 'MENU.name' | translate}}</div>
+        </ion-col>
+
+        <ion-col size="3" class="ion-align-self-center">
+          <div class="ion-text-center">{{ 'MENU.quantity' | translate}}</div>
+        </ion-col>
+        <ion-col size="3" class="ion-align-self-center">
+          <div class="ion-text-center">{{ 'MENU.unit' | translate}}</div>
+        </ion-col>
+
+        <ion-col size="3" class="ion-align-self-center">
+          <div class="ion-text-center">Action</div>
+        </ion-col>
+      </ion-row>
+      <ion-row
+        *ngFor="let prod of resourceList; let i= index"
+        class="data-row data-update"
+        [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      >
+        <ion-col size="3" class="ion-align-self-center">
+          <div class="ion-text-center">{{prod.name}}</div>
+        </ion-col>
+
+        <ion-col size="3" class="ion-align-self-center">
+          <div class="ion-text-center">{{prod.quantity}}</div>
+        </ion-col>
+        <ion-col size="3" class="ion-align-self-center">
+          <div class="ion-text-center">{{prod.unitName}}</div>
+        </ion-col>
+        <ion-col size="3" class="ion-align-self-center">
+          <div class="ion-text-center">
+            <ion-button
+              *ngIf="!tabRoles.includes(7)"
+              fill="clear"
+              (click)="deleteResource(prod)"
+              color="primary"
+            >
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon
+            ></ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+      <div padding></div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <!-- [disabled]="form.invalid"-->
+    <ion-col>
+      <div padding>
+        <ion-button
+          color="danger"
+          size="large"
+          (click)="update()"
+          expand="block"
+          >{{ 'MENU.save' | translate}}</ion-button
+        >
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

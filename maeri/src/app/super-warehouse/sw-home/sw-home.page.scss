@@ -1,0 +1,30 @@
+#notification-button {
+  position: relative;
+  // width: 42px;
+  top: 1px;
+  right: 1px;
+  overflow: visible !important;
+}
+
+#notifications-badge {
+  background-color: red;
+  position: absolute;
+  top: -5px;
+  right: -3px;
+  border-radius: 100%;
+}
+.stock-alert {
+  --ion-background-color: rgb(241, 75, 75);
+  --color: white;
+  opacity: 0.8;
+  .instore {
+    color: white;
+  }
+  .instock {
+    color: white;
+  }
+  .btnWarehouse {
+    --border-color: black;
+    --color: black;
+  }
+}

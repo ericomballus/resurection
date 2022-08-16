@@ -1,0 +1,410 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="outline" color="light">
+        <ion-icon color="light" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      <ion-button
+        (click)="addOrdonnance()"
+        fill="outline"
+        color="light"
+        *ngIf="pet == 'ordonnance'"
+      >
+        ordonnance
+        <ion-icon color="light" slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-segment
+      (ionChange)="segmentChanged($event)"
+      scrollable
+      value="{{ pet }}"
+      [(ngModel)]="pet"
+      style="padding: 0px; height: 20px; font-size: 8px"
+    >
+      <ion-segment-button
+        class="btnseg"
+        value="parameter"
+        style="text-align: center"
+      >
+        paramétres
+      </ion-segment-button>
+      <ion-segment-button
+        class="btnseg"
+        value="ordonnance"
+        style="text-align: center"
+      >
+        consultation
+      </ion-segment-button>
+      <ion-segment-button
+        class="btnseg"
+        value="facture"
+        style="text-align: center"
+      >
+        facture
+      </ion-segment-button>
+      <ion-segment-button
+        class="btnseg"
+        value="profile"
+        style="text-align: center"
+      >
+        profil
+      </ion-segment-button>
+      <ion-segment-button
+        class="btnseg"
+        value="hospitalisation"
+        style="text-align: center"
+      >
+        Hospitalisation
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="pet == 'parameter'">
+    <ion-row class="header-component2">
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">date</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">poids</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">température</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center" (click)="addParameter()">
+          tension <ion-icon color="light" slot="end" name="add"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let p of parameter; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-start ion-text-uppercase smallSize">
+          {{p.created | date: "medium" }}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ p.weight}} kg
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ p.temperature}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ p.tension}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="pet == 'ordonnance'">
+    <ion-row class="header-component2">
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">date</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">Réalisé par:</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">Enregistrer par:</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center"></div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let p of ordonnanceList; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="displayMore(p)"
+    >
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-start ion-text-uppercase smallSize">
+          {{p.created | date: "medium" }}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ p.authorId.name}}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ p.senderId.name}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize"></div>
+      </ion-col>
+      <ion-col size="12" *ngIf="p.open">
+        <ion-row
+          [ngStyle]="{ 'background-color': i % 2 == 0 ? 'white' : 'white' }"
+        >
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">observation:</div>
+          </ion-col>
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">{{p.comments}}</div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">
+              medicaments prescrits
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row
+          *ngFor="let med of p.medicamentList; let j = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': j % 2 == 0 ? '#f1f1f1' : 'white' }"
+        >
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-start ion-text-uppercase smallSize">
+              {{ j + 1}}
+            </div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-start ion-text-uppercase smallSize">
+              {{ med}}
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="pet == 'facture'">
+    <ion-row class="header-component2">
+      <ion-col size-sm="3">
+        <div class="ion-text-center">
+          <small>Le: </small>
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3">
+        <div class="ion-text-center">
+          <small>montant</small>
+        </div>
+      </ion-col>
+      <ion-col size-sm="3">
+        <div class="ion-text-center">
+          <small></small>
+        </div>
+      </ion-col>
+      <ion-col size-sm="3"> </ion-col>
+    </ion-row>
+    <ion-row
+      class="data-row data-update"
+      *ngFor="let invoice of invoices let i= index"
+      [ngStyle]="{'background-color': invoice.reimbursed == 1 ? 'red' : 'white' }"
+    >
+      <ion-col>
+        <div class="ion-text-center">{{invoice.created | date: "medium" }}</div>
+      </ion-col>
+
+      <ion-col>
+        <div class="ion-text-center">
+          {{ invoice.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div></ion-col
+      >
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          {{ invoice.userName}}
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-button size="small" (click)="displayDetails(invoice, i)">
+            afficher
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="pet == 'profile'">
+    <ion-row>
+      <ion-col size="12">
+        <div
+          class="ion-text-center ion-text-uppercase myIcon"
+          style="display: block"
+        >
+          <ion-icon
+            style="font-size: 64px"
+            name="person-circle-outline"
+          ></ion-icon>
+        </div>
+        <div class="ion-text-center ion-text-uppercase" style="display: block">
+          {{patient.name}}
+        </div>
+      </ion-col>
+      <ion-col size="3"></ion-col>
+      <ion-col size="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-item>
+                <ion-label>Nom: </ion-label>
+                <ion-input type="text" [(ngModel)]="patient.name"></ion-input>
+              </ion-item>
+            </ion-card-title>
+            <ion-card-subtitle style="font-weight: bold">
+              <ion-item>
+                <ion-label>Nationalité: </ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="patient.nationalite"
+                ></ion-input>
+              </ion-item>
+            </ion-card-subtitle>
+            <ion-card-subtitle style="font-weight: bold">
+              <ion-item>
+                <ion-label>Sexe: </ion-label>
+                <ion-input type="text" [(ngModel)]="patient.sexe"></ion-input>
+              </ion-item>
+            </ion-card-subtitle>
+            <ion-card-subtitle style="font-weight: bold">
+              <ion-item>
+                <ion-label>telephone: </ion-label>
+                <ion-input type="text" [(ngModel)]="patient.phone"></ion-input>
+              </ion-item>
+            </ion-card-subtitle>
+
+            <ion-card-subtitle>
+              <ion-item>
+                <ion-label>ville: </ion-label>
+                <ion-input type="text" [(ngModel)]="patient.ville"></ion-input>
+              </ion-item>
+            </ion-card-subtitle>
+            <ion-card-subtitle>
+              <ion-item>
+                <ion-label>quartier: </ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="patient.quartier"
+                ></ion-input>
+              </ion-item>
+            </ion-card-subtitle>
+            <ion-card-subtitle>
+              <ion-item>
+                <ion-label>religion: </ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="patient.religion"
+                ></ion-input>
+              </ion-item>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="3"></ion-col>
+              <ion-col>
+                <ion-button color="primary" (click)="updatePatient()">
+                  mettre a jour</ion-button
+                >
+              </ion-col>
+              <ion-col size="3"></ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="pet == 'hospitalisation'">
+    <ion-row class="header-component2">
+      <ion-col size-sm="2">
+        <div class="ion-text-center ion-text-uppercase">debut</div>
+      </ion-col>
+      <ion-col size-sm="2">
+        <div class="ion-text-center ion-text-uppercase">fin</div>
+      </ion-col>
+      <ion-col size-sm="2">
+        <div class="ion-text-center ion-text-uppercase">Autorisé Par</div>
+      </ion-col>
+      <ion-col size-sm="2">
+        <div class="ion-text-center ion-text-uppercase">enregistré par:</div>
+      </ion-col>
+
+      <ion-col size-sm="2">
+        <div class="ion-text-center ion-text-uppercase">status</div>
+      </ion-col>
+
+      <ion-col size-sm="2">
+        <div class="ion-text-center ion-text-uppercase">
+          <ion-button
+            (click)="addHosPitalisation()"
+            fill="outline"
+            color="light"
+          >
+            ajouter
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      class="data-row data-update"
+      *ngFor="let hospi of hospitalisationList let i= index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white'  }"
+    >
+      <ion-col size-sm="2">
+        <div class="ion-text-center">
+          {{(hospi.startAt ? hospi.startAt : hospi.created )| date: "medium" }}
+        </div>
+      </ion-col>
+
+      <ion-col size="2">
+        <div class="ion-text-center" *ngIf="hospi.endAt">
+          {{ hospi.endAt| date: "medium"}}
+        </div></ion-col
+      >
+
+      <ion-col size="2">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ hospi.authorId.name}}
+        </div></ion-col
+      >
+      <ion-col size="2">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ hospi.senderId.name}}
+        </div></ion-col
+      >
+      <ion-col
+        size="2"
+        [ngStyle]="{'background-color': hospi.actif ? 'green' : 'red'  }"
+      >
+        <div class="ion-text-center ion-text-uppercase" *ngIf="hospi.actif">
+          En cours...
+        </div>
+        <div class="ion-text-center ion-text-uppercase" *ngIf="!hospi.actif">
+          Terminé
+        </div>
+      </ion-col>
+
+      <ion-col size="2">
+        <div class="ion-text-center ion-text-uppercase" *ngIf="hospi.actif">
+          <ion-button
+            (click)="stopHosP(hospi, i)"
+            fill="outline"
+            color="danger"
+          >
+            arreter ?
+          </ion-button>
+        </div></ion-col
+      >
+    </ion-row>
+  </ion-grid>
+</ion-content>

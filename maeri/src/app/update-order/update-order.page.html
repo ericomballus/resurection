@@ -1,0 +1,279 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="success" (click)="confirmUpdate()">
+        <ion-icon name="checkmark-done-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div #myBill *ngIf="order">
+    <p class="centered" style="text-transform: uppercase; text-align: center">
+      table: {{order.tableNumber}} &nbsp; &nbsp; {{order.userName}}
+    </p>
+    <div>
+      <ion-row class="header-row">
+        <ion-col size="2" size-md="2">
+          <div class="ion-text-center">name</div>
+        </ion-col>
+        <ion-col size="2" size-md="2">
+          <div class="ion-text-center">status</div>
+        </ion-col>
+        <ion-col size="1" size-md="2">
+          <div class="ion-text-center">Qty</div>
+        </ion-col>
+
+        <ion-col class="ion-align-self-center" size="2" size-md="2">
+          <div class="ion-text-center">price</div>
+        </ion-col>
+        <ion-col size="2" size-md="2" class="ion-align-self-center">
+          <div class="ion-text-center">T.price</div>
+        </ion-col>
+        <ion-col size="2" size-md="2" class="ion-align-self-center">
+          <div class="ion-text-center">Action</div>
+        </ion-col>
+      </ion-row>
+      <div *ngFor="let commande of order.commandes; let j= index">
+        <div class="numcommande">
+          commande {{j+1}}
+          <div class="numcommandeprice">
+            total: {{commande.cartdetails.totalPrice |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+        </div>
+
+        <ion-row
+          *ngFor="let row of commande.products; let i= index"
+          class="data-row data-update"
+          [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+        >
+          <!-- gere d'abord le glacés-- debut -->
+
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+              <small class="namesmall"> {{row.item.name}}</small>
+            </div>
+          </ion-col>
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+              <small class="namesmall"> glacé </small>
+            </div>
+          </ion-col>
+          <ion-col
+            class="ion-align-self-center"
+            size="1"
+            size-md="2"
+            *ngIf="row.item.modeG > 0"
+          >
+            <div
+              *ngIf="row.item.modeG > 0"
+              class="ion-text-center ion-text-uppercase"
+            >
+              {{row.item.modeG}}
+            </div>
+          </ion-col>
+
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-wrap">
+              <small class="pricesmall">
+                {{row.item.sellingPrice |
+                currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+              >
+            </div>
+          </ion-col>
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-wrap">
+              <small class="pricesmall">
+                {{row.item.sellingPrice * row.item.modeG |
+                currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+              >
+            </div>
+          </ion-col>
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            *ngIf="row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-wrap">
+              <ion-button
+                size="small"
+                fill="clear"
+                (click)="removeOne(row, commande.products,order.commandes, i, j, 'modeG')"
+              >
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-col>
+          <!-- gere d'abord le glacés-- fin -->
+          <!-- gestion nonglacés-- debut-->
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeNG"
+          >
+            <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+              <small class="namesmall"> {{row.item.name}}</small>
+            </div>
+          </ion-col>
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeNG"
+          >
+            <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+              <small class="namesmall"> non glacé </small>
+            </div>
+          </ion-col>
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeNG"
+          >
+            <div class="ion-text-center ion-text-uppercase">
+              {{row.item.modeNG}}
+            </div>
+          </ion-col>
+
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeNG"
+          >
+            <div class="ion-text-center ion-text-wrap">
+              <small class="pricesmall">
+                {{row.item.sellingPrice |
+                currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+              >
+            </div>
+          </ion-col>
+          <ion-col
+            class="ion-align-self-center"
+            size="2"
+            size-md="2"
+            *ngIf="row.item.modeNG"
+          >
+            <div class="ion-text-center ion-text-wrap">
+              <small class="pricesmall">
+                {{row.item.sellingPrice * row.item.modeNG |
+                currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+              >
+            </div>
+          </ion-col>
+          <ion-col
+            size="2"
+            class="ion-align-self-center"
+            *ngIf="row.item.modeNG"
+          >
+            <div class="ion-text-center ion-text-wrap">
+              <ion-button
+                size="small"
+                fill="clear"
+                (click)="removeOne(row, commande.products,order.commandes, i, j, 'modeNG')"
+              >
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-col>
+          <!-- affichage produit resto-->
+          <ion-col
+            size="2"
+            size-md="2"
+            *ngIf="!row.item.modeNG && !row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+              <small class="namesmall"> {{row.item.name}}</small>
+            </div>
+          </ion-col>
+          <ion-col
+            size="2"
+            size-md="2"
+            *ngIf="!row.item.modeNG && !row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+              <small class="namesmall"> ... </small>
+            </div>
+          </ion-col>
+          <ion-col
+            size="2"
+            size-md="2"
+            *ngIf="!row.item.modeNG && !row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+              <small> {{row.qty}} </small>
+            </div>
+          </ion-col>
+
+          <ion-col
+            size="2"
+            size-md="2"
+            *ngIf="!row.item.modeNG && !row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+              <small class="pricesmall">
+                {{row.item.sellingPrice ? row.item.sellingPrice:
+                row.item.purchasingPrice |
+                currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+              >
+            </div>
+          </ion-col>
+          <ion-col
+            size="2"
+            class="ion-align-self-center"
+            size-md="2"
+            *ngIf="!row.item.modeNG && !row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-nowrap">
+              <small class="pricesmall">
+                {{row.price | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+              >
+            </div>
+          </ion-col>
+          <ion-col
+            size="2"
+            class="ion-align-self-center"
+            *ngIf="!row.item.modeNG && !row.item.modeG"
+          >
+            <div class="ion-text-center ion-text-wrap">
+              <ion-button
+                size="small"
+                fill="clear"
+                (click)="removeOne(row, commande.products,order.commandes, i, j, 'resto')"
+              >
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+  </div>
+</ion-content>

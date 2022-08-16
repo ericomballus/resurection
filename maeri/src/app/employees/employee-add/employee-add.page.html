@@ -1,0 +1,165 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        color="light"
+        fill="outline"
+        (click)="closeModal()"
+        *ngIf="!Changes"
+        >{{'MENU.close' | translate}}</ion-button
+      >
+      <ion-button
+        color="light"
+        fill="outline"
+        (click)="updateCancel()"
+        *ngIf="Changes"
+        >{{'MENU.cancel' | translate}}</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #form="ngForm" (ngSubmit)="register(form)" *ngIf="addemplpoye">
+    <div padding>
+      <ion-item>
+        <ion-label position="floating">{{ 'MENU.name' | translate}}</ion-label>
+        <ion-input
+          name="name"
+          type="text"
+          ngModel
+          required
+          [(ngModel)]="OneUser.name"
+        ></ion-input>
+      </ion-item>
+      <!--
+        <ion-item>
+        <ion-input
+          name="email"
+          type="email"
+          placeholder="your@email.com"
+          ngModel
+          required
+          [(ngModel)]="userEmail"
+        ></ion-input>
+      </ion-item>
+        interface="popover"
+         multiple="true"
+          cancelText="cancel"
+          okText="Okay"
+          <ion-select (ionChange)="test($event)" interface="popover">
+          <ion-select-option
+            *ngFor="let onerole of roles"
+            value="{{ onerole._id }}"
+            >{{ onerole.name }}</ion-select-option
+          >
+        </ion-select>
+     -->
+      <ion-item>
+        <ion-input
+          name="poste"
+          type="texte"
+          placeholder="poste occupé"
+          ngModel
+          required
+          [(ngModel)]="OneUser.poste"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label (click)="test()">role</ion-label>
+        <div><small>{{userselectRole}}</small></div>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">{{ 'MENU.phone' | translate}}</ion-label>
+        <ion-input
+          name="telephone"
+          type="number"
+          ngModel
+          required
+          [(ngModel)]="OneUser.telephone"
+        ></ion-input>
+      </ion-item>
+      <ion-item *ngIf="storeList.length > 1">
+        <ion-label>{{'MENU.store' | translate}}</ion-label>
+        <ion-select
+          cancelText="cancel"
+          okText="Okay"
+          interface="popover"
+          (ionChange)="assignSore($event)"
+        >
+          <ion-select-option
+            *ngFor="let store of storeList"
+            value="{{ store.id }}"
+            >{{ store.name }}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        {{ 'MENU.password' | translate}}
+        <ion-input
+          name="password"
+          type="password"
+          ngModel
+          required
+          [(ngModel)]="OneUser.password"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          name="confirm"
+          type="password"
+          placeholder="Password again"
+          ngModel
+          required
+          [(ngModel)]="OneUser.confirm"
+        ></ion-input>
+      </ion-item>
+    </div>
+    <div padding>
+      <ion-button
+        color="danger"
+        size="large"
+        type="submit"
+        [disabled]="form.invalid"
+        expand="block"
+        >{{ 'MENU.save' | translate}}</ion-button
+      >
+    </div>
+  </form>
+</ion-content>
+
+<!--
+<div class="divtable animated bounceInLeft slow delay-1s">
+    <div>
+      <table class="tableh2">
+        <tr class="firstcolone">
+          <th>No:</th>
+          <th>name</th>
+          <th>email</th>
+          <th>poste</th>
+          <th>password</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let emp of user; index as i">
+          <td class="un">{{ i + 1 }}</td>
+          <td class="un">{{ emp.name }}</td>
+          <td class="deux">{{ emp.email }}</td>
+          <td class="trois">{{ emp.poste }}</td>
+          <td class="trois">{{ emp.password }}</td>
+
+          <td>
+            <ion-button
+              color="primary"
+              fill="clear"
+              (click)="changesUpdate(emp)"
+            >
+              <ion-icon class="btnicone" name="add"></ion-icon>
+            </ion-button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+-->

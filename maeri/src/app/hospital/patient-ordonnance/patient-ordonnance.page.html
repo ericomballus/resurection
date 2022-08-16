@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title color="light">ordonnance</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="outline" color="light">
+        <ion-icon color="light" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-sm="4" size-md="4" size-lg="4">
+        <div class="ion-text-center">{{patient.name}}</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2"></ion-col>
+
+      <ion-col size-sm="4" size-md="4" size-lg="4">
+        <div class="ion-text-start ion-text-uppercase">choisir le docteur</div>
+      </ion-col>
+
+      <ion-col size-sm="4" size-md="4" size-lg="4">
+        <div class="ion-text-center ion-text-uppercase">
+          <select
+            name="pets"
+            id="pet-select"
+            (change)="selectedDoctor($event.target)"
+          >
+            <option value="" style="text-transform: uppercase">docteur</option>
+            <option
+              value="{{ user._id }}"
+              *ngFor="let user of doctorList let i= index"
+              style="
+                text-transform: uppercase;
+                font-size: 15px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                padding: 5px;
+              "
+            >
+              {{ user.name }}
+            </option>
+          </select>
+        </div>
+      </ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2"></ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Nom medicament</ion-label>
+          <ion-input
+            name="religion"
+            type="texte"
+            [(ngModel)]="medicamentName"
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">
+          <ion-button (click)="addMedicament()" color="primary">
+            ajouter
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size="2"> </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="medicamentList.length">
+      <ion-col size="12">
+        <div class="ion-text-center ion-text-uppercase">
+          liste des médicaments
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let m of medicamentList; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="2"> </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-start ion-text-uppercase">{{ i + 1 }}</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase">{{m}}</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase">
+          <ion-button (click)="removeToList(i)" color="danger">
+            supprimer
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size="2"> </ion-col>
+    </ion-row>
+
+    <ion-row style="background-color: #f1f1f1">
+      <ion-col size-sm="12" size-md="12" size-lg="12">
+        <div class="ion-text-center ion-text-uppercase">Observation:</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2"></ion-col>
+      <ion-col size="8">
+        <ion-textarea
+          [(ngModel)]="comments"
+          rows="10"
+          cols="6"
+          placeholder="ajouter des observations du médecin ici..."
+          maxlength="200"
+          autoGrow="true"
+        ></ion-textarea>
+      </ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+
+    <ion-row style="background-color: #f1f1f1">
+      <ion-col size-sm="12" size-md="12" size-lg="12">
+        <div class="ion-text-center ion-text-uppercase">
+          <ion-button (click)="save()" color="primary">
+            enregistrer
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

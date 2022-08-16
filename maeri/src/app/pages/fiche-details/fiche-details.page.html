@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/fiche-list"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row color="primary" class="header-component">
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">name</div>
+    </ion-col>
+
+    <ion-col size-sm="1" size-md="1" size-lg="1">
+      <div class="ion-text-center ion-text-uppercase">S.I</div>
+    </ion-col>
+
+    <ion-col size-sm="1" size-md="1" size-lg="1">
+      <div class="ion-text-center ion-text-uppercase">Qté</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">S.F</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">Qté.Vendu</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">P.U</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">Prix</div>
+    </ion-col>
+  </ion-row>
+  <ion-row
+    *ngFor="let prod of fiche.list let i= index"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    class="row-component"
+  >
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-start ion-text-uppercase" style="font-weight: bold">
+        {{prod.name}}
+      </div>
+    </ion-col>
+    <ion-col size-sm="1" size-md="1" size-lg="1" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.quantityStore ? prod.quantityStore: 0}}
+      </div>
+    </ion-col>
+
+    <ion-col size-sm="1" size-md="1" size-lg="1" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.pointage ? prod.pointage: 0}}
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.stockFinale ? prod.stockFinale: 0}}
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.ventes ? prod.ventes: 0}}
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.sellingPrice | currency: "FCFA":"symbol":"3.0-0"}}
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.ventes * prod.sellingPrice | currency: "FCFA":"symbol":"3.0-0"}}
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col
+      offset="8"
+      size-sm="2"
+      size-md="2"
+      size-lg="2"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase">TOTAL</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{totalPrice | currency: "FCFA":"symbol":"3.0-0"}}
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

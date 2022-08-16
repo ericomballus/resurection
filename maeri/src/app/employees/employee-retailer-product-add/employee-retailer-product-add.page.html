@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="save()"> SAVE </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment
+    (ionChange)="segmentChanged($event)"
+    scrollable
+    value="{{ pet }}"
+    [(ngModel)]="pet"
+  >
+    <ion-segment-button
+      class="btnseg"
+      *ngFor="let elt of storeTypeTab; let i = index"
+      value="{{ elt }}"
+    >
+      {{ elt }}
+    </ion-segment-button>
+  </ion-segment>
+  <!--
+    <app-pick
+    *ngIf="afficheResource"
+    [multiStoreProducts]="multiStoreResourceitem"
+    (valueChange)="IncommingItems($event)"
+  >
+  </app-pick>
+
+  
+ -->
+  <app-pick
+    *ngIf="pet === 'bar' && !afficheResource"
+    [multiStoreProducts]="multiStoreProductitem"
+    (valueChange)="IncommingItems($event)"
+  >
+  </app-pick>
+  <app-pick
+    *ngIf="pet === 'services' && !afficheResource"
+    [multiStoreProducts]="multiStoreService"
+    (valueChange)="IncommingItems($event)"
+  >
+  </app-pick>
+  <app-pick
+    *ngIf="pet === 'shop' && !afficheResource"
+    [multiStoreProducts]=" multiStoreList"
+    (valueChange)="IncommingItems($event)"
+  >
+  </app-pick>
+</ion-content>

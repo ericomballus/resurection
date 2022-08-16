@@ -1,0 +1,29 @@
+.header-r {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+  ion-col div {
+    text-transform: uppercase;
+    font-size: 9px;
+  }
+}
+
+.data-row {
+  border-bottom: 1px solid black;
+}
+
+.data-update {
+  //background: var(--ion-color-success);
+}
+
+ion-col {
+  font-size: 10px;
+  // text-align: center;
+}
+ion-input {
+  --padding-start: 0px;
+  --padding-end: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+  border: 1px solid black;
+  // font-size: 1.6rem;
+}

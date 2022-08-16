@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="success" (click)="dismiss()">
+        close
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="customer" style="padding: 10px">
+    <ion-row>
+      <ion-col size="12">
+        <div class="ion-text-center">
+          <ion-icon
+            style="width: 80px; height: 80px"
+            name="person-outline"
+          ></ion-icon>
+          <h3>CLIENT INFO</h3>
+        </div>
+      </ion-col>
+      <ion-col size="12">
+        <ion-item>
+          <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+          <ion-label>
+            <h6 style="font-weight: bold">Nom client</h6>
+            <small>{{customer.name}}</small>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="call"></ion-icon>
+          <ion-label>
+            <h6 style="font-weight: bold">Telephone</h6>
+            <small>{{customer.phone}}</small>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="map-outline"></ion-icon>
+          <ion-label>
+            <h6 style="font-weight: bold">Ville</h6>
+            <small>{{customer.ville}}</small>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="home"></ion-icon>
+
+          <ion-label>
+            <h6 style="font-weight: bold">Quartier</h6>
+            <small>{{customer.quartier}}</small>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="basket-outline"></ion-icon>
+
+          <ion-label>
+            <h6 style="font-weight: bold">Visites</h6>
+            <small>{{nbrVisite}}</small>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="calendar-outline"></ion-icon>
+
+          <ion-label>
+            <h6 style="font-weight: bold">Derniére visite</h6>
+            <small>{{lastVisite | date:'medium'}}</small>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

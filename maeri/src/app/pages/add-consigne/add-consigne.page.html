@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="success" (click)="save()">
+        save <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+      <ion-button color="danger" (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="header-row">
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">name</div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">Type</div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">Quantity</div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">Prix</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="allCart">
+    <ion-row
+      *ngFor="let row of allCart.products let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="3" size-md="3" size-xm="3">
+        <div class="ion-text-center ion-text-uppercase">
+          <small class="namesmall"> {{row.item.name}}</small>
+        </div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-xm="3">
+        <ion-input
+          placeholder="cassier"
+          type="number"
+          debounce="500"
+          (ionChange)="getCassierValue($event, row)"
+        ></ion-input>
+      </ion-col>
+
+      <ion-col size="3" size-md="3" size-xm="3">
+        <ion-input
+          placeholder="bouteille"
+          type="number"
+          debounce="500"
+          (ionChange)="getBouteilleValue($event, row)"
+        ></ion-input>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-xm="3">
+        <ion-input
+          placeholder="prix"
+          type="number"
+          debounce="500"
+          (ionChange)="getConsigneCoast($event, row)"
+        ></ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

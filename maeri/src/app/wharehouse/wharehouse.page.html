@@ -1,0 +1,316 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ 'MENU.stock' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button size="small">
+        {{ userName }}
+        <ion-icon slot="end" name="contact"></ion-icon>
+      </ion-button>
+      <ion-button
+        fill="clear"
+        (click)="this.router.navigateByUrl('ravitaillement')"
+        size="small"
+        *ngIf="warehousman"
+      >
+        Ravitaillement
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <!--<ion-menu-button autoHide="false"></ion-menu-button>-->
+
+      <ion-back-button
+        *ngIf="!vendorRole && !warehousman"
+        defaultHref="/start"
+      ></ion-back-button>
+      <ion-back-button
+        *ngIf="vendorRole && !warehousman"
+        defaultHref="/vendor-start"
+      ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment
+    *ngIf="storeTypeTab.length > 1"
+    (ionChange)="segmentChanged($event)"
+    scrollable
+    value="{{ pet }}"
+    [(ngModel)]="pet"
+  >
+    <ion-segment-button
+      class="btnseg"
+      *ngFor="let elt of storeTypeTab; let i = index"
+      value="{{ elt }}"
+    >
+      {{ elt }}
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- 
+    <app-displaystock
+    *ngIf="productsItem  && !multiStore"
+    lines="full"
+    [hidden]="!btnProducts"
+    [products]="productsItem"
+  ></app-displaystock>
+    <ion-segment
+    color="tertiary"
+    (ionChange)="segmentChanged($event)"
+    scrollable
+    [(ngModel)]="pet"
+  >
+    <ion-segment-button value="product" checked>
+      <ion-label>{{ 'MENU.drinks' | translate}}</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="resourceItem">
+      <ion-label>resource</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+    
+    prodcuts multistore
+  <ion-segment-button value="productResto">
+      <ion-label>{{ 'MENU.dishes' | translate}}</ion-label>
+    </ion-segment-button>
+     *ngIf="pet === 'bar'"
+  -->
+  <div *ngIf="pet === 'bar'">
+    <ion-slides pager="true">
+      <ion-slide *ngFor="let prod of multiStoreProductitem; let i = index">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div class="ion-text-center ion-text-uppercase">
+                <h4>store {{ prod.storeName ? prod.storeName: 'no name' }}</h4>
+              </div>
+            </ion-col>
+          </ion-row>
+          <app-displaystock
+            class="compo"
+            lines="full"
+            [products]="prod"
+          ></app-displaystock>
+        </ion-grid>
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <ion-slides pager="true" *ngIf="pet === 'services'">
+    <ion-slide *ngFor="let resources of multiStoreService; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>
+                store {{ resources.storeName ? resources.storeName : "no name"
+                }}
+              </h4>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="header-component">
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">name</div>
+          </ion-col>
+          <ion-col size-sm="1" size-md="1" size-lg="1">
+            <div class="ion-text-center">Unit</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">En stock</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">En vente</div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Total</div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          *ngFor="let prod of resources; let i = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+        >
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-start ion-text-uppercase smallSize">
+              {{ prod.name }}
+            </div>
+          </ion-col>
+          <ion-col size-sm="1" size-md="1" size-lg="1">
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ prod.quantityItems }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ prod.quantityStore }}
+            </div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ prod.quantityItems + prod.quantityStore }}
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+
+  <ion-slides pager="true" *ngIf="pet === 'shop'">
+    <ion-slide *ngFor="let shopList of multiStoreList; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>
+                store {{ shopList.storeName ? shopList.storeName : "no name" }}
+              </h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row
+          class="header-component"
+          *ngIf="!saveRandom.getSetting().sale_Gaz"
+        >
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">name</div>
+          </ion-col>
+          <ion-col size-sm="1" size-md="1" size-lg="1">
+            <div class="ion-text-center">Unit</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">En stock</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">En vente</div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Total</div>
+          </ion-col>
+        </ion-row>
+        <ion-row
+          class="header-component"
+          *ngIf="saveRandom.getSetting().sale_Gaz"
+        >
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">name</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">Pleine</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">vide</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">En stock</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">En vente</div>
+          </ion-col>
+
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">Total Btl</div>
+          </ion-col>
+        </ion-row>
+        <div *ngIf="!saveRandom.getSetting().sale_Gaz">
+          <ion-row
+            *ngFor="let prod of shopList; let i = index"
+            class="data-row data-update"
+            [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+          >
+            <ion-col size-sm="2" size-md="2" size-lg="2">
+              <div class="ion-text-start ion-text-uppercase smallSize">
+                {{ prod.name }}
+              </div>
+            </ion-col>
+            <ion-col size-sm="1" size-md="1" size-lg="1">
+              <div class="ion-text-center ion-text-uppercase smallSize"></div>
+            </ion-col>
+
+            <ion-col size-sm="3" size-md="3" size-lg="3">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                {{ prod.quantityItems }}
+              </div>
+            </ion-col>
+
+            <ion-col size-sm="3" size-md="3" size-lg="3">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                {{ prod.quantityStore }}
+              </div>
+            </ion-col>
+            <ion-col size-sm="3" size-md="3" size-lg="3">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                {{ prod.quantityItems + prod.quantityStore }}
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <div *ngIf="saveRandom.getSetting().sale_Gaz">
+          <ion-row
+            *ngFor="let prod of shopList; let i = index"
+            class="data-row data-update"
+            [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+          >
+            <ion-col size-sm="2" size-md="2" size-lg="2">
+              <div class="ion-text-start ion-text-uppercase smallSize">
+                {{ prod.name }}
+              </div>
+            </ion-col>
+            <ion-col size-sm="2" size-md="2" size-lg="2">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                {{prod.bottle_full ? prod.bottle_full : 0}}
+              </div>
+            </ion-col>
+            <ion-col size-sm="2" size-md="2" size-lg="2">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                {{prod.bottle_empty ? prod.bottle_empty : 0}}
+              </div>
+            </ion-col>
+
+            <ion-col size-sm="2" size-md="2" size-lg="2">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                {{ prod.quantityItems }}
+              </div>
+            </ion-col>
+
+            <ion-col size-sm="2" size-md="2" size-lg="2">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                {{ prod.quantityStore }}
+              </div>
+            </ion-col>
+            <ion-col size-sm="2" size-md="2" size-lg="2">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                {{ prod.bottle_empty + prod.bottle_full }}
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+
+  <!-- prodcuts resto here 
+  <app-restostock
+    *ngIf="productResto"
+    lines="full"
+    [hidden]="!btnResto"
+    [products]="productResto"
+  ></app-restostock>
+  -->
+  <app-resources
+    *ngIf="resourceItem && pet === 'resource'"
+    lines="full"
+    [products]="resourceItem"
+  >
+  </app-resources>
+</ion-content>

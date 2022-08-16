@@ -1,0 +1,120 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/sale-per-day"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="inventory">
+    <ion-row class="header-row">
+      <ion-col size="4" class="ion-align-self-center">
+        <div class="ion-text-center">name</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Start</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Out</div>
+      </ion-col>
+      <ion-col size="1" class="ion-align-self-center">
+        <div class="ion-text-center">F</div>
+      </ion-col>
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center">Lost</div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div *ngIf="inventory">
+    <ion-row
+      *ngFor="let row of inventory; let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="4" class="ion-align-self-center">
+        <div class="ion-text-center">{{row.prod.name}}</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">
+          {{row.lastQuantityIn ? row.lastQuantityIn : 0}}
+        </div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">
+          {{row.quantityOUT >= 0 ? row.quantityOUT: 0}}
+        </div>
+      </ion-col>
+
+      <ion-col size="1" class="ion-align-self-center">
+        <div class="ion-text-center">
+          {{row.incommingValue ? row.incommingValue :0}}
+        </div>
+      </ion-col>
+      <ion-col size="3" class="ion-align-self-center">
+        <div
+          class="ion-text-center"
+          [ngStyle]="{'background-color': row.quantityOUT > 0 ? 'white' : row.quantityOUT < 0 ? 'green' : 'red'}"
+        >
+          {{row.surplus ? +row.surplus: row.reste}}
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row [ngStyle]="{'background-color': '#f1f1f1'}">.</ion-row>
+    <ion-row [ngStyle]="{'background-color': '#f1f1f1'}">.</ion-row>
+    <ion-row [ngStyle]="{'background-color': '#f1f1f1'}">.</ion-row>
+    <div *ngIf="inventory">
+      <ion-row class="header-main">
+        <ion-col size="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">Montant caisse</div>
+        </ion-col>
+
+        <ion-col size="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">Vente</div>
+        </ion-col>
+
+        <ion-col size="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">différence</div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4" class="ion-align-self-center">
+          <div class="ion-text-center" style="font-size: 13px">
+            {{cashClose | currency:'FCFA':'symbol':'3.0-0':'fr' }}
+          </div>
+        </ion-col>
+        <ion-col size="4" class="ion-align-self-center">
+          <div class="ion-text-center" style="font-size: 13px">
+            {{totalSale | currency:'FCFA':'symbol':'3.0-0':'fr' }}
+          </div>
+        </ion-col>
+        <ion-col size="4" class="ion-align-self-center">
+          <div
+            [ngStyle]="{'background-color': totalSale - cashClose > 0 ? 'green' : totalSale - cashClose < 0 ? 'red' : 'white'}"
+            class="ion-text-center"
+            style="font-size: 13px"
+          >
+            {{(totalSale - cashClose )| currency:'FCFA':'symbol':'3.0-0':'fr' }}
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <div *ngIf="inventory.length == 0">
+    <ion-row class="data-row data-update">
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center">
+          <h3>NO INVENTORY FOUND</h3>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div>
+    <ion-row class="separation"></ion-row>
+  </div>
+</ion-content>

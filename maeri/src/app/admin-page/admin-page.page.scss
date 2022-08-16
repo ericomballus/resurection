@@ -1,0 +1,110 @@
+.adminflex {
+  display: flex;
+  max-width: 100%;
+}
+
+.box {
+  display: flex;
+  min-width: 25%;
+  height: 70px;
+  flex-grow: 1;
+  //margin: 1%;
+}
+
+.adminflex > .one {
+  background-color: rgb(55, 248, 136);
+}
+
+.adminflex > .two {
+  background-color: rgb(247, 19, 235);
+}
+
+.adminflex > .three {
+  background-color: rgb(12, 155, 238);
+}
+
+.adminflex > .four {
+  background-color: rgb(242, 245, 81);
+}
+
+.btnadmin {
+  position: relative;
+  display: flex;
+  //left: 13px;
+  top: 25px;
+  // z-index: -4;
+  // max-width: 100%;
+}
+
+.listuser ion-button {
+  // width: 7px;
+  position: relative;
+  left: 50%;
+}
+
+.image {
+  width: 55%;
+  // height: 50%;
+  position: relative;
+  top: 10%;
+  left: 20%;
+}
+
+.image p {
+  font-size: 55%;
+  text-align: center;
+}
+
+.footer {
+  width: 100%;
+  color: #fff;
+  font-weight: bold;
+  background: #374168;
+  height: 56px;
+  line-height: 56px;
+  // text-align: center;
+  position: fixed;
+  bottom: 0px;
+}
+.btnfooter ion-button {
+  //--width: 100px;
+  // --height: 100px;
+  // --vertical-align: middle;
+  //  --padding-start: 10px;
+  // --padding-end: 10px;
+  color: rgb(73, 72, 72);
+  font-size: 11px;
+}
+ion-button div {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  // color: black;
+}
+ion-button .btnmenu {
+  display: flex;
+  flex-flow: column nowrap;
+  //color: white
+  align-items: center;
+  // color: black;
+}
+
+ion-button div ion-icon {
+  font-size: 15px;
+}
+.btnfooter2 {
+  color: rgb(73, 72, 72);
+  font-size: 11px;
+  font-weight: bolder;
+}
+ion-button {
+  ion-badge {
+    position: absolute;
+    opacity: 0.9;
+    top: 0.1rem;
+    right: 0.2rem;
+    & ~ ion-icon {
+      margin-right: 1.2rem;
+    }
+  }
+}

@@ -1,0 +1,153 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>admin-product-update</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="closeModal()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="url">
+    <img [src]="url" />
+  </ion-card>
+  <form #form="ngForm" (ngSubmit)="register(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div padding>
+            <ion-item>
+              <ion-label
+                >{{prod.categoryName ? prod.categoryName :
+                "Category"}}</ion-label
+              >
+              <ion-select interface="popover" (ionChange)="test($event)">
+                <ion-select-option
+                  *ngFor="let cat of categorys"
+                  value="{{ cat._id }}"
+                >
+                  {{ cat.name }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label
+                >{{ prod.produceBy ? prod.produceBy : "made By" }}</ion-label
+              >
+              <ion-select interface="popover" (ionChange)="made($event)">
+                <ion-select-option
+                  *ngFor="let made of mades"
+                  value="{{ made._id }}"
+                  >{{ made.name }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                name="name"
+                type="text"
+                placeholder="Name"
+                ngModel
+                required
+                [(ngModel)]="prod.name"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label *ngIf="!prod.sizeUnit">size</ion-label>
+              <ion-input
+                name="sizeUnit"
+                type="number"
+                ngModel
+                required
+                [(ngModel)]="prod.sizeUnit"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label
+                >{{ prod.unitName ? prod.unitName : "choose unit" }}</ion-label
+              >
+              <ion-select interface="popover" (ionChange)="unitMeasure($event)">
+                <ion-select-option value="g">g</ion-select-option>
+                <ion-select-option value="kg">kg</ion-select-option>
+                <ion-select-option value="cl">cl</ion-select-option>
+                <ion-select-option value="l">l</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>purchasing price: </ion-label>
+              <ion-input
+                name="purchasingPrice"
+                type="number"
+                placeholder="prix d'achat"
+                ngModel
+                required
+                [(ngModel)]="prod.purchasingPrice"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>selling price: </ion-label>
+              <ion-input
+                name="sellingPrice"
+                type="number"
+                placeholder="prix de vente"
+                ngModel
+                required
+                [(ngModel)]="prod.sellingPrice"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>pack size: </ion-label>
+              <ion-input
+                name="packSize"
+                type="number"
+                placeholder="pack siize"
+                ngModel
+                required
+                [(ngModel)]="prod.packSize"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>pack price: </ion-label>
+              <ion-input
+                name="packPrice"
+                type="number"
+                placeholder="pack price"
+                ngModel
+                required
+                [(ngModel)]="prod.packPrice"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>ristourne: </ion-label>
+              <ion-input
+                name="ristourne"
+                type="number"
+                placeholder="pack ristourne"
+                ngModel
+                required
+                [(ngModel)]="prod.ristourne"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                name="image"
+                type="file"
+                (change)="readUrl($event)"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+          </div>
+          <div padding>
+            <ion-button color="danger" size="large" type="submit" expand="block"
+              >Register</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

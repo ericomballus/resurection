@@ -1,0 +1,109 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons *ngIf="!order.adminId" slot="start">
+      <ion-back-button
+        defaultHref="/retailer-display-order-proposal"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-buttons *ngIf="order.adminId" slot="start">
+      <ion-back-button
+        defaultHref="/retailer-display-order-proposal"
+      ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label class="tailleLivraison" *ngIf="order.livraisonDateConfirm == 0"
+      >LIVRAISON
+    </ion-label>
+    <ion-datetime
+      class="ion-datetime"
+      *ngIf="order.livraisonDateConfirm == 0 && order.catchRetailer"
+      displayFormat="MMM DD, YYYY HH:mm"
+      pickerFormat="MMM DD, YYYY HH:mm"
+      [value]="order.dateLivraison"
+      (ionChange)="getLivraisonTime($event)"
+    ></ion-datetime>
+    <!-- [disabled]="disable"   displayFormat="h:mm A"-->
+    <ion-button
+      *ngIf="order.catchRetailer"
+      class="btnb"
+      slot="end"
+      size="small"
+      color="light"
+      (click)="cancelProposal()"
+    >
+      annuler
+    </ion-button>
+    <ion-button
+      class="btnb"
+      *ngIf="order.catchRetailer"
+      slot="end"
+      (click)="confirmOrders()"
+    >
+      confirm
+    </ion-button>
+  </ion-item>
+  <ion-row class="second-lastrow">
+    <ion-col size="3">
+      <div class="ion-text-center inte">name</div>
+    </ion-col>
+
+    <ion-col size="3">
+      <div class="ion-text-center inte">price</div>
+    </ion-col>
+
+    <ion-col size="3">
+      <div class="ion-text-center inte">Qty</div>
+    </ion-col>
+    <ion-col size="3">
+      <div class="ion-text-center inte">T.price</div>
+    </ion-col>
+  </ion-row>
+  <ion-row
+    *ngFor="let art of order.commandes; let i= index"
+    class="data-row data-update"
+  >
+    <ion-col size="3">
+      <div class="ion-text-center inte">{{art.item.name}}</div>
+    </ion-col>
+
+    <ion-col size="3">
+      <div class="ion-text-center inte" *ngIf="art.item.packPrice">
+        {{art.item.packPrice | currency:'CFA':'symbol':'3.0-0'}}
+      </div>
+    </ion-col>
+    <ion-col size="3">
+      <div class="ion-text-center inte">
+        <ion-input
+          [ngStyle]="{'background-color': art.alert ? 'red' : 'white'}"
+          slot="end"
+          placeholder="bouteille"
+          type="number"
+          debounce="700"
+          [value]="art.qty"
+          (ionChange)="addIncrement($event, art, i)"
+        ></ion-input>
+      </div>
+    </ion-col>
+
+    <ion-col size="3">
+      <div class="ion-text-center inte">
+        {{art.coast | currency:'CFA':'symbol':'3.0-0'}}
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="order.retailerConfirm">
+    <ion-col size="12">
+      <div class="ion-text-center">commande validé</div>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="!order.retailerConfirm && !order.catchRetailer">
+    <ion-col size="12">
+      <div class="ion-text-center">commande rejetté</div>
+    </ion-col>
+  </ion-row>
+</ion-content>

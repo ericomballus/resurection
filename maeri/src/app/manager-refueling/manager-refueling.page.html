@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="!isSuperManager">
+    <ion-row class="header-component">
+      <ion-col size="3">
+        <div class="ion-text-center">name</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">Quantity</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">Date</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center"></div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let prod of RefuelingList; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="3">
+        <div class="ion-text-start ion-text-uppercase smallSize">
+          {{ prod.name }}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ prod.newquantity }}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase" style="font-size: 12px">
+          {{ prod.created | date: "medium" }}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          <ion-button
+            size="small"
+            (click)="confirmRefueling(prod)"
+            style="font-size: 9px"
+            >confirm</ion-button
+          >
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-slides pager="true" *ngIf="isSuperManager">
+    <ion-slide *ngFor="let shopList of productListTab; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>
+                store {{ shopList.storeName ? shopList.storeName : "no name" }}
+              </h4>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="header-component">
+          <ion-col size="3">
+            <div class="ion-text-center">name</div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="ion-text-center">{{ 'MENU.quantity' | translate}}</div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="ion-text-center">Date</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">{{ 'MENU.status' | translate}}</div>
+          </ion-col>
+        </ion-row>
+        <ion-row
+          *ngFor="let prod of shopList; let i = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+        >
+          <ion-col size="3">
+            <div
+              class="ion-text-start ion-text-uppercase smallSize"
+              style="font-size: 12px"
+            >
+              {{ prod.name }}
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div
+              class="ion-text-center ion-text-uppercase smallSize"
+              style="font-size: 12px"
+            >
+              {{ prod.newquantity }}
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div
+              class="ion-text-center ion-text-uppercase"
+              style="font-size: 12px"
+            >
+              {{ prod.created | date: "medium" }}
+            </div>
+          </ion-col>
+          <ion-col
+            size="3"
+            [ngStyle]="{ 'background-color': prod.confirm ? 'var(--ion-color-success)' : 'var(--ion-color-danger)' }"
+          >
+            <div
+              class="ion-text-center ion-text-uppercase smallSize"
+              style="font-size: 12px"
+            >
+              {{!prod.confirm ? 'waiting...' : 'ok'}}
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

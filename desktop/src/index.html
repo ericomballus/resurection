@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    hello electron
+    <button onclick="printData()">print</button>
+  </body>
+  <script>
+    // const { ipcRenderer } = require("electron");
+    const data = [
+      {
+        type: "text",
+        value: "SAMPLE HEADING",
+        style: `text-align:center;`,
+        css: { "font-weight": "700", "font-size": "18px" },
+      },
+      {
+        type: "text",
+        value: "Secondary text",
+        style: `text-align:left;color: red;`,
+        css: { "text-decoration": "underline", "font-size": "10px" },
+      },
+    ];
+
+    function printData() {
+      ipcRenderer.send("print", JSON.stringify(data));
+    }
+  </script>
+</html>

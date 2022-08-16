@@ -1,0 +1,139 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <p class="centered" style="text-transform: uppercase; text-align: center;">
+      {{orders.userName}}
+    </p>
+    <div>
+      <ion-row class="header-row">
+        <ion-col size="4" size-md="4">
+          <div class="ion-text-center">
+            Qty
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md="4">
+          <div class="ion-text-center">
+            name
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md="4">
+          <div class="ion-text-center">
+            price
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row
+        *ngFor="let row of orders.products; let i= index"
+        class="data-row data-update"
+      >
+        <!-- gere d'abord le glacés-- debut -->
+        <ion-col size="4" size-md="4" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-uppercase">
+            {{row.item.modeG}}
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md="4" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}} glacé</small>
+          </div>
+        </ion-col>
+
+        <ion-col size="4" size-md="4" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice * row.item.modeG |
+              currency:'FCFA'}}</small
+            >
+          </div>
+        </ion-col>
+        <!-- gere d'abord le glacés-- fin -->
+        <ion-col size="4" size-md="4" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase">
+            {{row.item.modeNG}}
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md="4" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}} non glacé</small>
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md="4" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice * row.item.modeNG |
+              currency:'FCFA'}}</small
+            >
+          </div>
+        </ion-col>
+        <!-- affichage produit resto-->
+        <ion-col
+          size="4"
+          size-md="4"
+          *ngIf="!row.item.modeNG && !row.item.modeG"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small> {{row.qty}} </small>
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md="4" *ngIf="!row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}}</small>
+          </div>
+        </ion-col>
+        <ion-col
+          size="4"
+          size-md="4"
+          *ngIf="!row.item.modeNG && !row.item.modeG"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small> {{row.price ? row.price: 0}}</small>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-md="4">
+          <div class="ion-text-center ion-text-wrap">
+            <small> TOTAL:</small>
+            <small class="totalsmall">
+              {{ sum | currency:'FCFA':'symbol':'3.0-0'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col size-md="4">
+          <div class="ion-text-center ion-text-wrap">
+            <div>reçus:</div>
+            <small class="totalsmall">
+              {{ montantR | currency:'FCFA':'symbol':'3.0-0'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col size-md="4">
+          <div class="ion-text-center ion-text-wrap">
+            <div>reste:</div>
+            <small class="totalsmall">
+              {{ reste | currency:'FCFA':'symbol':'3.0-0'}}</small
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <ion-row>
+    <ion-col class="btnv" offset="2" size="8">
+      <div class="ion-text-center">
+        <ion-button color="danger" (click)="closeModal()" fill="clear"
+          >Close</ion-button
+        >
+        <ion-button fill="clear" color="primary" (click)="confirm()">
+          valider
+        </ion-button>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

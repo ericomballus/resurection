@@ -1,0 +1,58 @@
+{
+  "_from": "cordova-plugin-usbprint",
+  "_id": "cordova-plugin-usbprint@0.0.4",
+  "_inBundle": false,
+  "_integrity": "sha512-4e0fQk/8AYaa0Y7JSR1YSE9cNlQFYtCi9zqXmIAhX8FsJFyh9w22A/lyv5UFIgTEEU/XcJbj5v4S9GEBGfdYXA==",
+  "_location": "/cordova-plugin-usbprint",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-usbprint",
+    "name": "cordova-plugin-usbprint",
+    "escapedName": "cordova-plugin-usbprint",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-usbprint/-/cordova-plugin-usbprint-0.0.4.tgz",
+  "_shasum": "2d665231de0d01c194dd67ac5a4114e8689da5fd",
+  "_spec": "cordova-plugin-usbprint",
+  "_where": "C:\\Users\\erico\\conop\\elpis\\maeri",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/ArunYogi/paytm-cordova-plugin/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-usbprint",
+    "platforms": [
+      "android"
+    ]
+  },
+  "dependencies": {},
+  "deprecated": false,
+  "description": "This Plugin allows you to print documents via USB.",
+  "devDependencies": {},
+  "homepage": "https://github.com/ArunYogi/paytm-cordova-plugin#readme",
+  "keywords": [
+    "cordova",
+    "plugin",
+    "USB",
+    "print",
+    "Mobile",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-usbprint",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArunYogi/paytm-cordova-plugin.git"
+  },
+  "version": "0.0.4"
+}

@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar no-border>
+    <ion-menu-button autoHide="false"></ion-menu-button>
+    <ion-buttons style="margin-right: 60%">
+      <ion-searchbar
+        type="text"
+        debounce="500"
+        (ionChange)="getCustomerList($event)"
+      ></ion-searchbar>
+    </ion-buttons>
+    <ion-buttons slot="end" style="font-size: 5px">
+      <ion-button
+        class="custom-btn"
+        color="light"
+        fill="outline"
+        (click)="addPatient()"
+      >
+        nouveau patient
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="margin-right: 60%">
+    <ion-list *ngIf="customerList.length ">
+      <ion-item
+        color="dark"
+        *ngFor="let custo of customerList"
+        (click)="pickcustomer(custo)"
+        ><small style="font-size: 12px; text-transform: uppercase"
+          >{{ custo.name }}</small
+        >
+        &nbsp; &nbsp; &nbsp;
+        <small style="font-size: 12px; text-transform: uppercase"
+          >TEL: {{ custo.phone }}</small
+        ></ion-item
+      >
+    </ion-list>
+  </div>
+  <ion-grid *ngIf="patientTab.length">
+    <ion-row>
+      <ion-col size="12">
+        <div class="ion-text-center ion-text-uppercase">Liste des patients</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="header-component2">
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">name</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">age</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">Sexe</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">quartier</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let p of patientTab; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="pickcustomer(p)"
+    >
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-start ion-text-uppercase smallSize">
+          {{ p.name }}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ p.age}}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ p.sexe}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ p.quartier}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

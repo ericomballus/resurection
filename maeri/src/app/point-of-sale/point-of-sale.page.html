@@ -1,0 +1,350 @@
+<ion-header *ngIf="!isDesktop">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button
+        class="btn-toolbar"
+        [disabled]="!notification"
+        (click)="presentModal()"
+        id="notification-button"
+      >
+        <ion-icon name="notifications-outline"></ion-icon>
+        <ion-badge id="notifications-badge" color="danger"
+          >{{notification.length}}
+        </ion-badge>
+      </ion-button>
+
+      <ion-button class="btn-toolbar" size="small"> {{ userName }} </ion-button>
+
+      <ion-button
+        class="btn-mobile btn-toolbar"
+        fill="outline"
+        *ngIf="!cashOpened"
+        (click)="postCashOpen() "
+      >
+        {{ 'MENU.open_cash' | translate}}
+      </ion-button>
+      <ion-button
+        class="btn-mobile btn-toolbar"
+        fill="outline"
+        *ngIf="cashOpened"
+        (click)="presentAlertPrompt()"
+      >
+        {{ 'MENU.close_cash' | translate}}
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+
+      <ion-button class="btn-toolbar" id="pos-button" size="small">
+        {{ 'MENU.pos' | translate}}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="!isDesktop" class="ion-no-padding">
+  <ion-grid class="customgrid" *ngIf="orders.length == 0">
+    <ion-row *ngIf="orders.length == 0" class="ion-align-items-center">
+      <ion-col class="ion-align-self-center">
+        <div
+          class="ion-text-center ion-text-uppercase"
+          style="font-weight: bold; font-size: 13px"
+        >
+          <h1>MAERI POS</h1>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid
+    class="ion-no-padding"
+    *ngIf="orders.length"
+    style="margin-top: 5px"
+  >
+    <ion-row>
+      <ion-col class="ion-align-self-center">
+        <div
+          class="ion-text-center ion-text-uppercase"
+          style="font-weight: bold"
+        >
+          factures récentes
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="orders.length" class="ion-align-items-center">
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center">
+          <h6>date</h6>
+        </div>
+      </ion-col>
+
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center">
+          <h6>montant</h6>
+        </div>
+      </ion-col>
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center">
+          <h6>name</h6>
+        </div>
+      </ion-col>
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center">
+          <h6>état</h6>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let order of orders let i= index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="viewMobileManageOrder(order)"
+      class="row-orders"
+    >
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase">
+          <h5>{{ order.created | date:'short' }}</h5>
+        </div>
+      </ion-col>
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase">
+          <h5 style="font-weight: bold">
+            {{ order.commande.cartdetails.totalPrice | currency:'FCFA' }}
+          </h5>
+        </div>
+      </ion-col>
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <h5>{{ order.userName}}</h5>
+        </div>
+      </ion-col>
+      <!--
+          
+        -->
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <ion-icon
+            *ngIf="!order.confirm && order.Posconfirm"
+            color="danger"
+            name="checkmark-circle-outline"
+          ></ion-icon>
+
+          <ion-icon
+            *ngIf="order.confirm && order.Posconfirm"
+            color="success"
+            name="checkmark-circle-outline"
+          ></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<!-- desktop view start here-->
+
+<div *ngIf="isDesktop" class="desktop">
+  <div class="content">
+    <div *ngIf="shopAutorisation">
+      <ion-header mode="ios">
+        <ion-toolbar color="primary">
+          <ion-row class="ion-align-items-center"> </ion-row>
+          <ion-buttons slot="end">
+            <ion-button
+              fill="clear"
+              class="link"
+              (click)="this.shopAutorisation = !this.shopAutorisation"
+            >
+              Services
+            </ion-button>
+          </ion-buttons>
+          <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <div class="flex-container" *ngIf="shopAutorisation">
+        <div class="div1">
+          <app-displayitems
+            (valueChange)="displayCart($event)"
+          ></app-displayitems>
+        </div>
+        <div class="div2">
+          <ion-header mode="ios">
+            <ion-toolbar class="toolbarInt">
+              <ion-row>
+                <ion-col size="10" class="col">
+                  <ion-button
+                    fill="clear"
+                    (click)="viewMode = 'invoices';"
+                    [class.active]="viewMode == 'invoices'"
+                  >
+                    Invoices
+                  </ion-button>
+                  <ion-button
+                    fill="clear"
+                    (click)="viewMode = 'orders';"
+                    [class.active]="viewMode == 'orders'"
+                  >
+                    Orders
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-toolbar>
+          </ion-header>
+          <div [ngSwitch]="viewMode">
+            <div *ngSwitchCase="'invoices'">
+              <ion-list>
+                <ion-list-header>
+                  <ion-label>Invoices</ion-label>
+                </ion-list-header>
+                <ion-item
+                  *ngFor="let order of orders"
+                  (click)="displayDetails(order)"
+                  lines="full"
+                >
+                  <a class="iconStart"
+                    ><ion-icon
+                      class="iconDollars"
+                      color="success"
+                      name="cash"
+                    ></ion-icon
+                  ></a>
+                  <ion-label>
+                    <p>
+                      {{ order.commande.cartdetails.totalPrice }}FCFA
+                      <a class="a1">table: {{ order.tableNumber}}</a> <br />
+                      <a class="a2">
+                        {{order.userName}} {{ order.created | date:'medium'
+                        }}</a
+                      >
+                    </p>
+
+                    <p
+                      class="btnStatus"
+                      *ngIf="!order.confirm && order.Posconfirm"
+                    >
+                      <ion-icon
+                        color="danger"
+                        name="checkmark-circle-outline"
+                      ></ion-icon>
+                    </p>
+                    <p
+                      class="tableNumber2 btnStatus"
+                      *ngIf="order.confirm && order.Posconfirm"
+                    >
+                      <ion-icon
+                        color="success"
+                        name="checkmark-circle-outline"
+                      ></ion-icon>
+                    </p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+            <div *ngSwitchCase="'orders'">
+              <app-displayorders
+                [notifications]="desktopTab"
+                (valueChange)="displayCounter($event)"
+              ></app-displayorders>
+            </div>
+            <div *ngSwitchDefault>output33</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!shopAutorisation">
+      <ion-header mode="ios">
+        <ion-toolbar color="primary">
+          <ion-row class="ion-align-items-center"> </ion-row>
+
+          <ion-buttons slot="start">
+            <ion-menu-button
+              color="danger"
+              autoHide="false"
+              *ngIf="cashOpened"
+            ></ion-menu-button>
+            <ion-button
+              fill="outline"
+              class="link"
+              *ngIf="cashOpened"
+              (click)="this.router.navigateByUrl('shop')"
+            >
+              Services</ion-button
+            >
+
+            <ion-button
+              *ngIf="transaction.length"
+              (click)=" this.router.navigateByUrl('procurment-product-item')"
+            >
+              <ion-icon name="notifications-outline"></ion-icon>
+              <ion-badge id="notifications-badge" color="danger"
+                >{{transaction.length}}
+              </ion-badge>
+            </ion-button>
+          </ion-buttons>
+
+          <ion-buttons slot="end">
+            <ion-button
+              color="light"
+              fill="outline"
+              (click)="pickRetailer()"
+              *ngIf="setting && setting.register_customer"
+            >
+              <ion-icon slot="end" name="people-outline"></ion-icon>
+              {{ 'MENU.retailer' | translate}}
+            </ion-button>
+            <!--
+             
+              <ion-button
+              color="light"
+              fill="outline"
+              (click)="displayCustomers()"
+            >
+              <ion-icon slot="end" name="person-outline"></ion-icon>
+              {{ 'MENU.customer' | translate}}
+            </ion-button>
+           -->
+            <ion-button
+              color="light"
+              fill="outline"
+              (click)="this.router.navigateByUrl('consigne')"
+              *ngIf="setting && setting.use_Consigne"
+            >
+              <ion-icon name="document-text-outline"></ion-icon>
+              {{ 'MENU.consigne' | translate}}
+            </ion-button>
+            <ion-button
+              color="light"
+              fill="outline"
+              *ngIf="!cashOpened"
+              (click)="postCashOpen() "
+            >
+              {{ 'MENU.open_cash' | translate}}
+            </ion-button>
+            <ion-button
+              color="light"
+              fill="outline"
+              *ngIf="cashOpened"
+              (click)="presentAlertPrompt()"
+            >
+              {{ 'MENU.close_cash' | translate}}
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <div class="flex-container">
+        <div class="div3">
+          <app-displayinvoices
+            [orders]="orders"
+            (sendOrder)="displayDetails($event)"
+          ></app-displayinvoices>
+        </div>
+        <div class="div4">
+          <app-displayorders
+            [notifications]="desktopTab"
+            (valueChange)="displayCounter($event)"
+          ></app-displayorders>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

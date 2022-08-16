@@ -1,0 +1,47 @@
+p {
+  margin: 0px;
+  padding: 0px;
+  // background-color: #f1f1f1;
+}
+
+.orders {
+  background-color: #f1f1f1;
+  width: 100%;
+  // margin: 0px;
+  // padding: 0px;
+  // background-color: #f1f1f1;
+}
+
+.iconprint {
+  //position: relative;
+  // left: 90%;
+  //bottom: 65%;
+  //width: 500px;
+  margin-left: 15px;
+  //color: aqua;
+}
+
+.thedate {
+  font-size: 8px;
+}
+
+.userName {
+  font-size: 11px;
+  position: absolute;
+  left: 80%;
+  bottom: 8%;
+  color: rgb(250, 52, 52);
+}
+
+.tableNumber {
+  font-size: 9px;
+  position: absolute;
+  left: 50%;
+  bottom: 40%;
+  color: rgb(29, 114, 243);
+}
+
+a {
+  margin-right: 5px;
+  text-transform: uppercase;
+}

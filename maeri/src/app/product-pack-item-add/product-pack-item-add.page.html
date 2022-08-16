@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="titre">{{ 'MENU.packs' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/product-buy']">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="packs" lines="full">
+    <ion-item *ngFor="let pack of packs" lines="full">
+      <ion-label class="ion-text-wrap">
+        <p class="name">{{ pack.name }}</p>
+        <p>{{ pack.purchasingPrice }} -- {{ pack.sellingPrice }}</p>
+        <p class="name">
+          {{ pack.quantity }} * {{pack.itemsInPack}} = {{pack.totalItems}}
+        </p>
+        <!--  
+          <ion-avatar slot="start">
+        <img src="{{ pack.url }}" />
+      </ion-avatar>
+          <p>update: {{ pack.dateupdate | date:'medium' }}</p>-->
+      </ion-label>
+      <ion-button
+        size="small"
+        (click)="presentActionSheet(pack)"
+        color="warning"
+      >
+        <ion-icon name="eye"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

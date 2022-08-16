@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="titre"
+      >{{ 'MENU.invoicesnonpayee' | translate}}</ion-title
+    >
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/point-of-sale"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="header-row">
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>N0</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>montant</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>A.Reduction</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>date</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>client</small>
+      </div>
+    </ion-col>
+
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>name</small>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row
+    *ngFor="let order of invoices let i= index"
+    class="data-row data-update"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    (click)="displayDetails(order)"
+  >
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall"> {{order.numFacture}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall">
+          {{ order.commande.cartdetails.totalPrice |
+          currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+        >
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall">
+          {{ order.commande.montantReduction ? order.commande.montantReduction :
+          0 | currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+        >
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall"> {{ order.created | date:'medium' }}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall"> ""</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall"> {{ order.userName}}</small>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

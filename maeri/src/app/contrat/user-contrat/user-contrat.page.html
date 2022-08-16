@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end" class="btnend">
+      <ion-button (click)="createdContrat()">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase">
+          paiements {{admin.company}}
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="header-component">
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">Start At</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">Montant</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">End At</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">Status</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let contrat of contratList; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="displayDetails(contrat)"
+    >
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ contrat.startAt | date }}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{contrat.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ contrat.endAt | date }}
+        </div>
+      </ion-col>
+
+      <ion-col size="3">
+        <!--
+            <ion-button (click)="updateContrat(contrat)">
+            <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+          </ion-button>
+         -->
+        <div class="ion-text-center ion-text-uppercase">
+          <ion-text color="danger" *ngIf="!contrat.status">
+            <h4>Non payé</h4>
+          </ion-text>
+          <ion-text color="success" *ngIf="contrat.status">
+            <h4>payé</h4>
+          </ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

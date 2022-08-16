@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>cancel-order</ion-title>
+    <ion-buttons slot="start">
+      <ion-button fill="outline" (click)="closeModal()"
+        >Close
+        <ion-icon slot="start" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col>
+      <div class="ion-text-center ion-text-uppercase">
+        <h6 *ngIf="!onAccount && !partially">
+          <small>motif suppression facture</small>
+        </h6>
+        <h6 *ngIf="onAccount"><small>paiement a crédit</small></h6>
+        <h6 *ngIf="partially"><small>paiement partiel</small></h6>
+        <ion-list *ngIf="!onAccount && !partially">
+          <ion-item>
+            <ion-select (ionChange)="suggestion($event)" interface="popover">
+              <ion-select-option value="bacon">Bacon</ion-select-option>
+              <ion-select-option value="olives">Black Olives</ion-select-option>
+              <ion-select-option value="xcheese"
+                >Extra Cheese</ion-select-option
+              >
+              <ion-select-option value="peppers"
+                >Green Peppers</ion-select-option
+              >
+              <ion-select-option value="mushrooms">Mushrooms</ion-select-option>
+              <ion-select-option value="onions">Onions</ion-select-option>
+              <ion-select-option value="pepperoni">Pepperoni</ion-select-option>
+              <ion-select-option value="pineapple">Pineapple</ion-select-option>
+              <ion-select-option value="sausage">Sausage</ion-select-option>
+              <ion-select-option value="Spinach">Spinach</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-col>
+    <!--
+      <ion-col size="12" *ngIf="!annule">
+      <div class="ion-text-center ion-text-uppercase">
+        <h6><small>nom du client</small></h6>
+        <ion-input
+          autocomplete="on"
+          autocorrect="on"
+          clear-input="true"
+          inputmode="text"
+          [(ngModel)]="user.name"
+        ></ion-input>
+      </div>
+    </ion-col>
+    <ion-col size="12" *ngIf="!annule">
+      <div class="ion-text-center ion-text-uppercase">
+        <h6><small>numero de telephone</small></h6>
+        <ion-input
+          autocomplete="on"
+          autocorrect="on"
+          clear-input="true"
+          inputmode="number"
+          [(ngModel)]="user.phone"
+        ></ion-input>
+      </div>
+    </ion-col>
+    -->
+  </ion-row>
+
+  <form
+    [formGroup]="ionicForm"
+    (ngSubmit)="validation()"
+    novalidate
+    *ngIf="!annule"
+  >
+    <ion-item lines="full">
+      <ion-label position="floating">Nom du client</ion-label>
+      <ion-input formControlName="name" type="text" required></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="floating">Telephone</ion-label>
+      <ion-input formControlName="phone" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">ville</ion-label>
+      <ion-input formControlName="ville" type="text" required></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="floating">quartier</ion-label>
+      <ion-input formControlName="quartier" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-row>
+      <ion-col>
+        <ion-button type="submit" color="danger" expand="block"
+          >Submit</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <ion-row>
+    <ion-col offset="4" size="4" *ngIf="annule">
+      <ion-button size="block" color="primary" (click)="valider2()"
+        >valider</ion-button
+      >
+    </ion-col>
+  </ion-row>
+</ion-content>

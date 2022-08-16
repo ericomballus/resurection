@@ -1,0 +1,253 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="titre">
+      {{ 'MENU.invoicesdetails' | translate}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon color="light" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div #myBill>
+    <p
+      class="centered"
+      style="text-transform: uppercase; text-align: center;"
+      *ngIf="company"
+    >
+      {{company}}
+    </p>
+    <p class="centered" style="text-transform: uppercase; text-align: center;">
+      table: {{tableNumber}} &nbsp; &nbsp; {{order.userName}}
+    </p>
+    <div>
+      <ion-row class="header-row">
+        <ion-col size="3" size-md="3">
+          <div class="ion-text-center">
+            name
+          </div>
+        </ion-col>
+        <ion-col size="2" size-md="2">
+          <div class="ion-text-center">
+            status
+          </div>
+        </ion-col>
+        <ion-col size="1" size-md="2">
+          <div class="ion-text-center">
+            Qty
+          </div>
+        </ion-col>
+
+        <ion-col size="3" size-md="3">
+          <div class="ion-text-center">
+            price
+          </div>
+        </ion-col>
+        <ion-col size="3" size-md="2" class="ion-align-self-center">
+          <div class="ion-text-center">
+            T.price
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row
+        *ngFor="let row of order.products; let i= index"
+        class="data-row data-update"
+        [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      >
+        <!-- gere d'abord le glacés-- debut -->
+        <ion-col size="3" size-md="3" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}}</small>
+          </div>
+        </ion-col>
+        <ion-col size="2" size-md="2" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall">
+              glacé
+            </small>
+          </div>
+        </ion-col>
+        <ion-col size="1" size-md="2" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-uppercase">
+            {{row.item.modeG}}
+          </div>
+        </ion-col>
+
+        <ion-col size="3" size-md="3" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice * row.item.modeG |
+              currency:'FCFA'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col
+          class="ion-align-self-center"
+          size="3"
+          size-md="2"
+          *ngIf="row.item.modeG"
+        >
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice * row.item.modeG |
+              currency:'FCFA'}}</small
+            >
+          </div>
+        </ion-col>
+        <!-- gere d'abord le glacés-- fin -->
+        <!-- gestion nonglacés-- debut-->
+        <ion-col size="3" size-md="3" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}}</small>
+          </div>
+        </ion-col>
+        <ion-col size="2" size-md="2" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall">
+              non glacé
+            </small>
+          </div>
+        </ion-col>
+        <ion-col size="1" size-md="2" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase">
+            {{row.item.modeNG}}
+          </div>
+        </ion-col>
+
+        <ion-col size="3" size-md="3" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice | currency:'FCFA'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col
+          class="ion-align-self-center"
+          size="3"
+          size-md="2"
+          *ngIf="row.item.modeNG"
+        >
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice * row.item.modeNG |
+              currency:'FCFA'}}</small
+            >
+          </div>
+        </ion-col>
+        <!-- affichage produit resto-->
+        <ion-col
+          size="3"
+          size-md="3"
+          *ngIf="!row.item.modeNG && !row.item.modeG"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}}</small>
+          </div>
+        </ion-col>
+        <ion-col
+          size="2"
+          size-md="2"
+          *ngIf="!row.item.modeNG && !row.item.modeG"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall">
+              ...
+            </small>
+          </div>
+        </ion-col>
+        <ion-col
+          size="1"
+          size-md="2"
+          *ngIf="!row.item.modeNG && !row.item.modeG"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small> {{row.qty}} </small>
+          </div>
+        </ion-col>
+
+        <ion-col
+          size="3"
+          size-md="3"
+          *ngIf="!row.item.modeNG && !row.item.modeG"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice ? row.item.sellingPrice:
+              row.item.purchasingPrice |
+              currency:'FCFA':'symbol':'3.2-2':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col
+          size="3"
+          class="ion-align-self-center"
+          size-md="2"
+          *ngIf="!row.item.modeNG && !row.item.modeG"
+        >
+          <div class="ion-text-center ion-text-nowrap">
+            <small class="pricesmall">
+              {{row.price | currency:'FCFA':'symbol':'3.2-2':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+      <!--ici total facture montant encaissé et reste-->
+      <ion-row class="ion-align-items-end">
+        <ion-col offset="7" size="5">
+          <div class="ion-text-end ion-text-wrap ion-text-uppercase bigScreen">
+            <small class="totalsmall totaborder">
+              <a>total:</a> {{ sum |
+              currency:'FCFA':'symbol':'3.2-2':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col offset="7" size="5">
+          <div class="ion-text-end ion-text-wrap ion-text-uppercase bigScreen">
+            <small class="totalsmall totaborder">
+              <a>reçus:</a> {{ montantR |
+              currency:'FCFA':'symbol':'3.2-2':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col offset="7" size="5">
+          <div class="ion-text-end ion-text-wrap ion-text-uppercase bigScreen">
+            <small class="totalsmall totaborder">
+              <a>reste:</a>{{ reste |
+              currency:'FCFA':'symbol':'3.2-2':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="!flag && order.confirm && order.Posconfirm">
+        <ion-col size="4" class="calcul pad">
+          <div class="ion-text-center inte">
+            TOTAL: {{ montantR}}
+          </div>
+        </ion-col>
+        <ion-col size="4" class="calcul">
+          <div class="ion-text-center inte"></div>
+        </ion-col>
+        <ion-col size="4" class="calcul pad">
+          <div class="ion-text-center inte">
+            RESTE: {{ reste }}
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <ion-footer *ngIf="order.custumerName">
+    <ion-row>
+      <ion-col offset="2" size="4">
+        <small class="custumer">{{order.custumerName}}</small>
+      </ion-col>
+      <ion-col offset="2" size="4">
+        <small>{{order.custumerPhone}}</small>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</ion-content>

@@ -1,0 +1,419 @@
+<ion-segment
+  (ionChange)="segmentChanged($event)"
+  scrollable
+  value="{{ pet }}"
+  [(ngModel)]="pet"
+  *ngIf="storeTypeTab.length > 1"
+>
+  <ion-segment-button
+    class="btnseg"
+    *ngFor="let elt of storeTypeTab; let i = index"
+    value="{{ elt }}"
+  >
+    {{ elt }}
+  </ion-segment-button>
+</ion-segment>
+
+<ion-slides pager="true" *ngIf="pet === 'bar'">
+  <ion-slide *ngFor="let packs of multiStoreProductitem; let i = index">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>store {{ packs.storeName ? packs.storeName : "no name" }}</h4>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <div *ngIf="packs" lines="full">
+        <div class="divitem nodejs" *ngFor="let pack of packs" lines="full">
+          <div class="inItem inItem3">
+            <p>
+              {{ pack.name }} {{ pack.sizeUnitProduct }}
+              {{ pack.unitNameProduct }}<br />
+              {{ pack.sizePack }} BTLs
+            </p>
+          </div>
+          <!-- [(ngModel)]="pack.inputValue"-->
+          <div class="inItem">
+            <ion-input
+              [(ngModel)]="pack.myValue"
+              slot="end"
+              placeholder="cassier"
+              type="number"
+              debounce="500"
+              (ionChange)="getValue($event, pack)"
+            ></ion-input>
+          </div>
+          <div class="inItem">
+            <ion-input
+              [(ngModel)]="pack.nbrBtl"
+              slot="end"
+              placeholder="btls "
+              type="number"
+              debounce="500"
+              (ionChange)="getValueBtl($event, pack)"
+            ></ion-input>
+          </div>
+          <div class="inItem">
+            <ion-input
+              [disabled]="!randomObj[pack._id]"
+              slot="end"
+              placeholder="{{
+                pack.nbrCassier && pack.nbrBtl
+                  ? pack.nbrCassier * pack.packPrice +
+                    pack.nbrBtl * pack.purchasingPrice
+                  : pack.qty
+                  ? pack.qty * pack.prix
+                  : !pack.nbrCassier && pack.nbrBtl
+                  ? pack.nbrBtl * pack.purchasingPrice
+                  : 0
+              }} Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, pack)"
+            ></ion-input>
+          </div>
+        </div>
+      </div>
+    </ion-grid>
+  </ion-slide>
+</ion-slides>
+<div *ngIf="pet === 'bar' && packs.length == 0">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>{{ "MENU.notfound" | translate }}</h4>
+          </div>
+        </ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+<ion-slides pager="true" *ngIf="pet === 'resto'">
+  <ion-slide *ngFor="let resources of multiStoreResource; let i = index">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>
+              {{ resources.storeName ? resources.storeName : "no name" }}
+            </h4>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <div class="nodejs">
+        <ion-list lines="full" [hidden]="!btnResource">
+          <ion-item *ngFor="let resource of resources" lines="full">
+            <ion-input
+              slot="end"
+              placeholder="Enter "
+              type="number"
+              debounce="1500"
+              (ionChange)="getValueResto($event, resource)"
+            ></ion-input>
+            <ion-input
+              *ngIf="!resource.qty"
+              [disabled]="!randomObj[resource._id]"
+              slot="end"
+              placeholder="prix unitaire {{
+                resource.purchasingPrice ? resource.purchasingPrice : 0
+              }}  Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, resource)"
+            ></ion-input>
+            <ion-input
+              *ngIf="resource.qty"
+              [disabled]="!randomObj[resource._id]"
+              slot="end"
+              placeholder="{{
+                resource.purchasingPrice
+                  ? resource.purchasingPrice * resource.qty
+                  : 0
+              }}Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, resource)"
+            ></ion-input>
+
+            <ion-label>
+              <small>{{ resource.name }}</small>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-grid>
+  </ion-slide>
+</ion-slides>
+<div *ngIf="pet === 'resto' && multiStoreResource.length === 0">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>{{ "MENU.notfound" | translate }}</h4>
+          </div>
+        </ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+<ion-slides pager="true" *ngIf="pet === 'services' && multiStoreService.length">
+  <ion-slide *ngFor="let resources of multiStoreService; let i = index">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>
+              {{ resources.storeName ? resources.storeName : "no name" }}
+            </h4>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <div class="nodejs">
+        <ion-list lines="full">
+          <ion-item *ngFor="let resource of resources" lines="full">
+            <ion-input
+              [(ngModel)]="resource.fisrtValueAdd"
+              slot="end"
+              placeholder="Enter "
+              type="number"
+              debounce="1500"
+              (ionChange)="getValueResto($event, resource)"
+            ></ion-input>
+            <ion-input
+              *ngIf="isRetailer"
+              [disabled]="isRetailer"
+              slot="end"
+              placeholder="prix unitaire {{
+                resource.retailerPrice ? resource.retailerPrice : 0
+              }}  Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, resource)"
+            ></ion-input>
+            <ion-input
+              *ngIf="!resource.qty && !isRetailer"
+              [disabled]="!randomObj[resource._id]"
+              slot="end"
+              placeholder="prix unitaire {{
+                resource.purchasingPrice ? resource.purchasingPrice : 0
+              }}  Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, resource)"
+            ></ion-input>
+            <ion-input
+              *ngIf="resource.qty && !isRetailer"
+              [disabled]="!randomObj[resource._id]"
+              slot="end"
+              placeholder="{{
+                resource.purchasingPrice
+                  ? resource.purchasingPrice * resource.qty
+                  : 0
+              }}Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, resource)"
+            ></ion-input>
+
+            <ion-label>
+              <small>{{ resource.name }}</small>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-grid>
+  </ion-slide>
+</ion-slides>
+<div *ngIf="pet === 'services' && multiStoreService.length === 0">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>{{ "MENU.notfound" | translate }}</h4>
+          </div>
+        </ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+<ion-slides
+  #mySlider2
+  pager="true"
+  *ngIf="pet === 'shop' && multiStoreList.length"
+  (ionSlideDidChange)="slideChange()"
+>
+  <ion-slide *ngFor="let shopList of multiStoreList; let i = index">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>
+              {{ shopList.storeName ? shopList.storeName : "no name" }}
+            </h4>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <div class="nodejs">
+        <ion-list lines="full">
+          <ion-item *ngFor="let pack of shopList" lines="full">
+            <!--
+              <ion-avatar slot="start">
+              <img src="{{ pack.url }}" />
+            </ion-avatar>
+            -->
+            <ion-input
+              [(ngModel)]="pack.fisrtValueAdd"
+              slot="end"
+              placeholder="Enter "
+              type="number"
+              debounce="1500"
+              (ionChange)="getValueResto($event, pack)"
+            ></ion-input>
+
+            <!--
+              <ion-input
+              [disabled]="isRetailer"
+              slot="end"
+              placeholder="prix unitaire {{
+                pack.retailerPrice ? pack.retailerPrice : 0
+              }}  Fcfa"
+              type="number"
+            ></ion-input>
+              <ion-input
+              *ngIf="!isRetailer"
+              [disabled]="!randomObj[pack._id]"
+              slot="end"
+              placeholder="prix unitaire {{
+                pack.purchasingPrice ? pack.purchasingPrice : 0
+              }}  Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, pack)"
+            ></ion-input>
+
+            -->
+            <ion-input
+              [disabled]="!randomObj[pack._id]"
+              slot="end"
+              placeholder="{{
+                pack.purchasingPrice ? pack.purchasingPrice * pack.qty : 0
+              }}Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, pack)"
+            ></ion-input>
+
+            <ion-label>
+              <small>{{ pack.name }}</small>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-grid>
+  </ion-slide>
+</ion-slides>
+<div *ngIf="pet === 'shop' && multiStoreList.length === 0">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>{{ "MENU.notfound" | translate }}</h4>
+          </div>
+        </ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+<ion-slides pager="true" *ngIf="pet === 'resource'">
+  <ion-slide *ngFor="let resources of multiStoreResource; let i = index">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>
+              {{ resources.storeName ? resources.storeName : "no name" }}
+            </h4>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <div class="nodejs">
+        <ion-list lines="full">
+          <ion-item *ngFor="let resource of resources" lines="full">
+            <ion-input
+              [(ngModel)]="resource.fisrtValueAdd"
+              slot="end"
+              placeholder="Enter "
+              type="number"
+              debounce="1500"
+              (ionChange)="getValueResto($event, resource)"
+            ></ion-input>
+            <ion-input
+              *ngIf="!resource.qty"
+              [disabled]="!randomObj[resource._id]"
+              slot="end"
+              placeholder="prix unitaire {{
+                resource.purchasingPrice ? resource.purchasingPrice : 0
+              }}  Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, resource)"
+            ></ion-input>
+            <ion-input
+              *ngIf="resource.qty"
+              [disabled]="!randomObj[resource._id]"
+              slot="end"
+              placeholder="{{
+                resource.purchasingPrice
+                  ? resource.purchasingPrice * resource.qty
+                  : 0
+              }}Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, resource)"
+            ></ion-input>
+
+            <ion-label>
+              <small>{{ resource.name }}</small>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-grid>
+  </ion-slide>
+</ion-slides>
+
+<div pager="true" *ngIf="pet === 'resource' && multiStoreResource.length == 0">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">
+            <h4>{{ "MENU.notfound" | translate }}</h4>
+          </div>
+        </ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+
+<!--
+
+
+  achat des resources
+
+
+
+  
+
+-->

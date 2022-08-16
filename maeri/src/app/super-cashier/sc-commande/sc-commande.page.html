@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>sc-commande</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/sc-home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="AgenceCommande.length">
+    <ion-row class="header-component">
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Name</div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center">Demande</div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center">Disponible</div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center">Reservé</div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center">Reste</div>
+      </ion-col>
+
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center"></div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center">A livré</div>
+      </ion-col>
+
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center">prix.U</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">prix.T</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let com of AgenceCommande; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      style="font-size: 12px"
+    >
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.name}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.qty}}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ com.avaible.quantityItems}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.avaible.reserve ? com.avaible.reserve - com.request.qty : 0 }}
+        </div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.avaible.reserve ? com.avaible.quantityItems -
+          (com.avaible.reserve - com.request.qty) : 0 }}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          <ion-input
+            *ngIf="!originalCommande.scConfirm"
+            slot="end"
+            placeholder="quantité"
+            type="number"
+            debounce="500"
+            (ionChange)="addValue($event, i)"
+          ></ion-input>
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="1"
+        size-md="1"
+        size-lg="1"
+        [ngStyle]="{ 'background-color': com.reject > 0 ? 'var(--ion-color-danger)' : com.reject < 0 ? 'var(--ion-color-success)' : 'white' }"
+      >
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.reject > 0 ? -1 * com.reject : com.reject < 0 ? + com.reject :
+          0}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.sellingPrice|
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.sellingPrice * com.accept|
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

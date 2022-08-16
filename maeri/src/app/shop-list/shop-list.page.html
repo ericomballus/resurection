@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light" fill="outline" (click)="addProduct()">
+        <ion-icon
+          color="light"
+          size="large"
+          slot="icon-only"
+          name="add-outline"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="true"></ion-menu-button>
+      <!--
+        {{'MENU.addcategorie' | translate}}
+      -->
+      <ion-button color="light" fill="outline" (click)="addCategorie()">
+        categorie
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true">
+    <ion-slide *ngFor="let products of multiStoreProductitem; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>{{ products.storeName ? products.storeName: 'no name' }}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-list>
+          <ion-item *ngFor="let prod of products; let j = index">
+            <ion-label>
+              <p>{{ prod.name }}</p>
+              <p>{{ prod.sellingPrice }}</p>
+              <p>{{ prod.purchasingPrice }}</p></ion-label
+            >
+            <ion-button
+              (click)="TransferOne(prod, i, j)"
+              color="primary"
+              slot="end"
+              small
+              *ngIf=" this.saveRandom.getSetting().use_same_variety"
+            >
+              {{ 'MENU.transfer' | translate}}
+            </ion-button>
+            <ion-button
+              (click)="productUpdate(prod)"
+              color="primary"
+              class="round"
+              slot="end"
+              small
+            >
+              {{'MENU.update' | translate}}
+            </ion-button>
+            <ion-button
+              *ngIf="admin"
+              (click)="deleteShopListProd(prod)"
+              color="danger"
+              class="round"
+              slot="end"
+              small
+            >
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

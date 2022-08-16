@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button (click)="addYourRetailer()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true">
+    <ion-slide *ngFor="let allEmployes of multiStoreEmploye; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>
+                store {{ allEmployes.storeName ? allEmployes.storeName: 'no
+                name' }}
+              </h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-list>
+          <ion-list>
+            <ion-list-header *ngIf="admin"> ALL EMPLOYEES </ion-list-header>
+
+            <ion-item *ngFor="let employe of allEmployes">
+              <ion-avatar slot="start">
+                <img src="../../assets/user.png" />
+              </ion-avatar>
+              <ion-label>
+                <h3>{{ employe.name }}</h3>
+
+                <h3>Telephone: {{ employe.telephone }}</h3>
+              </ion-label>
+              <ion-button
+                color="success"
+                fill="clear"
+                (click)="manageRetailer(employe)"
+              >
+                manage retailer
+              </ion-button>
+            </ion-item>
+          </ion-list>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

@@ -1,0 +1,44 @@
+<ion-slides pager="true">
+  <ion-slide>
+    <ion-grid>
+      <ion-row *ngIf="storeName">
+        <ion-col>
+          <div class="ion-text-center ion-text-uppercase">{{ storeName }}</div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col
+          size="12"
+          sizeLg="3"
+          sizeMd="4"
+          sizeSm="6"
+          sizeXs="6"
+          *ngFor="let prod of multiStoreProducts"
+        >
+          <!-- <ion-card (click)="pickProduct(produit)" [disabled]="produit.exist">-->
+          <ion-card (click)="pickProduct(prod)" [disabled]="prod.exist">
+            <div
+              *ngIf="prod.pick"
+              [ngClass]="{ 'product-pick': prod.pick === true }"
+            >
+              <ion-icon name="checkbox-outline"></ion-icon>
+            </div>
+            <img
+              class="img-container"
+              src="{{ prod.url }}"
+              style="width: 100px; height: 100px"
+            />
+            <ion-card-content>
+              <div style="text-align: center" class="divname">
+                <small>{{ prod.name }}</small
+                >&nbsp;
+                <small>{{ prod.sizeUnit ? prod.sizeUnit : "" }}</small>
+                <small>{{ prod.unitName ? prod.unitName : "" }}</small>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-slide>
+</ion-slides>

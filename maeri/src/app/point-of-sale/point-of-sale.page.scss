@@ -1,0 +1,281 @@
+p {
+  margin: 0px;
+  padding: 0px;
+  // background-color: #f1f1f1;
+}
+
+.orders {
+  background-color: #f1f1f1;
+  width: 100%;
+  // margin: 0px;
+  // padding: 0px;
+  // background-color: #f1f1f1;
+}
+
+.iconprint {
+  margin-left: 15px;
+  //color: aqua;
+}
+
+.tableNumber {
+  font-size: 9px;
+  position: absolute;
+  left: 48%;
+  bottom: 52%;
+  color: rgb(29, 114, 243);
+}
+
+.btnStatus {
+  // font-size: 2px;
+  position: absolute;
+  left: 90%;
+  bottom: 30px;
+  // color: rgb(29, 114, 243);
+}
+
+a {
+  margin-right: 5px;
+  text-transform: uppercase;
+}
+.badge {
+  position: relative;
+  left: 50%;
+}
+.iconN {
+  position: relative;
+  right: 16%;
+  bottom: 5%;
+}
+.header-rowpos {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+  background-color: black;
+  color: white;
+  padding-top: 7px;
+  padding-bottom: 7px;
+
+  ion-col div {
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+}
+
+.iconDollars {
+  position: relative;
+  bottom: 10px;
+  left: 10px;
+}
+
+.iconStart {
+  margin-right: 10%;
+}
+
+.a1 {
+  font-size: 10px;
+  margin-left: 10px;
+}
+
+.a2 {
+  font-size: 8px;
+  color: rgb(78, 78, 248);
+}
+
+.desktop {
+  ion-router-outlet {
+    // margin-top: 56px;
+    margin-bottom: 56px;
+    height: 100%;
+  }
+
+  .logo {
+    max-height: 30px;
+  }
+
+  ion-toolbar {
+    --background: #374168;
+  }
+
+  .toolbarInt {
+    --background: white;
+    margin: 0px;
+    position: relative;
+    bottom: 10px;
+  }
+
+  .link {
+    --color: var(--ion-color-light);
+  }
+
+  .active-link {
+    --color: var(--ion-color-primary);
+  }
+
+  .flex-container {
+    display: flex;
+  }
+
+  .flex-container > div {
+    // background-color: #f1f1f1;
+    margin: 10px;
+    padding: 20px;
+    font-size: 30px;
+  }
+
+  .div1 {
+    max-height: 700px;
+    overflow: scroll;
+    width: 70%;
+  }
+  .div2 {
+    max-height: 700px;
+    overflow: scroll;
+    width: 30%;
+  }
+  .div3 {
+    // min-height: 500px;
+    height: 1000px;
+    overflow: scroll;
+    width: 70%;
+    padding-bottom: 20px;
+  }
+  .div4 {
+    //min-height: 500px;
+    height: 1000px;
+    overflow: scroll;
+    width: 50%;
+    padding-bottom: 20px;
+  }
+  .navbar {
+    background: #e61f05;
+  }
+}
+
+.footer {
+  width: 100%;
+  color: #fff;
+  font-weight: bold;
+  // background: #374168;
+  height: 200px;
+  line-height: 56px;
+  text-align: center;
+  position: fixed;
+  bottom: 0px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@media only screen and (min-width: 500px) {
+  .col {
+    // background-color: yellow;
+    display: flex;
+    ion-button {
+      // --color: red;
+      font-size: 9px;
+      // --width: 10px;
+      --margin-top: 0px;
+      --margin-bottom: 0px;
+    }
+  }
+}
+@media (max-width: 327px) {
+  ion-title {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 567px) {
+  ion-header {
+    height: 10%;
+    ion-toolbar {
+      // --background: var(--ion-color-secondary) !important;
+      --background: linear-gradient(
+          162deg,
+          rgba(40, 41, 44, 0.2) 20%,
+          rgba(40, 41, 44, 0.2) 100%
+        ),
+        url("../../assets/icon.png") no-repeat center / 100%;
+      height: 100%;
+    }
+  }
+
+  ion-content {
+    --padding-top: 0px;
+  }
+  #pos-button {
+    // width: 100px;
+    font-size: 9px;
+  }
+  div h6 {
+    text-transform: uppercase;
+    font-size: 9px;
+    font-weight: bold;
+  }
+
+  div h5 {
+    font-size: 12px;
+    text-transform: uppercase;
+    // font-weight: bold;
+  }
+  .btn-mobile {
+    width: 85px;
+    font-size: 9px;
+  }
+  .btn-toolbar {
+    color: var(--ion-color-light);
+    font-weight: bold;
+  }
+  .customgrid {
+    height: 100%;
+    ion-row:first-child {
+      height: 100%;
+    }
+  }
+  ion-grid {
+    //  --ion-grid-column-padding: 10px;
+    border-collapse: collapse;
+    border-style: hidden;
+
+    ion-row:nth-child(2) {
+      background-color: #2dd36f;
+      font-weight: bold;
+      margin-top: 20px;
+      padding-top: 10px;
+      padding-bottom: 5px;
+      height: 6%;
+    }
+    ion-row:nth-child(n + 3) {
+      // background-color: #d32d93;
+      font-weight: bold;
+      // margin-top: 20px;
+      padding-top: 10px;
+      padding-bottom: 5px;
+      height: 6%;
+    }
+    ion-col {
+      border-bottom: 0;
+      border-right: 0;
+    }
+    .row-orders ion-col {
+      --ion-grid-column-padding: 0px;
+    }
+  }
+}

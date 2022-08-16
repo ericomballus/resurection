@@ -1,0 +1,89 @@
+<div class="divtable" *ngIf="orders">
+  <table class="tableh2" style="width: 100%">
+    <tr class="firstcolone" style="text-transform: uppercase">
+      <th>N0</th>
+      <th>TABLE</th>
+      <th>com</th>
+      <th>T.{{ "MENU.price" | translate }}</th>
+      <th style="text-transform: uppercase">{{ "MENU.percu" | translate }}</th>
+      <th>{{ "MENU.employe" | translate }}</th>
+      <th>DATE</th>
+      <th>STATUT</th>
+    </tr>
+    <tr
+      *ngFor="let order of orders"
+      (click)="Send(order)"
+      [ngClass]="{ animated: order.anime, fadeInRight: order.anime }"
+    >
+      <td>
+        {{ order.numFacture }}
+      </td>
+      <td>
+        {{ order.tableNumber }}
+      </td>
+      <td>{{ order.commandes.length }}</td>
+      <td>
+        {{
+          (order.montantReduction
+            ? order.montantReduction
+            : order.commande.cartdetails.totalPrice
+          ) | currency: "FCFA":"symbol":"3.0-0"
+        }}
+      </td>
+      <td>
+        {{ (order.recu ? order.recu : 0) | currency: "FCFA":"symbol":"3.0-0" }}
+      </td>
+      <td>
+        {{ order.userName }}
+      </td>
+      <td class="un">
+        {{ order.created | date: "short" }}
+      </td>
+      <td>
+        <p class="btnStatus" *ngIf="!order.confirm && order.Posconfirm">
+          <ion-icon color="warning" name="checkmark-circle-outline"></ion-icon>
+        </p>
+        <p
+          class="tableNumber2 btnStatus"
+          *ngIf="order.confirm && order.Posconfirm"
+        >
+          <ion-icon color="success" name="checkmark-circle-outline"></ion-icon>
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!--
+  <div class="invoices">
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Invoices</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let order of orders" (click)="Send(order)" lines="full">
+      <a class="iconStart"
+        ><ion-icon class="iconDollars" color="success" name="cash"></ion-icon
+      ></a>
+      <ion-label>
+        <p>
+          {{ order.commande.cartdetails.totalPrice }}FCFA
+          <a class="a1">table: {{ order.tableNumber }}</a> <br />
+          <a class="a2">
+            {{ order.userName }} {{ order.created | date: "medium" }}</a
+          >
+        </p>
+
+        <p class=" btnStatus" *ngIf="!order.confirm && order.Posconfirm">
+          <ion-icon color="danger" name="checkmark-circle-outline"></ion-icon>
+        </p>
+        <p
+          class="tableNumber2 btnStatus"
+          *ngIf="order.confirm && order.Posconfirm"
+        >
+          <ion-icon color="success" name="checkmark-circle-outline"></ion-icon>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</div>
+-->

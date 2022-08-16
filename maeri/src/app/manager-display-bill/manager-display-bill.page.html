@@ -1,0 +1,370 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        color="light"
+        fill="outline"
+        defaultHref="/start"
+      ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div [ngStyle]="{'padding': '15px' }">
+    <ion-row>
+      <ion-col size="3">
+        <form class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <input
+                style="display: none"
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                name="dp"
+                [(ngModel)]="model"
+                ngbDatepicker
+                #d="ngbDatepicker"
+              />
+              <div class="input-group-append">
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  class="btn btn-outline-secondary calendar"
+                  (click)="d.toggle()"
+                  type="button"
+                  >start <ion-icon name="calendar"></ion-icon
+                ></ion-button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ion-col>
+      <ion-col size="2" *ngIf="model" class="ion-padding ion-align-self-center">
+        <pre>{{model.day}}/{{model.month}}/{{model.year}}</pre>
+      </ion-col>
+      <ion-col
+        size="2"
+        *ngIf="model2"
+        class="ion-padding ion-align-self-center"
+      >
+        <pre>{{model2.day}}/{{model2.month}}/{{model2.year}}</pre>
+      </ion-col>
+
+      <ion-col size="3">
+        <form class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <input
+                style="display: none"
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                name="dp"
+                [(ngModel)]="model2"
+                ngbDatepicker
+                #d2="ngbDatepicker"
+              />
+              <div class="input-group-append">
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  class="btn btn-outline-secondary calendar"
+                  (click)="d2.toggle()"
+                  type="button"
+                  >End <ion-icon name="calendar"></ion-icon
+                ></ion-button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ion-col>
+      <ion-col size="2" *ngIf="storeList.length > 1">
+        <div class="ion-text-center">
+          <select
+            name="pets"
+            id="pet-select"
+            (change)="selectStore($event.target)"
+          >
+            <option value="">--Please choose store--</option>
+            <option
+              value="{{ store.id }}"
+              *ngFor="let store of storeList let j= index"
+            >
+              {{ store.name}}
+            </option>
+          </select>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center">
+      <ion-col class="ion-align-self-center" *ngIf="model && model2">
+        <div class="ion-text-center">
+          <ion-button size="small" (click)="takeInventory()">
+            submit</ion-button
+          >
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-row *ngIf="isDesktop" class="header-row">
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.date' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.invoicesdetails' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>reçu</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.amount' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>Monnaie </small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.made_by' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1"> Reduction </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>type</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1"> </ion-col>
+  </ion-row>
+  <div *ngIf="isDesktop">
+    <ion-row
+      *ngFor="let invoice of invoices let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': invoice.reimbursed == 1 ? 'red' : 'white' }"
+    >
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2" style="font-size: 10px">
+            {{invoice.created | date }}</small
+          >
+          <br />
+          <small class="namesmalle2" style="font-size: 10px">
+            {{invoice.created | date: "shortTime" }}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px"
+        >
+          <small class="namesmalle2"> {{invoice.numFacture}}</small>
+        </div>
+      </ion-col>
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px"
+        >
+          <small
+            class="namesmalle2"
+            *ngIf="!invoice.montantReduction && invoice.rembourse"
+          >
+            {{invoice.montant + invoice.rembourse |
+            currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+          >
+          <small
+            class="namesmalle2"
+            *ngIf="!invoice.montantReduction && !invoice.rembourse"
+          >
+            {{invoice.montant | currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+          >
+          <small class="namesmalle2" *ngIf="invoice.montantReduction">
+            {{invoice.commande.cartdetails.totalPrice |
+            currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="2" size-md="2" class="ion-no-margin">
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px"
+        >
+          <small class="namesmalle2" *ngIf="!invoice.montantReduction">
+            {{ invoice.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+          <small class="namesmalle2" *ngIf="invoice.montantReduction">
+            {{ invoice.montantReduction |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+
+      <ion-col
+        size="2"
+        size-md="2"
+        class="ion-no-margin"
+        *ngIf="invoice.rembourse"
+      >
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px"
+        >
+          <small class="namesmalle2">
+            {{ invoice.rembourse |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col
+        size="2"
+        size-md="2"
+        class="ion-no-margin"
+        *ngIf="!invoice.rembourse"
+      >
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px"
+        >
+          <small class="namesmalle2">
+            {{ 0| currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+
+      <ion-col size="2" size-md="2" class="ion-no-margin">
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px"
+        >
+          <small class="namesmalle2"> {{ invoice.userName}}</small>
+        </div>
+      </ion-col>
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div
+          *ngIf="invoice.montantReduction"
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px; background-color: rgb(14, 245, 14)"
+        >
+          oui
+        </div>
+        <div
+          *ngIf="!invoice.montantReduction"
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px"
+        >
+          non
+        </div>
+      </ion-col>
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase" style="font-size: 11px">
+          {{ invoice.paiment_type ? invoice.paiment_type : 'CASH'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="1"
+        size-md="1"
+        class="ion-no-margin"
+        *ngIf="!invoice.cancel"
+      >
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 12px"
+        >
+          <ion-button fill="outline" (click)="viewMobileManageOrder(invoice, i)"
+            ><ion-icon slot="icon-only" name="eye"></ion-icon
+          ></ion-button>
+        </div>
+      </ion-col>
+      <ion-col
+        size="1"
+        size-md="1"
+        class="ion-no-margin"
+        *ngIf="invoice.cancel"
+      >
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap"
+          style="font-size: 9px; color: rgb(241, 56, 56)"
+          (click)="viewMobileManageOrder(invoice, i)"
+        >
+          facture annulée
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="!isDesktop">
+    <ion-row class="header-tab">
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <small>{{ 'MENU.date' | translate}}</small>
+        </div>
+      </ion-col>
+
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <small>{{ 'MENU.amount' | translate}}</small>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <small>{{ 'MENU.made_by' | translate}}</small>
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2">N0</small>
+        </div>
+      </ion-col>
+      <ion-col size="1"> </ion-col>
+    </ion-row>
+    <ion-row
+      class="mobile"
+      *ngFor="let invoice of invoices let i= index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="3">
+        <div class="ion-text-center tailleTexte2">
+          {{invoice.created | date: "medium" }}
+        </div>
+      </ion-col>
+
+      <ion-col size="3">
+        <div class="ion-text-center tailleTexte2">
+          {{ invoice.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div></ion-col
+      >
+      <ion-col size="3">
+        <div
+          class="ion-text-center ion-text-uppercase ion-text-nowrap tailleTexte2"
+        >
+          {{ invoice.userName}}
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2"> {{invoice.numFacture}}</small>
+        </div>
+      </ion-col>
+      <ion-col size="1">
+        <div class="ion-text-center tailleTexte2">
+          <ion-button
+            style="font-size: 10px"
+            fill="outline"
+            (click)="viewMobileManageOrder(invoice, i)"
+            ><ion-icon slot="icon-only" name="eye"></ion-icon
+          ></ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

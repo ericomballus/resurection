@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>add item</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="products">
+    <ion-list-header>
+      ALL PRODUCTS
+    </ion-list-header>
+
+    <ion-item *ngFor="let prod of products">
+      <ion-avatar slot="start">
+        <img src="{{ prod.url }}" />
+      </ion-avatar>
+      <ion-label>
+        <h3>{{ prod.name }}</h3>
+        <h3>{{ prod.capacity }}</h3>
+        <h3>prix d'achat: {{ prod.purchasingPrice }}</h3>
+        <h3>prix de vente: {{ prod.sellingPrice }}</h3>
+      </ion-label>
+      <ion-button
+        (click)="createProduct(prod)"
+        color="danger"
+        class="round"
+        slot="end"
+        small
+        >created</ion-button
+      >
+    </ion-item>
+  </ion-list>
+</ion-content>

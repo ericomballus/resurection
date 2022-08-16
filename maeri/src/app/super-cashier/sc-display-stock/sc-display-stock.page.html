@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ion-grid *ngIf="productServiceTab.length">
+      <ion-row style="font-size: 14px; font-weight: bold">
+        <ion-col size="12">
+          <div class="ion-text-center ion-text-uppercase">
+            <p>MAGASIN</p>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="header-component">
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center">name</div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center">En stock</div>
+        </ion-col>
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center">En vente</div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center">Ravitailler</div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row
+        *ngFor="let prod of productServiceTab; let i = index"
+        class="data-row data-update"
+        [ngStyle]="{ 'background-color': prod.quantityItems <= prod.quantityToAlert ? 'var(--ion-color-danger)' : i % 2 == 0 ? '#f1f1f1' : 'white' }"
+        style="font-size: 11px"
+      >
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-start ion-text-uppercase smallSize">
+            {{ prod.name }}
+          </div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center ion-text-uppercase smallSize">
+            {{ prod.quantityItems }}
+          </div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center ion-text-uppercase smallSize">
+            {{ prod.quantityStore }}
+          </div>
+        </ion-col>
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center ion-text-uppercase smallSize">
+            <ion-input
+              slot="end"
+              placeholder="quantité"
+              type="number"
+              debounce="500"
+            ></ion-input>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

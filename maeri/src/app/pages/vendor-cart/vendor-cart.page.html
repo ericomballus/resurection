@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/vendor-shop"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button
+        color="success"
+        fill="clear"
+        size="small"
+        (click)="sendCommande()"
+      >
+        ok
+        <ion-icon slot="end" name="thumbs-up-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="cart">
+  <ion-item>
+    <ion-label>choisir une date de livraison:</ion-label>
+    <ion-datetime
+      displayFormat="MMM DD, YYYY HH:mm"
+      pickerFormat="MMM DD, YYYY HH:mm"
+      (ionChange)="getLivraisonTime($event)"
+    ></ion-datetime>
+  </ion-item>
+
+  <div *ngIf="cart" class="contain">
+    <ion-row class="header-row">
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center">name</div>
+      </ion-col>
+
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center">price</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Qty</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Btl</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">T.price</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let prod of cart; let i= index"
+      class="data-row data-update"
+    >
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center commande">{{ prod.item.name }}</div>
+      </ion-col>
+
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center">
+          <ion-input
+            *ngIf="prod.item.packPrice"
+            (ionChange)="changePrice($event, prod)"
+            debounce="500"
+            placeholder="price."
+            [value]="prod.item.packPrice"
+          ></ion-input>
+          <ion-input
+            *ngIf="!prod.item.packPrice"
+            (ionChange)="changePrice($event, prod)"
+            debounce="500"
+            placeholder="price."
+            [value]="0"
+          ></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center commande">{{prod.qty}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center commande" *ngIf="prod.item.nbrBtl">
+          + {{prod.item.nbrBtl}}
+        </div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center" *ngIf="!prod.item.nbrBtl">
+        <div class="ion-text-center commande" *ngIf="prod.item.packPrice">
+          {{prod.qty * prod.item.packPrice | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center" *ngIf="prod.item.nbrBtl">
+        <div class="ion-text-center commande" *ngIf="prod.item.packPrice">
+          {{prod.qty * prod.item.packPrice + prod.item.nbrBtl*
+          prod.item.purchasingPrice | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

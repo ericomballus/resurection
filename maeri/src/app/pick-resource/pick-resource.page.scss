@@ -1,0 +1,33 @@
+.resource {
+  width: 100%;
+  display: flex;
+}
+
+ion-item {
+  flex-grow: 1;
+  width: 100%;
+  border: 1px solid #f1f1f1;
+  padding: 1px;
+}
+
+.label {
+  font-size: 10px;
+}
+.pickerDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pickerDiv div {
+  // display: flex;
+}
+.header-row {
+  // background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 9px;
+    }
+  }
+}

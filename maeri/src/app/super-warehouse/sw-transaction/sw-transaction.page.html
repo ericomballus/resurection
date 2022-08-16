@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="display: flex; justify-content: space-between">
+    <div
+      style="
+        flex-grow: 1;
+        padding-right: 15px;
+        padding-left: 15px;
+        border-right: 2px solid black;
+      "
+    >
+      <ion-grid *ngIf="agencesCommandes.length">
+        <ion-row style="font-size: 14px; font-weight: bold">
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">
+              <p>commandes agences</p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="header-component">
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Date</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Agence</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Quantité</div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">status</div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          *ngFor="let com of agencesCommandes; let i = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white'}"
+          (click)="display(com, i)"
+          style="font-size: 11px"
+        >
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.created | date: "short" }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.store.name }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.quantity }}
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="1"
+            size-md="1"
+            size-lg="1"
+            [ngStyle]="{ 'background-color': com.scConfirm ? 'var(--ion-color-success)' : 'white' }"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+          <ion-col
+            size-sm="1"
+            size-md="1"
+            size-lg="1"
+            [ngStyle]="{ 'background-color': com.scConfirm && !com.swConfirm ? 'var(--ion-color-warning)' : com.scConfirm && com.swConfirm ? 'var(--ion-color-success)' : 'white' }"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+          <ion-col
+            size-sm="1"
+            size-md="1"
+            size-lg="1"
+            [ngStyle]="{ 'background-color': com.scConfirm && com.swConfirm && !com.managerConfirm ? 'var(--ion-color-warning)' : com.scConfirm && com.swConfirm && com.managerConfirm ? 'var(--ion-color-success)' : 'white' }"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

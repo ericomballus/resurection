@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!isDetail" (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="isDetail" (click)="closeDetail()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!isDetail">
+  <ion-grid *ngIf="invoicesList.length == 0">
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase taille">
+          <h2>NO INVOICES FOUND</h2>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="invoicesList.length > 0">
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase taille">
+          Liste des factures
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase taille">
+          Total impayé : {{totalImpaye | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="invoicesList.length > 0">
+    <ion-row class="header-component">
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">Date</div>
+      </ion-col>
+
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">Responsable</div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">Montant</div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase">Etat</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      color="primary"
+      *ngFor="let invoice of invoicesList let i = index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="displayDetail(invoice)"
+    >
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          {{ invoice.created | date:"MM/dd/yy"}}
+        </div>
+      </ion-col>
+
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          {{invoice.userName ? invoice.userName : 'no Name'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          {{invoice.commande.cartdetails.totalPrice |
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-text-center ion-text-uppercase"
+      >
+        {{invoice.sale ? ' payé ' : 'non payé'}}
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

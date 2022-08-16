@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="success" (click)="closeModal()">
+        close
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="ionicForm" (ngSubmit)="validation()" novalidate>
+    <ion-item lines="full">
+      <ion-label position="floating">Nom du client</ion-label>
+      <ion-input formControlName="name" type="text" required></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="floating">Telephone</ion-label>
+      <ion-input formControlName="phone" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">ville</ion-label>
+      <ion-input formControlName="ville" type="text" required></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="floating">quartier</ion-label>
+      <ion-input formControlName="quartier" type="text" required></ion-input>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label position="floating">Code client</ion-label>
+      <ion-input formControlName="codeClient" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label>Type de client</ion-label>
+      <ion-select
+        value="REPRESENTANT"
+        interface="popover"
+        (ionChange)="typeDeClient($event)"
+      >
+        <ion-select-option value="RP">Répresentant</ion-select-option>
+        <ion-select-option value="SM">Super marché</ion-select-option>
+        <ion-select-option value="FR">Franchise</ion-select-option>
+        <ion-select-option value="AU">Autre</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-select placeholder="Select Role" (ionChange)="logValue($event)">
+        <ion-select-option value="C">Chef d'équipe ?</ion-select-option>
+        <ion-select-option value="A">Autres</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating"> Reduction Facture</ion-label>
+      <ion-input formControlName="reduction" type="numbet" required></ion-input>
+    </ion-item>
+    <ion-item *ngIf="useBonus">
+      <ion-label>Chef Equipe</ion-label>
+      <ion-select (ionChange)="addChefEquipe($event)">
+        <ion-select-option
+          *ngFor="let customer of customerList"
+          value="{{ customer._id }}"
+          >{{ customer.name }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+
+    <ion-row>
+      <ion-col>
+        <ion-button
+          type="submit"
+          color="danger"
+          expand="block"
+          [disabled]="!ionicForm.valid"
+          >Submit</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

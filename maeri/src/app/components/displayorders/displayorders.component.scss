@@ -1,0 +1,47 @@
+.title {
+  text-align: center;
+  text-transform: uppercase;
+}
+.tableNumber {
+  text-transform: uppercase;
+  text-align: center;
+}
+ion-col {
+  div {
+    font-size: 12px;
+  }
+  ion-icon {
+    font-size: 12px;
+  }
+}
+
+.header-row1 {
+  background-color: #f1f1f1;
+  ion-col div {
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+}
+
+.data-row1 {
+  border-bottom: 1px solid #f1f1f1;
+}
+.gras {
+  font-weight: bold;
+}
+
+.divtable {
+  width: 100%;
+  padding-bottom: 20px;
+  // background-color: red;
+}
+
+.animate__bounceOutLeft {
+  // -prefix-animation: slide 1s ease 3.5s forwards;
+}
+
+.signalColor {
+  // background-color: red;
+  border-style: 1px solid red;
+  // animation-delay: 2s;
+}

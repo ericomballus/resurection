@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="row-header">
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">Nom</div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">phone</div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">ville</div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">quartier</div>
+    </ion-col>
+  </ion-row>
+  <div *ngIf="customerList">
+    <ion-row
+      color="primary"
+      *ngFor="let pro of leaderList let i = index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="manageCustumer(pro)"
+    >
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{pro.name ? pro.name : 'no Name'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{pro.phone ? pro.phone : 'no phone'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{pro.ville ? pro.ville : 'no ville'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{pro.quartier ? pro.quartier : 'no quartier'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

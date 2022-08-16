@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="danger" (click)="closeModal()">close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-list-header>Boutiques: </ion-list-header>
+    <div *ngFor="let p of storeList; let i= index">
+      <div style="margin: 5px; padding: 5px" (click)="display(p, i)">
+        {{p.name}}
+      </div>
+      <div *ngIf="p.open">
+        <h3>{{ p.ville}}</h3>
+        <h5>{{ p.quartier}}</h5>
+        <ion-input
+          slot="end"
+          placeholder="budget: {{p.budget}}"
+          type="number"
+          debounce="1500"
+          (ionChange)="getBudgetValue($event, p, i)"
+        ></ion-input>
+        <ion-button (click)="save(p, i)"> enregistrez</ion-button>
+      </div>
+    </div>
+  </ion-list>
+</ion-content>

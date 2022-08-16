@@ -1,0 +1,78 @@
+ion-menu {
+  //--ion-background-color: var(--ion-color-primary);
+  //  --ion-background-color: black;
+  //--ion-text-color: var(--ion-color-primary-contrast);
+
+  ion-toolbar {
+    // --background: var(--ion-color-primary);
+    // --background: black;
+  }
+  --ion-placeholder-color {
+    // --background: var(--ion-color-primary);
+    --background: black;
+  }
+
+  .active {
+    --ion-text-color: var(--ion-color-primary);
+  }
+  .active ion-icon {
+    color: #ff8d22;
+    // --ion-text-color-rgb: var(--ion-color-primary);
+  }
+  .active-parent {
+    font-weight: 500;
+  }
+
+  .sub-item {
+    padding-left: 20px;
+    font-size: small;
+  }
+
+  ion-label .languageSelect {
+    font-size: 12px;
+  }
+}
+ion-menu-toggle ion-item {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+ion-item {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.iconmenu3 {
+  color: #8922ff;
+}
+.iconmenu4 {
+  color: #22ffa3;
+}
+
+@media only screen and (min-width: 768px) {
+  ion-split-pane {
+    ion-menu {
+      max-width: 20px !important;
+    }
+  }
+}
+
+#splitMenu {
+  // --background: #343e59;
+  --background: var(--ion-color-dark);
+  ion-icon {
+    font-size: 32px;
+    color: white;
+    --ionicon-stroke-width: 16px;
+  }
+  ion-list {
+    // --background: #343e59;
+    margin-top: 0px;
+  }
+  ion-item {
+    --background: var(--ion-color-dark);
+    color: white;
+    text-transform: uppercase;
+    --padding-end: 0px;
+    --padding-top: 0px;
+    margin-top: 0px;
+  }
+}

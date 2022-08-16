@@ -1,0 +1,187 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div
+    style="display: flex; justify-content: space-between"
+    *ngIf="setting && setting.ship_packages"
+  >
+    <div style="flex-grow: 1">
+      <form class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              style="display: none"
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="dp"
+              [(ngModel)]="model"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+            <div class="input-group-append">
+              <ion-button
+                fill="clear"
+                size="small"
+                class="btn btn-outline-secondary calendar"
+                (click)="d.toggle()"
+                type="button"
+                >Date de livraison <ion-icon name="calendar"></ion-icon
+              ></ion-button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div style="flex-grow: 2; text-align: right; font-weight: bold">
+      <pre>{{model.day}}/{{model.month}}/{{model.year}}</pre>
+    </div>
+  </div>
+
+  <ion-list *ngIf="order">
+    <ion-item *ngIf="setting && setting.ship_packages">
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>Confirmer la livraison ?</h2>
+      </ion-label>
+      <ion-checkbox
+        slot="end"
+        *ngIf="!order.delivery"
+        (ionChange)="confirmLivraison()"
+        color="primary"
+      ></ion-checkbox>
+      <ion-checkbox
+        slot="end"
+        *ngIf="order.delivery"
+        color="primary"
+        checked="true"
+        (ionChange)="confirmLivraison()"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item *ngIf="tabRoles.includes(8)">
+      <ion-label>TRANSPORT DHL</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="Transport dhl"
+        type="number"
+        [(ngModel)]="transport"
+      ></ion-input>
+    </ion-item>
+    <ion-item *ngIf="tabRoles.includes(8)">
+      <ion-label>TRANSPORT</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="Transport"
+        type="number"
+        [(ngModel)]="transport_colis"
+      ></ion-input>
+    </ion-item>
+    <ion-item *ngIf="tabRoles.includes(8)">
+      <ion-label>PHYTOSANITAIRE</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="sanitaire"
+        type="number"
+        [(ngModel)]="phyto"
+      ></ion-input>
+    </ion-item>
+    <ion-item *ngIf="tabRoles.includes(8)">
+      <ion-label>TAXE SUR RETRAIT</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="taxeRetrait"
+        type="number"
+        [(ngModel)]="taxeRetrait"
+      ></ion-input>
+    </ion-item>
+    <ion-item *ngIf="tabRoles.includes(8)">
+      <ion-label>EMBALLAGE</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="emballages"
+        type="number"
+        [(ngModel)]="emballage"
+      ></ion-input>
+    </ion-item>
+    <ion-item *ngIf="tabRoles.includes(8)">
+      <ion-label>POIDS ESTIMATIF EN GRAMME</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="Poids estimatif"
+        type="number"
+        [(ngModel)]="poids_estimatif"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>Confirmer le paiment ?</h2>
+      </ion-label>
+      <ion-checkbox
+        slot="end"
+        *ngIf="order.confirmPaie"
+        color="primary"
+        checked="true"
+      ></ion-checkbox>
+      <ion-checkbox
+        slot="end"
+        *ngIf="!order.confirmPaie"
+        color="primary"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>Avez vous Remboursez?</h2>
+      </ion-label>
+      <ion-checkbox
+        (ionChange)="remboursement()"
+        slot="end"
+        *ngIf="order.remb"
+        color="primary"
+        checked="true"
+      ></ion-checkbox>
+      <ion-checkbox
+        (ionChange)="remboursement()"
+        slot="end"
+        *ngIf="!order.remb"
+        color="primary"
+      ></ion-checkbox>
+    </ion-item>
+
+    <ion-item *ngIf="displayItem && setting && setting.use_paiement_type">
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label>Type de paiement</ion-label>
+      <ion-select
+        value="CASH"
+        interface="popover"
+        (ionChange)="typeDePaiment($event)"
+      >
+        <ion-select-option value="CASH">CASH</ion-select-option>
+        <ion-select-option value="CARD">CARTE</ion-select-option>
+        <ion-select-option
+          *ngFor="let doc of phoneList; let i= index"
+          [value]="doc"
+          >{{doc.name}}: {{doc.telephone}}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="enablePhoneNumber">
+      <ion-icon slot="start" name="call"></ion-icon>
+      <ion-label>Numéro de téléphone</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="Numéro de telephone"
+        type="number"
+        [(ngModel)]="phoneNumber"
+      ></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button (click)="paieAndPrint()" color="success" expand="block"
+    >Valider</ion-button
+  >
+</ion-content>

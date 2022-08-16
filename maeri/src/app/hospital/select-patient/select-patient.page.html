@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-searchbar
+      *ngIf="!addcustomer"
+      type="text"
+      debounce="500"
+      (ionChange)="getCustomerList($event)"
+    ></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button
+        *ngIf="addcustomer"
+        color="warning"
+        (click)="searchCustomer()"
+      >
+        search
+      </ion-button>
+      <ion-button color="danger" (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="customerList.length ">
+    <ion-item
+      color="primary"
+      *ngFor="let custo of customerList"
+      (click)="pickcustomer(custo)"
+      ><small style="font-size: 12px; text-transform: uppercase"
+        >{{ custo.name }}</small
+      >
+      &nbsp; &nbsp; &nbsp;
+      <small style="font-size: 12px; text-transform: uppercase"
+        >TEL: {{ custo.phone }}</small
+      ></ion-item
+    >
+  </ion-list>
+
+  <ion-item lines="full" *ngIf="addcustomer">
+    <ion-icon slot="end" name="person-circle-outline"></ion-icon>
+    <ion-label
+      style="font-weight: bold; text-transform: uppercase"
+      position="floating"
+    >
+      Nom client
+    </ion-label>
+    <ion-input [(ngModel)]="customer.name" type="text" required></ion-input>
+  </ion-item>
+  <ion-item lines="full" *ngIf="addcustomer">
+    <ion-icon slot="end" name="call"></ion-icon>
+    <ion-label
+      style="font-weight: bold; text-transform: uppercase"
+      position="floating"
+      >Telephone</ion-label
+    >
+    <ion-input [(ngModel)]="customer.phone" type="text" required></ion-input>
+  </ion-item>
+
+  <ion-item lines="full" *ngIf="addcustomer">
+    <ion-icon slot="end" name="map-outline"></ion-icon>
+    <ion-label
+      style="font-weight: bold; text-transform: uppercase"
+      position="floating"
+      >ville</ion-label
+    >
+    <ion-input [(ngModel)]="customer.ville" required></ion-input>
+  </ion-item>
+  <ion-item lines="full" *ngIf="addcustomer">
+    <ion-icon slot="end" name="home"></ion-icon>
+    <ion-label
+      style="font-weight: bold; text-transform: uppercase"
+      position="floating"
+      >quartier</ion-label
+    >
+    <ion-input [(ngModel)]="customer.quartier" required></ion-input>
+  </ion-item>
+
+  <ion-row *ngIf="addcustomer">
+    <ion-col>
+      <ion-button (click)="save()" color="danger" expand="block"
+        >SAVE</ion-button
+      >
+    </ion-col>
+  </ion-row>
+</ion-content>

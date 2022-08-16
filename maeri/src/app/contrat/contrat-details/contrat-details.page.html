@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/user-contrat"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="danger" (click)="WindowPrint()"> imprimer</ion-button>
+      <ion-button
+        color="primary"
+        *ngIf="display_btn"
+        (click)="ConfirmPaiement()"
+      >
+        confirm Paiement</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+      <tr class="top">
+        <td colspan="2">
+          <table>
+            <tr>
+              <td class="title">MAERI POS</td>
+
+              <td>
+                Invoice #: <br />
+                YDE LE: {{facture.created | date:'short'}}<br />
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr class="information">
+        <td colspan="2">
+          <table>
+            <tr>
+              <td>
+                Maeri, Pos.<br />
+                Yaoundé Cameroun
+              </td>
+
+              <td>
+                {{admin.company}}<br />
+                {{admin.city}}<br />
+                {{admin.email}}<br />
+                {{admin.telephone}}<br />
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr class="heading">
+        <td>Paiment PAR :</td>
+
+        <td>CASH</td>
+      </tr>
+
+      <tr class="details">
+        <td>Status</td>
+        <td *ngIf="!facture.status">Non Payé</td>
+        <td *ngIf="facture.status">Payé</td>
+      </tr>
+
+      <tr class="heading">
+        <td>ARTICLE</td>
+
+        <td>PRIX</td>
+      </tr>
+
+      <tr class="item">
+        <td>Hosting (1 mois)</td>
+        <td>{{facture.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}</td>
+      </tr>
+
+      <tr class="total">
+        <td></td>
+
+        <td>
+          Total: {{facture.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</ion-content>

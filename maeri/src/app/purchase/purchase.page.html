@@ -1,0 +1,163 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- <ion-menu-button autoHide="false"></ion-menu-button>
+         <ion-button fill="outline" color="medium" [routerLink]="['/product-buy']" (click)="CreatePopover()">
+      -->
+      <ion-back-button
+        color="light"
+        fill="outline"
+        *ngIf="!vendorRole"
+        defaultHref="/start"
+      ></ion-back-button>
+      <ion-back-button
+        color="light"
+        fill="outline"
+        *ngIf="vendorRole"
+        defaultHref="/vendor-start"
+      ></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button
+        color="light"
+        fill="outline"
+        (click)="this.router.navigateByUrl('product-buy')"
+      >
+        <ion-icon
+          color="light"
+          slot="icon-only"
+          name="add-circle-outline"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="allPurchase">
+    <ion-row class="header-row">
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.day' | translate}}</div>
+      </ion-col>
+
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.hour' | translate}}</div>
+      </ion-col>
+
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.quantity' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.price' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center"></div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">action</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let p of allPurchase; let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="presentActionSheet(p, i)"
+    >
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">{{ p.purchaseDate | date }}</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">{{p.hours}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">{{p.quantity}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">
+          {{p.totalPrice | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte"></div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">
+          <ion-button fill="clear" size="small" color="primary">
+            <ion-icon color="dark" name="eye"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-col>
+      <!--ici on affiche la liste des achats-->
+      <ion-col size="12" *ngIf="p.open">
+        <ion-row class="second-lastrow">
+          <ion-col size="3">
+            <div class="ion-text-center inte">{{ 'MENU.name' | translate}}</div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="ion-text-center inte">
+              {{ 'MENU.price' | translate}}
+            </div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="ion-text-center inte">
+              {{ 'MENU.quantity' | translate}}
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="ion-text-center inte">
+              T.{{ 'MENU.price' | translate}}
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row
+          *ngFor="let art of articles; let i= index"
+          class="data-row data-update"
+        >
+          <ion-col size="3">
+            <div class="ion-text-center inte">{{art.item.name}}</div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="ion-text-center inte" *ngIf="art.packPrice > 1">
+              {{art.packPrice | currency:'CFA':'symbol':'3.0-0'}}
+            </div>
+            <div class="ion-text-center inte" *ngIf="art.packPrice == 0">
+              {{art.item.purchasingPrice | currency:'CFA':'symbol':'3.0-0'}}
+            </div>
+          </ion-col>
+
+          <ion-col size="3" *ngIf="!art.item.nbrBtl">
+            <div class="ion-text-center">{{art.qty}}</div>
+          </ion-col>
+          <ion-col size="3" *ngIf="art.item.nbrBtl">
+            <div class="ion-text-center">
+              {{art.qty}} + {{art.item.nbrBtl}}btls
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div
+              class="ion-text-center inte"
+              *ngIf="art.item.thetype === 'productItems' || art.item.thetype === 'pack'"
+            >
+              {{((art.qty * art.packPrice )+ (art.item.nbrBtl ? art.item.nbrBtl
+              * art.item.purchasingPrice : 0 ))|
+              currency:'CFA':'symbol':'3.0-0'}}
+            </div>
+            <div
+              class="ion-text-center inte"
+              *ngIf="art.item.thetype !== 'productItems' && art.item.thetype !== 'pack' "
+            >
+              {{art.qty * art.item.purchasingPrice |
+              currency:'CFA':'symbol':'3.0-0'}}
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="last-row"> </ion-row>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

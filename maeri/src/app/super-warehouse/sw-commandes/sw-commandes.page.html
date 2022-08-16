@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>sw-commande</ion-title>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+      <ion-button
+        *ngIf="transaction.length"
+        (click)=" this.router.navigateByUrl('procurment-product-item')"
+      >
+        <ion-icon name="notifications-outline"></ion-icon>
+        <ion-badge id="notifications-badge" color="danger"
+          >{{transaction.length}}
+        </ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="agencesCommandes.length">
+    <ion-row class="header-component">
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Date</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Agence</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Quantité</div>
+      </ion-col>
+
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Sc</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Dg</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Ag</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let com of agencesCommandes; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="display(com, i)"
+    >
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ com.created | date: "short" }}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ com.store.name }}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ com.quantity }}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-lg="2"
+        [ngStyle]="{ 'background-color': com.scConfirm ? 'var(--ion-color-success)' : 'white' }"
+      >
+        <div class="ion-text-center ion-text-uppercase smallSize"></div>
+      </ion-col>
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-lg="2"
+        [ngStyle]="{ 'background-color': com.saConfirm ? 'var(--ion-color-success)' : 'white' }"
+      >
+        <div class="ion-text-center ion-text-uppercase smallSize"></div>
+      </ion-col>
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-lg="2"
+        [ngStyle]="{ 'background-color': com.managerConfirm ? 'var(--ion-color-success)' : 'white' }"
+      >
+        <div class="ion-text-center ion-text-uppercase smallSize"></div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div
+    *ngIf="agencesCommandes.length == 0"
+    style="text-align: center; height: 100%"
+  >
+    <p>Pas de commandes disponibles pour le moment</p>
+  </div>
+</ion-content>

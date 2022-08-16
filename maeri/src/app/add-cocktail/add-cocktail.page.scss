@@ -1,0 +1,39 @@
+.data-lastrow {
+  background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.header-row {
+  // background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 9px;
+    }
+  }
+}
+
+.rowInventaire {
+  background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 9px;
+    }
+  }
+}
+
+.header-row2 {
+  background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 13px;
+      background-color: var(--ion-color-dark);
+      color: white;
+    }
+  }
+}

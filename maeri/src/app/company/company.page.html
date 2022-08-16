@@ -1,0 +1,215 @@
+<ion-header>
+  <ion-toolbar no-border>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+      <ion-button
+        color="light"
+        fill="outline"
+        *ngIf="setting.sale_Gaz"
+        (click)="displayStoreDetails()"
+        >boutique</ion-button
+      >
+      <ion-button
+        color="light"
+        fill="outline"
+        *ngIf="setting.use_gamme"
+        (click)="goToZonePage()"
+        >Zone Expedition</ion-button
+      >
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="save()" *ngIf="!check">
+        <ion-icon size="large" color="light" slot="end" name="save"></ion-icon>
+        <!-- {{ 'MENU.save' | translate}}-->
+      </ion-button>
+      <ion-button fill="outline" (click)="update()" *ngIf="check">
+        <ion-icon size="large" color="light" slot="end" name="save"></ion-icon>
+        <!-- {{ 'MENU.save' | translate}}-->
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-list-header>{{ 'MENU.settings' | translate}}</ion-list-header>
+
+    <ion-item>
+      <ion-icon slot="start" name="pricetag"></ion-icon>
+      <ion-label position="floating">
+        <h2>{{ 'MENU.name' | translate}}</h2>
+        <p *ngIf="companyName">{{companyName}}</p>
+      </ion-label>
+      <ion-input [(ngModel)]="companyName"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="call"></ion-icon>
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>{{ 'MENU.phone' | translate}}</h2>
+        <p>pas de signe +, EX: 237691087025</p>
+      </ion-label>
+      <ion-input [(ngModel)]="phoneNumber"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="setting && setting.use_paiement_type">
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label>Type de paiement</ion-label>
+      <ion-select
+        value="CASH"
+        interface="popover"
+        (ionChange)="typeDePaiment($event)"
+      >
+        <ion-select-option value="ORANGE MONEY">ORANGE MONEY</ion-select-option>
+        <ion-select-option value="MTN MONEY">MTN MONEY</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="operatorName">
+      <ion-icon slot="start" name="call"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>Paiement Mobile:</h2>
+      </ion-label>
+      <ion-input
+        [(ngModel)]="phonePaiement"
+        type="tel"
+        name="telephone"
+      ></ion-input>
+      <ion-button
+        [disabled]="!phonePaiement"
+        size="small"
+        (click)="getPhoneList()"
+        >valider</ion-button
+      >
+    </ion-item>
+    <div *ngIf="phoneList.length">
+      <ion-list>
+        <ion-item *ngFor="let doc of phoneList; let i= index">
+          <ion-label>{{doc.name}} Tel: {{doc.telephone}}</ion-label>
+
+          <ion-button
+            color="danger"
+            size="small"
+            (click)="removeToPhoneList(doc, i)"
+            >Delete</ion-button
+          >
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <ion-item>
+      <ion-icon slot="start" name="print"></ion-icon>
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>{{ 'MENU.localserver' | translate}} @mac</h2>
+        <p *ngIf="macServer">{{macServer}}</p>
+      </ion-label>
+      <ion-input [(ngModel)]="macServer"></ion-input>
+    </ion-item>
+
+    <!--
+      <ion-item>
+      <ion-icon slot="start" name="stopwatch"></ion-icon>
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>{{ 'MENU.stock_alert' | translate}}</h2>
+        <p *ngIf="ip">{{stock_min}}</p>
+      </ion-label>
+      <ion-input [(ngModel)]="stock_min"></ion-input>
+    </ion-item>
+      <ion-item>
+      <ion-icon slot="start" name="mail"></ion-icon>
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>E-mail</h2>
+        <p *ngIf="companyMail">{{companyMail}}</p>
+      </ion-label>
+      <ion-input [(ngModel)]="companyMail "></ion-input>
+    </ion-item>
+    
+      <ion-item>
+      <ion-icon slot="start" name="print"></ion-icon>
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>{{ 'MENU.printer' | translate}} ip@</h2>
+        <p *ngIf="ip">{{ip}}</p>
+      </ion-label>
+      <ion-input [(ngModel)]="ip "></ion-input>
+    </ion-item>
+      <ion-item>
+      <ion-icon slot="start" name="stopwatch"></ion-icon>
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>Stock Min autorisation vente</h2>
+        <p *ngIf="ip">{{stock_min_aut}}</p>
+      </ion-label>
+      <ion-input [(ngModel)]="stock_min_aut"></ion-input>
+    </ion-item>
+     <ion-item>
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>{{ 'MENU.register_customer' | translate}}</h2>
+      </ion-label>
+      <ion-checkbox
+        slot="end"
+        [(ngModel)]="register_customer"
+        (ionChange)="autoriseEnregistrementClient()"
+      ></ion-checkbox>
+    </ion-item>
+   -->
+
+    <ion-item>
+      <ion-icon slot="start" name="build"></ion-icon>
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>{{ 'MENU.invoice_header' | translate}}:</h2>
+        <p *ngIf="entete_facture">{{entete_facture}}</p>
+      </ion-label>
+      <ion-input [(ngModel)]="entete_facture"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="build"></ion-icon>
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>{{ 'MENU.invoice_footer' | translate}}:</h2>
+        <p *ngIf="pied_facture">{{pied_facture}}</p>
+      </ion-label>
+      <ion-input [(ngModel)]="pied_facture"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap">
+        <h2>logo company:</h2>
+      </ion-label>
+      <ion-input
+        name="image"
+        type="file"
+        (change)="readUrl($event)"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label class="ion-text-wrap">
+        <h2>logo pied de page:</h2>
+      </ion-label>
+      <ion-input
+        name="image"
+        type="file"
+        (change)="readUrlPiedPage($event)"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="setting && setting.ship_packages">
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>Taxe covid</h2>
+      </ion-label>
+      <ion-input [(ngModel)]="taxe_covid"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="setting && setting.ship_packages">
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>Taxe phytosanitaire</h2>
+      </ion-label>
+      <ion-input [(ngModel)]="taxe_phyto"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="setting && setting.ship_packages">
+      <ion-label position="floating" class="ion-text-wrap">
+        <h2>Surcharge Carburant</h2>
+      </ion-label>
+      <ion-input [(ngModel)]="surcharge_carburant"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>

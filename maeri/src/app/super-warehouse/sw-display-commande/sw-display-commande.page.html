@@ -1,0 +1,112 @@
+<div #header>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title></ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/start"></ion-back-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button fill="outline" color="primary" (click)="print()">
+          imprimer
+        </ion-button>
+        <ion-button
+          fill="outline"
+          color="success"
+          (click)="sendToSuperWareouse()"
+          *ngIf="!originalCommande.swConfirm"
+        >
+          confirmer la livraison
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+</div>
+<ion-content>
+  <div style="padding-left: 60px; padding-right: 60px">
+    <div *ngIf="setting && setting.logo" style="margin: 15px">
+      <img
+        style="
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
+          height: 100px;
+        "
+        src="{{setting.logo}}"
+        alt=""
+      />
+    </div>
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <div class="ion-text-center ion-text-uppercase">
+          Bordereau de livraison
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row class="header-component">
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">Name</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">A livré</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">prix.U</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">prix.T</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let com of originalCommande.AgenceCommande; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.name}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.accept}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.sellingPrice|
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.sellingPrice * com.accept|
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer *ngIf="display_footer">
+  <div style="padding-left: 60px; padding-right: 60px">
+    <div *ngIf="setting && setting.pied_page" style="margin: 15px">
+      <img
+        style="
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
+          height: 100px;
+        "
+        src="{{setting.pied_page}}"
+        alt=""
+      />
+    </div>
+  </div>
+</ion-footer>

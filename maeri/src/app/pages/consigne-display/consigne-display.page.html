@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button color="light" fill="outline" size="small" (click)="update()"
+        >update</ion-button
+      >
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="header-row-consigne">
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">name</div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">Cassier</div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">Bouteille</div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">Price</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let row of Consigne.articles let i= index"
+      class="data-row-consigne data-update"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="3" size-md="3" size-sm="3" class="ion-align-self-center">
+        <div class="ion-text-center">{{row.item.name}}</div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3">
+        <ion-input
+          style="text-align: center"
+          color="primary"
+          [value]="row.cassier ? row.cassier : 0 "
+          placeholder="cassier"
+          type="number"
+          debounce="500"
+          (ionChange)="getNewValueCassier($event, row, i)"
+        ></ion-input>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3" class="ion-align-self-center">
+        <ion-input
+          style="text-align: center"
+          color="danger"
+          [value]="row.bouteille ? row.bouteille : 0"
+          placeholder="bouteille"
+          type="number"
+          debounce="500"
+          (ionChange)="getNewValueBouteille($event, row, i)"
+        ></ion-input>
+        <div class="ion-text-center"></div>
+      </ion-col>
+      <ion-col size="3" size-md="3" size-sm="3" class="ion-align-self-center">
+        <div class="ion-text-center" *ngIf="row.price">
+          {{row.price | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="prod">
+    <img src="{{ prod.url }}" />
+  </ion-card>
+  <ion-list *ngIf="prod" lines="full">
+    <ion-list-header> </ion-list-header>
+
+    <ion-item lines="full">
+      <ion-label class="ion-text-wrap">
+        <h3>{{ prod.name }}</h3>
+        <h3>prix d'achat: {{ prod.purchasingPrice }}</h3>
+        <h3>prix de vente: {{ prod.sellingPrice }}</h3>
+        <h3>store: {{ prod.quantityStore }}</h3>
+        <h3>stock: {{ prod.quantityItems }}</h3>
+        <p>update: {{ prod.dateupdate | date:'medium' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="prod && prod.pack_items_update " lines="full">
+    <ion-list-header> </ion-list-header>
+
+    <ion-item lines="full" *ngFor="let item of prod.pack_items_update">
+      <ion-label class="ion-text-wrap">
+        <p>update: {{ item.dateupdate | date:'medium' }}</p>
+        <h3>New stock: {{ item.newstock }}</h3>
+        <h3>Old stock: {{ item.oldstock }}</h3>
+        <h3>quantity: {{ item.quantity }}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="prod && prod.manufacturedupdate " lines="full">
+    <ion-list-header> </ion-list-header>
+
+    <ion-item lines="full" *ngFor="let item of prod.manufacturedupdate">
+      <ion-label class="ion-text-wrap">
+        <p>update: {{ item.dateupdate | date:'medium' }}</p>
+        <h3>New stock: {{ item.newstock }}</h3>
+        <h3>Old stock: {{ item.oldstock }}</h3>
+        <h3>quantity: {{ item.quantity }}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

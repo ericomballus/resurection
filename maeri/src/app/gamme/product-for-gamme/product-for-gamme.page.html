@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        size="small"
+        fill="outline"
+        color="primary"
+        (click)="saveAndCloseModal()"
+      >
+        {{ 'MENU.save' | translate}}
+      </ion-button>
+      <ion-button
+        size="small"
+        fill="outline"
+        color="danger"
+        (click)="closeModal()"
+      >
+        {{ 'MENU.cancel' | translate}}
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let prod of productTab">
+      <ion-label>{{prod.name}}</ion-label>
+      <ion-checkbox
+        checked="true"
+        *ngIf="prod.isChecked"
+        (ionChange)="selectProduct(prod)"
+        slot="end"
+      ></ion-checkbox>
+      <ion-checkbox
+        *ngIf="!prod.isChecked"
+        (ionChange)="selectProduct(prod)"
+        slot="end"
+      ></ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>

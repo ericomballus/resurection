@@ -1,0 +1,163 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col class="ion-align-self-center" [ngClass]="'separationBlock'">
+      <div class="ion-text-center ion-text-uppercase">
+        <h3>les commandes</h3>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row color="primary">
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">Journéé</div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">company</div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">
+        heure livraison
+      </div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">statut</div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row
+    color="primary"
+    *ngFor="let inv of commandeList let i = index"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    (click)="presentModal(inv)"
+  >
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">
+        {{inv.created | date}} {{ inv.created | date:'shortTime' }}
+      </div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">
+        {{inv.vendorId ?.company}}
+      </div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">
+        {{inv.dateLivraison | date:'shortTime'}}
+      </div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div
+        *ngIf="!inv.vendorConfirm && !inv.orderConfirm && inv.status == 1"
+        class="ion-text-center ion-text-uppercase taille color1"
+      >
+        en attente
+      </div>
+      <div
+        *ngIf="inv.orderConfirm &&  inv.status == 1"
+        class="ion-text-center ion-text-uppercase taille color1"
+      >
+        confirmé
+      </div>
+      <div
+        *ngIf="inv.vendorConfirm && inv.status == 2"
+        class="ion-text-center ion-text-uppercase taille color4"
+      >
+        en traitement
+      </div>
+      <div
+        *ngIf="inv.vendorConfirm && inv.status == 3"
+        class="ion-text-center ion-text-uppercase taille color2"
+      >
+        marchandise livré
+      </div>
+      <div
+        *ngIf="inv.vendorConfirm && inv.status == 4"
+        class="ion-text-center ion-text-uppercase taille color3"
+      >
+        livraison reçu
+      </div>
+      <div
+        *ngIf="inv.paid && !inv.delivered && inv.status == 5"
+        class="ion-text-center"
+      >
+        payé non livré
+      </div>
+      <div
+        *ngIf="inv.paid && !inv.delivered && inv.status == 3"
+        class="ion-text-center"
+      >
+        payé non reçu
+      </div>
+      <div *ngIf="inv.paid && inv.delivered" class="ion-text-center">payé</div>
+      <div
+        *ngIf="!inv.vendorConfirm && inv.status == 0"
+        class="ion-text-center ion-text-uppercase taille color0"
+      >
+        rejetté
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

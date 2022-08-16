@@ -1,0 +1,256 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="light" fill="outline" (click)="closeModal()">
+        <ion-icon color="light" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        *ngIf="isRetailer"
+        color="light"
+        fill="outline"
+        (click)="save()"
+        color="primary"
+      >
+        <ion-icon
+          size="large"
+          color="light"
+          slot="icon-only"
+          name="save"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="animated bounceInLeft slow delay-1s">
+    <form #form="ngForm" (ngSubmit)="register(form)" *ngIf="Changes">
+      <div padding *ngIf="Changes">
+        <ion-item>
+          <ion-input
+            name="name"
+            type="text"
+            placeholder="Name"
+            ngModel
+            required
+            [(ngModel)]="employee.name"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            name="poste"
+            type="texte"
+            placeholder="poste occupé"
+            ngModel
+            required
+            [(ngModel)]="employee.poste"
+          ></ion-input>
+        </ion-item>
+        <ion-item *ngIf="userStore.length > 1">
+          <ion-label>{{ 'MENU.store' | translate}}</ion-label>
+          <ion-select
+            cancelText="cancel"
+            okText="Okay"
+            interface="popover"
+            (ionChange)="assignSore($event)"
+          >
+            <ion-select-option
+              *ngFor="let role of userStore"
+              value="{{ role.id }}"
+              >{{ role.name }}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+
+        <ion-list *ngIf="!isRetailer">
+          <ion-list-header>
+            <ion-label>ROLE</ion-label>
+          </ion-list-header>
+          <ion-item *ngFor="let role of roles">
+            <ion-label>{{role.name}}</ion-label>
+            <ion-checkbox
+              slot="end"
+              [(ngModel)]="role.isChecked"
+              [ngModelOptions]="{standalone: true}"
+            ></ion-checkbox>
+          </ion-item>
+        </ion-list>
+        <ion-item *ngIf="!isRetailer">
+          <ion-label>{{ 'MENU.delete' | translate}} ROLE</ion-label>
+          <ion-select
+            cancelText="cancel"
+            okText="Okay"
+            interface="popover"
+            (ionChange)="removeRole($event)"
+          >
+            <ion-select-option
+              *ngFor="let role of employee.role"
+              value="{{ role._id }}"
+              >{{ role.name }}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            name="telephone"
+            type="number"
+            placeholder="phone number"
+            ngModel
+            required
+            [(ngModel)]="employee.telephone"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            name="password"
+            type="password"
+            placeholder="Password"
+            ngModel
+            required
+            [(ngModel)]="employee.newpassword"
+          ></ion-input>
+        </ion-item>
+        <ion-item *ngIf="setting && setting.check_resource">
+          <ion-label> {{ 'MENU.pReduction' | translate}}</ion-label>
+          <ion-input
+            name="percentage"
+            type="number"
+            placeholder="Pourcentage"
+            ngModel
+            required
+            [(ngModel)]="employee.percentage"
+          ></ion-input>
+        </ion-item>
+      </div>
+      <div *ngIf="isRetailer">
+        <ion-row class="row-header">
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-xm="3"
+            size-lg="3"
+            class="ion-align-self-center"
+          >
+            <div class="ion-text-center ion-text-uppercase taille">
+              {{ 'MENU.name' | translate}}
+            </div>
+          </ion-col>
+
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-xm="3"
+            size-lg="3"
+            class="ion-align-self-center"
+          >
+            <div class="ion-text-center ion-text-uppercase taille">
+              {{ 'MENU.avaible' | translate}}
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-xm="3"
+            size-lg="3"
+            class="ion-align-self-center"
+          >
+            <div class="ion-text-center ion-text-uppercase taille">
+              {{ 'MENU.price' | translate}}
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-xm="3"
+            size-lg="3"
+            class="ion-align-self-center"
+          >
+            <div class="ion-text-right ion-text-uppercase">
+              {{ 'MENU.retailerPrice' | translate}}
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row
+          color="primary"
+          *ngFor="let prod of employee.productsToSale let i = index"
+          [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+        >
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-xm="3"
+            size-lg="3"
+            class="ion-align-self-center"
+          >
+            <div class="ion-text-center ion-text-uppercase">
+              {{prod.name ? prod.name : 'no Name'}}
+            </div>
+          </ion-col>
+
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-xm="3"
+            size-lg="3"
+            class="ion-align-self-center"
+          >
+            <div class="ion-text-center ion-text-uppercase">
+              {{prod.retailerStore ? prod.retailerStore : 0}}
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-xm="3"
+            size-lg="3"
+            class="ion-align-self-center"
+          >
+            <div class="ion-text-center ion-text-uppercase">
+              {{prod.sellingPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-xm="3"
+            size-lg="3"
+            class="ion-align-self-center"
+          >
+            <ion-input
+              placeholder="{{
+              prod.retailerPrice ? prod.retailerPrice: 0
+            }} Fcfa"
+              type="number"
+              debounce="1000"
+              (ionChange)="changePrice($event, prod)"
+            ></ion-input>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div padding *ngIf="!isRetailer">
+        <ion-button color="danger" size="large" type="submit" expand="block"
+          >{{ 'MENU.update' | translate}}</ion-button
+        >
+      </div>
+    </form>
+
+    <ion-list *ngIf="disiplay_details">
+      <ion-list-header> </ion-list-header>
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="../../assets/user.png" />
+        </ion-avatar>
+        <ion-label>
+          <h3>{{ employee.name }}</h3>
+          <h3>{{ 'MENU.poste' | translate}}: {{ employee.poste }}</h3>
+          <h6 class="role" *ngFor="let rol of employee.role index as i">
+            Role {{i+1}}-: {{ rol.name}}
+          </h6>
+          <h3>{{ 'MENU.phone' | translate}}: {{ employee.telephone }}</h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

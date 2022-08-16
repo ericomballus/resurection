@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{company}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-align-items-center">
+      <ion-col class="col">
+        <h5>Turnover:</h5>
+        <p class="numberInDiv1">
+          {{totalVente | currency:'FCFA':'symbol':'3.0-0'}}
+        </p>
+      </ion-col>
+      <ion-col class="rowcol2 col">
+        <h5 class="titleInDiv">cash:</h5>
+        <p class="numberInDiv1">
+          {{totalsaleProd | currency:'FCFA':'symbol':'3.0-0'}}
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center">
+      <ion-col class="col">
+        <h5 class="titleInDiv">Orders:</h5>
+        <p class="numberInDiv">{{openTicket}}</p>
+      </ion-col>
+      <ion-col class="rowcol2 col">
+        <h5 class="titleInDiv">Open Orders:</h5>
+        <p class="numberInDiv">{{cashDayTicket}}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div>
+    <table class="table">
+      <tr>
+        <th class="textLeft">Name</th>
+        <th class="textRight">Quantity</th>
+        <th class="textRight">TotalSale</th>
+      </tr>
+      <tr *ngFor="let elt of rows">
+        <td class="productname textRigh" width="25%">
+          {{ elt._id }}
+        </td>
+        <td class="numberIntable textRigh" width="25%">
+          <span class="spane">{{ elt.quantity }} </span>
+        </td>
+
+        <td class="numberIntable" width="25%">
+          <span class="spane"
+            >{{ elt.totalSalesAmount | currency:'FCFA':'symbol':'3.0-0'}}
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+</ion-content>

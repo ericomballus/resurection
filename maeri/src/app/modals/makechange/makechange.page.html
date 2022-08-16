@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="data"
+      >Echange: {{data.ToChange.name}} ---> {{data.product.name}}</ion-title
+    >
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>Bouteille pleine</h2>
+      </ion-label>
+      <ion-checkbox
+        slot="end"
+        (ionChange)="confirmBtlPleine()"
+        color="primary"
+        *ngIf="!data.pleine"
+      ></ion-checkbox>
+      <ion-checkbox
+        slot="end"
+        *ngIf="data.pleine"
+        color="primary"
+        checked="true"
+        (ionChange)="confirmBtlVide()"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label class="ion-text-wrap">
+        <h2>Bouteille vide</h2>
+      </ion-label>
+      <ion-checkbox
+        slot="end"
+        (ionChange)="confirmBtlVide()"
+        color="primary"
+        *ngIf="!data.vide"
+      ></ion-checkbox>
+      <ion-checkbox
+        slot="end"
+        *ngIf="data.vide"
+        color="primary"
+        checked="true"
+        (ionChange)="confirmBtlVide()"
+      ></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label>Quantité</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="quantité"
+        type="number"
+        [(ngModel)]="nbr"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Montant Echange</ion-label>
+      <ion-input
+        slot="end"
+        placeholder="montant échange"
+        type="number"
+        [(ngModel)]="montant"
+      ></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button (click)="validate()" color="success" expand="block"
+    >Valider</ion-button
+  >
+</ion-content>

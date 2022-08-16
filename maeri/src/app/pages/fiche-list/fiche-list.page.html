@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true" *ngIf="multiStoreList.length">
+    <ion-slide *ngFor="let ficheList of multiStoreList; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>{{ficheList.storeName}}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="header-component">
+          <ion-col size-sm="5" size-md="5" size-lg="5">
+            <div class="ion-text-center">Date</div>
+          </ion-col>
+          <ion-col size-sm="5" size-md="5" size-lg="5">
+            <div class="ion-text-center">Status</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center"></div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          class="row-componentt"
+          *ngFor="let fiche of ficheList let i= index"
+          [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+        >
+          <ion-col size-sm="5" size-md="5" size-lg="5">
+            <div class="ion-text-center">
+              {{ fiche.created | date: "short"}}
+            </div>
+          </ion-col>
+          <ion-col size-sm="5" size-md="5" size-lg="5">
+            <div class="ion-text-center">
+              {{ fiche.open ? 'ouvert' : 'fermé'}}
+            </div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">
+              <ion-button size="small" (click)="voir(fiche)">voir</ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

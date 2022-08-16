@@ -1,0 +1,35 @@
+.round {
+  --width: 5px;
+  --height: 5px;
+  // --border-radius: 50%;
+  --vertical-align: middle;
+  // --padding-start: 10px;
+  // --padding-end: 10px;
+  margin: 2px;
+  font-size: 10px;
+}
+
+.packName {
+  font-size: 12px;
+  // position: absolute;
+  // bottom: 55%;
+}
+.packUnit {
+  font-size: 12px;
+}
+
+.divBtn {
+  height: 10px;
+  width: 15;
+}
+
+.divBtn ion-button {
+  font-size: 55%;
+}
+
+.divBtnUpdate {
+  // position: relative;
+  // right: 1%;
+  // top: 3%;
+  font-size: 45%;
+}

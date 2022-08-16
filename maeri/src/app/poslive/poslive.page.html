@@ -1,0 +1,421 @@
+<ion-header #mballus2>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button
+        color="light"
+        fill="outline"
+        defaultHref="/start"
+      ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <!--<ion-title class="titre">{{ 'MENU.administration' | translate}}</ion-title>
+    <ion-buttons slot="end" *ngIf="admin || manager">
+      <ion-button>
+        {{ userName }}
+        <ion-icon slot="icon-only" name="contact"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>-->
+</ion-header>
+
+<ion-content padding>
+  <h1 class="title">POS LIVE</h1>
+  <div (click)="openBar()" class="bar" *ngIf="!tabRoles.includes(6)">
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">BAR</div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-col
+        size="6"
+        size-md="3"
+        size-lg="3"
+        size-sm="6"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Turnover</h3>
+          {{totalVenteBar | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-lg="3"
+        size-sm="6"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Cash</h3>
+          {{cashBar | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-lg="3"
+        size-sm="6"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>BIlls</h3>
+          {{billsBar}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-lg="3"
+        size-sm="6"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Open Orders:</h3>
+          {{openTicketBar ? openTicketBar: 0}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="barOpen && !tabRoles.includes(6)">
+    <div *ngIf="Bar">
+      <ion-row class="header-component">
+        <ion-col size-sm="2" size-md="2" size-lg="2">
+          <div class="ion-text-center">name</div>
+        </ion-col>
+        <ion-col size-sm="2" size-md="2" size-lg="2">
+          <div class="ion-text-center">glacé</div>
+        </ion-col>
+        <ion-col size-sm="2" size-md="2" size-lg="2">
+          <div class="ion-text-center">n.glacé</div>
+        </ion-col>
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center">quantité</div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center">TotalSale</div>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="Bar">
+      <ion-row
+        *ngFor="let row of Bar; let i= index"
+        class="data-row data-update"
+      >
+        <ion-col size="2" size-md="2" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row._id.name}}</div>
+        </ion-col>
+        <ion-col size="2" size-md="2" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row.glace}}</div>
+        </ion-col>
+        <ion-col size="2" size-md="2" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row.nonglace}}</div>
+        </ion-col>
+        <ion-col size="3" size-md="3" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row.quantity}}</div>
+        </ion-col>
+        <ion-col size="3" size-md="3" class="ion-align-self-center">
+          <div class="ion-text-center inte">
+            {{row.totalSalesAmount | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <div
+    (click)="openResto()"
+    class="divResto"
+    class="resto"
+    *ngIf="!tabRoles.includes(6)"
+  >
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">CUISINE</div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Turnover</h3>
+          {{totalVenteResto | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Cash</h3>
+          {{cashResto | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>BIlls</h3>
+          {{billsResto}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Open Orders:</h3>
+          {{openTicketResto ? openTicketResto: 0}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="restoOpen && !tabRoles.includes(6)">
+    <div *ngIf="Resto">
+      <ion-row class="header-component">
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">name</div>
+        </ion-col>
+
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">quantité</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">TotalSale</div>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="Resto">
+      <ion-row
+        *ngFor="let row of Resto; let i= index"
+        class="data-row data-update"
+      >
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row._id.name}}</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row.quantity}}</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">
+            {{row.totalSalesAmount | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <div
+    (click)="openShop()"
+    class="divResto boutique"
+    *ngIf="!tabRoles.includes(6)"
+  >
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">SHOP</div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Turnover</h3>
+          {{totalVenteShop | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Cash</h3>
+          {{cashShop | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>BIlls</h3>
+          {{billsShop}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Open Orders:</h3>
+          {{openTicketShop ? openTicketShop: 0}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="shopOpen">
+    <div *ngIf="Shop">
+      <ion-row class="header-component">
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">name</div>
+        </ion-col>
+
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">quantité</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">TotalSale</div>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="Shop">
+      <ion-row
+        *ngFor="let row of Shop; let i= index"
+        class="data-row data-update"
+      >
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row._id.name}}</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row.quantity}}</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">
+            {{row.totalSalesAmount | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <div (click)="openService()" class="divResto service">
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">SERVICE</div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Turnover</h3>
+          {{totalVenteService | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Cash</h3>
+          {{cashService | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>BIlls</h3>
+          {{billsService}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="6"
+        size-md="3"
+        size-sm="6"
+        size-lg="3"
+        class="ion-padding ion-margin-top"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Open Orders:</h3>
+          {{openTicketService ? openTicketService: 0}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="serviceOpen">
+    <div *ngIf="ServiceList">
+      <ion-row class="header-component">
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">name</div>
+        </ion-col>
+
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">quantité</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center ion-text-uppercase">TotalSale</div>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="ServiceList">
+      <ion-row
+        *ngFor="let row of ServiceList; let i= index"
+        class="data-row data-update"
+      >
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row._id.name}}</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">{{row.quantity}}</div>
+        </ion-col>
+        <ion-col size="4" size-md="4" class="ion-align-self-center">
+          <div class="ion-text-center inte">
+            {{row.totalSalesAmount | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+</ion-content>

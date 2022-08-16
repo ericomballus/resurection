@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home-expense"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #form="ngForm" (ngSubmit)="postExpense(form)">
+    <div>
+      <ion-item>
+        <ion-label>{{ 'MENU.categories' | translate}}</ion-label>
+        <ion-select interface="popover" (ionChange)="chooseCategorie($event)">
+          <ion-select-option
+            *ngFor="let prod of categories"
+            value="{{ prod._id }}"
+            >{{ prod.name }}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          name="amount"
+          type="number"
+          placeholder="montant"
+          ngModel
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item *ngIf="userStore.length > 1">
+        <ion-label>{{ 'MENU.store' | translate}}</ion-label>
+        <ion-select
+          cancelText="cancel"
+          okText="Okay"
+          interface="popover"
+          (ionChange)="assignStore($event)"
+        >
+          <ion-select-option
+            *ngFor="let role of userStore"
+            value="{{ role.id }}"
+            >{{ role.name }}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-textarea
+          name="description"
+          ngModel
+          required
+          rows="8"
+          cols="24"
+          placeholder="écrire le texte ici..."
+        ></ion-textarea>
+      </ion-item>
+    </div>
+    <div class="ion-text-center">
+      <ion-button color="danger" size="large" type="submit" expand="block"
+        >{{ 'MENU.save' | translate}}</ion-button
+      >
+    </div>
+  </form>
+</ion-content>

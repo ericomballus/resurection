@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/purchase"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <div class="ion-text-center ion-text-uppercase">
+          Bordereau de livraison
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="doc">
+    <ion-row class="header-component">
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Name</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Q. commandé</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">Q. livré</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">prix.U</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">prix.T</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center"></div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="!doc.scConfirm">
+      <ion-col size="12">
+        <div
+          class="ion-text-center ion-text-uppercase"
+          style="color: var(--ion-color-danger)"
+        >
+          En cours de traitement ...
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let com of doc.AgenceCommande; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      [ngClass]="{ masque: com.confirm}"
+    >
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.name}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.qty}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.accept}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.sellingPrice|
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{com.request.item.sellingPrice * com.accept|
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">
+          <ion-button
+            *ngIf="doc.swConfirm && !tabRoles.includes(7)"
+            [disabled]="com.confirm"
+            size="small"
+            (click)="valider(com, i)"
+            >valider</ion-button
+          >
+          <p
+            *ngIf="!doc.swConfirm && !tabRoles.includes(7)"
+            style="color: var(--ion-color-danger)"
+          >
+            En cours de livraison...
+          </p>
+          <p
+            *ngIf="!doc.managerConfirm && tabRoles.includes(7) && doc.swConfirm"
+            style="color: var(--ion-color-danger)"
+          >
+            En cours de livraison...
+          </p>
+          <p
+            *ngIf="doc.managerConfirm && tabRoles.includes(7) && doc.swConfirm"
+            style="color: var(--ion-color-success)"
+          >
+            Livré
+          </p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

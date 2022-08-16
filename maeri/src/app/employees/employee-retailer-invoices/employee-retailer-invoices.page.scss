@@ -1,0 +1,39 @@
+data-lastrow {
+  background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.header-component {
+  background-color: #202020;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: white;
+  text-transform: uppercase;
+  ion-col {
+    div {
+      font-size: 11px;
+    }
+  }
+}
+
+.header-row {
+  // font-weight: 500;
+  // border-bottom: 2px solid black;
+  background-color: #f1f1f1;
+  color: black;
+  ion-col div {
+    // text-transform: uppercase;
+    // font-size: 11px;
+  }
+}
+
+.smalle {
+  font-weight: bold;
+  font-size: 15px;
+  padding: 5px;
+}
+
+.smallSize {
+  font-size: 11px;
+  text-align: center;
+}

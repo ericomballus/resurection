@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase">
+          {{'MENU.historiqueP' | translate}}
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="header-component">
+      <ion-col size="3">
+        <div class="ion-text-center">{{'MENU.startAt' | translate}}</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">{{'MENU.amount' | translate}}</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">{{'MENU.endAt' | translate}}</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">Status</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let contrat of contratList; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="displayDetails(contrat)"
+    >
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ contrat.startAt | date }}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{contrat.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ contrat.endAt | date }}
+        </div>
+      </ion-col>
+
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{contrat.status ? 'payé' : 'non payé'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

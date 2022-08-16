@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="titre">{{ 'MENU.item_resource' | translate}}</ion-title>
+    <ion-buttons slot="end"> </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment color="tertiary" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="product" checked>
+      <ion-label>{{ 'MENU.drinks' | translate}}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="productResto">
+      <ion-label>{{ 'MENU.dishes' | translate}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <ion-list *ngIf="resources " lines="full" [hidden]="!btnProducts">
+    <ion-list-header> </ion-list-header>
+
+    <ion-item *ngFor="let prod of resources" lines="full">
+      <ion-label> {{ prod.name}}</ion-label>
+      <ion-button
+        class="btnWarehouse"
+        fill="outline"
+        size="small"
+        slot="end"
+        (click)="updateStore(prod)"
+        >{{ 'MENU.update_store' | translate}}</ion-button
+      >
+      <ion-label>
+        <p class="instock">
+          {{ 'MENU.in_stock' | translate}}: {{ prod.quantityItems }} {{
+          prod.unitName }}
+        </p>
+        <p class="instore">
+          {{ 'MENU.in_store' | translate}}: {{ prod.quantityStore }}
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <!-- prodcuts resto here -->
+  <ion-list *ngIf="productsItem " lines="full" [hidden]="!btnResto">
+    <ion-list-header> </ion-list-header>
+
+    <ion-item *ngFor="let prod of productResto" lines="full">
+      <ion-avatar slot="start">
+        <img src="{{ prod.url }}" />
+      </ion-avatar>
+      <ion-button fill="outline" slot="end" (click)="updateStoreResto(prod)"
+        >{{ 'MENU.update_store' | translate}}</ion-button
+      >
+      <ion-label>
+        <p class="instock">
+          {{ 'MENU.in_stock' | translate}}: {{ prod.quantityItems }}
+        </p>
+        <p class="instore">
+          {{ 'MENU.in_store' | translate}}: {{ prod.quantityStore }}
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,253 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" color="light" (click)="pickProduct()">
+        <ion-icon color="light" slot="icon-only" name="add"></ion-icon
+      ></ion-button>
+      <ion-button
+        *ngIf="productPick && flag"
+        fill="outline"
+        color="light"
+        (click)="sendToServer()"
+      >
+        <ion-icon color="success" slot="end" name="save"></ion-icon>
+      </ion-button>
+      <ion-button
+        *ngIf="productPick && !flag"
+        fill="outline"
+        color="light"
+        (click)="sendManufToServer()"
+      >
+        <ion-icon color="light" slot="end" name="save"></ion-icon>
+      </ion-button>
+      <ion-button (click)="closeModal()" fill="outline" color="light">
+        <ion-icon color="light" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!--table data pick-->
+  <div *ngIf="flag">
+    <ion-row class="header-r">
+      <ion-col size="2">
+        <div class="ion-text-start">image</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.name' | translate}}</div>
+      </ion-col>
+
+      <ion-col size="2">
+        <div class="ion-text-center">
+          {{ 'MENU.purchasingPrice' | translate}}
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.sellingPrice' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">store</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">category</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let row of productPick; let i= index"
+      class="data-row data-update"
+    >
+      <ion-col size="2">
+        <img src="{{ row.url }}" style="height: 30px" />
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{row.name}}</div>
+      </ion-col>
+
+      <ion-col size="2" size-md="2">
+        <div class="ion-text-center">
+          <ion-input
+            (ionChange)="changePrice($event, row, 'purchasingPrice')"
+            debounce="500"
+            placeholder="price..."
+            [value]="sendPrice(row.purchasingPrice)"
+          ></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="2" size-md="2">
+        <div class="ion-text-center">
+          <ion-input
+            (ionChange)="changePrice($event, row, 'sellingPrice')"
+            debounce="500"
+            placeholder="price..."
+            [value]="sendPrice(row.sellingPrice)"
+          ></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div *ngIf="userStore.length == 1" class="ion-text-center">
+          {{userStore[0].name}}
+        </div>
+        <div *ngIf="userStore.length > 1">
+          <ion-label>{{ 'MENU.store' | translate}}</ion-label>
+          <ion-select
+            cancelText="cancel"
+            okText="Okay"
+            interface="popover"
+            (ionChange)="assignStore($event, i)"
+          >
+            <ion-select-option
+              *ngFor="let role of userStore"
+              value="{{ role.id }}"
+              >{{ role.name }}</ion-select-option
+            >
+          </ion-select>
+        </div>
+      </ion-col>
+      <ion-col size="1">
+        <div class="">
+          <ion-label>{{row.categoryName}}</ion-label>
+          <ion-select interface="popover" (ionChange)="test2($event, i)">
+            <ion-select-option
+              *ngFor="let prod of categorys"
+              value="{{ prod.name }}"
+              >{{ prod.name }}</ion-select-option
+            >
+          </ion-select>
+        </div>
+      </ion-col>
+
+      <ion-col size="1">
+        <div
+          *ngIf="row.pick"
+          class="ion-text-center"
+          (click)="selectProduct(row, i)"
+        >
+          <ion-icon
+            size="large"
+            color="primary"
+            name="checkbox-outline"
+          ></ion-icon>
+        </div>
+        <div
+          *ngIf="!row.pick"
+          class="ion-text-center"
+          (click)="selectProduct(row, i)"
+        >
+          <ion-icon size="large" name="checkbox-outline"></ion-icon>
+        </div>
+      </ion-col>
+      <!--
+         
+         <ion-label>{{ 'MENU.category' | translate}}</ion-label>
+        <ion-col size="1">
+        <ion-button fill="clear" (click)="removeProduct(i)">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </ion-col>
+     -->
+    </ion-row>
+  </div>
+
+  <!--tab for manufactured item-->
+  <div *ngIf="!flag">
+    <ion-row class="header-r">
+      <ion-col size="2">
+        <div class="ion-text-center">image</div>
+      </ion-col>
+      <ion-col size="1">
+        <div class="ion-text-center">{{ 'MENU.name' | translate}}</div>
+      </ion-col>
+      <ion-col size="2" size-md="2">
+        <div class="ion-text-center">Resources</div>
+      </ion-col>
+      <ion-col size="2" size-md="2">
+        <div class="ion-text-center">{{ 'MENU.sellinPrice' | translate}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-hide-md-down">
+        <div class="ion-text-center">{{ 'MENU.category' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.store' | translate}}</div>
+      </ion-col>
+      <ion-col size="1">
+        <div class="ion-text-center">action</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let row of productPick; let i= index"
+      class="data-row data-update"
+    >
+      <ion-col size="2">
+        <img src="{{ row.url }}" style="height: 30px" />
+      </ion-col>
+      <ion-col size="1">
+        <div class="ion-text-start">{{row.name}}</div>
+      </ion-col>
+      <ion-col size="4" size-md="2">
+        <ion-button
+          size="small"
+          fill="clear"
+          (click)="pickResource(row)"
+          *ngIf="!row.resourceList"
+        >
+          <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        </ion-button>
+
+        <div *ngIf="row.resourceList" (click)="pickResource(row)">
+          <small *ngFor="let prod of row.resourceList">
+            {{prod.name}} {{prod.quantity}} {{prod.unitName}},<br />
+          </small>
+        </div>
+      </ion-col>
+      <ion-col size="2" size-md="2">
+        <div class="ion-text-center">
+          <ion-input
+            (ionChange)="changePrice($event, row, 'sellingPrice')"
+            debounce="500"
+            placeholder="price..."
+            [value]="sendPrice(row.sellingPrice)"
+          ></ion-input>
+        </div>
+      </ion-col>
+
+      <ion-col size="2" size-md="2" class="ion-hide-md-down">
+        <div class="">
+          <ion-label>{{row.categoryName}}</ion-label>
+          <ion-select interface="popover" (ionChange)="test2($event, i)">
+            <ion-select-option
+              *ngFor="let prod of supcategories"
+              value="{{ prod._id }}"
+              >{{ prod.name }}</ion-select-option
+            >
+          </ion-select>
+        </div>
+      </ion-col>
+
+      <ion-col size="2">
+        <div class="" *ngIf="userStore.length > 1">
+          <ion-label>{{ 'MENU.store' | translate}}</ion-label>
+          <ion-select
+            cancelText="cancel"
+            okText="Okay"
+            interface="popover"
+            (ionChange)="assignStoreManufactured($event, i)"
+          >
+            <ion-select-option
+              *ngFor="let role of userStore"
+              value="{{ role.id }}"
+              >{{ role.name }}</ion-select-option
+            >
+          </ion-select>
+        </div>
+      </ion-col>
+
+      <ion-col size="1">
+        <ion-button fill="clear" (click)="removeProduct(i)">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

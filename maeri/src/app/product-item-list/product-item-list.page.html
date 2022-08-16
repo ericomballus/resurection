@@ -1,0 +1,128 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="titre">{{ 'MENU.products' | translate}}</ion-title>
+    <ion-buttons slot="end" *ngIf="display">
+      <ion-button [routerLink]="['/product-buy']" color="light" fill="outline">
+        <ion-icon color="light" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="productsItem && !prodUpdate" lines="full">
+    <ion-item *ngFor="let prod of productsItem" lines="full">
+      <ion-avatar slot="start">
+        <img src="{{ prod.url }}" />
+      </ion-avatar>
+      <ion-label class="ion-text-wrap">
+        <p class="name">{{ prod.name }}</p>
+        <p>{{ prod.purchasingPrice }} -- {{ prod.sellingPrice }}</p>
+        <p>
+          {{ 'MENU.in_stock' | translate}}: {{ prod.quantityItems }} {{
+          'MENU.in_store' | translate}}: {{ prod.quantityStore }}
+        </p>
+
+        <!--<p>update: {{ prod.dateupdate | date:'medium' }}</p>
+        <ion-button
+        size="small"
+        (click)="presentActionSheet(prod)"
+        color="warning"
+      >
+        <ion-icon name="eye"></ion-icon>
+      </ion-button>-->
+      </ion-label>
+      <ion-button
+        (click)="presentActionSheet(prod)"
+        color="warning"
+        fill="outline"
+        slot="end"
+        >Reset</ion-button
+      >
+    </ion-item>
+  </ion-list>
+
+  <ion-card *ngIf="dataItem && prodUpdate">
+    <img src="{{ dataItem.url }}" />
+    <ion-card-content>
+      <p>Name: {{dataItem.name}}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <form
+    *ngIf="dataItem && prodUpdate"
+    #form="ngForm"
+    (ngSubmit)="updateProd(form)"
+  >
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div padding>
+            <ion-item>
+              <ion-label position="floating">Entrer le stock</ion-label>
+              <ion-input
+                name="newquantity"
+                type="number"
+                placeholder="En stock"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">description du produit</ion-label>
+              <ion-textarea
+                name="description"
+                rows="6"
+                cols="20"
+                placeholder="Enter more informations..."
+              ></ion-textarea>
+            </ion-item>
+          </div>
+          <div padding>
+            <ion-button
+              color="danger"
+              size="large"
+              type="submit"
+              [disabled]="form.invalid"
+              expand="block"
+              >Register</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+
+<!--
+   <ion-list *ngIf="productsItem && !prodUpdate" lines="full">
+    <ion-list-header>
+      ALL PACKS
+    </ion-list-header>
+
+    <ion-item *ngFor="let prod of productsItem" lines="full">
+      <ion-avatar slot="start">
+        <img src="{{ prod.url }}" />
+      </ion-avatar>
+      <ion-label class="ion-text-wrap">
+        <p>{{ prod.name }}</p>
+        <h3>prix d'achat: {{ prod.purchasingPrice }}</h3>
+        <h3>prix de vente: {{ prod.sellingPrice }}</h3>
+        <h3>In stock: {{ prod.quantityItems }}</h3>
+        <h3>In store: {{ prod.quantityStore }}</h3>
+        <p>update: {{ prod.dateupdate | date:'medium' }}</p>
+      </ion-label>
+      <ion-button
+        size="small"
+        (click)="presentActionSheet(prod)"
+        color="warning"
+      >
+        DETAILS
+      </ion-button>
+    </ion-item>
+  </ion-list>
+-->

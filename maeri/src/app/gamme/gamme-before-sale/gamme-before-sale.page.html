@@ -1,0 +1,146 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div
+    style="
+      text-align: center;
+      text-transform: uppercase;
+      background-color: #f1f1f1;
+      padding: 5px;
+    "
+  >
+    <h4>{{gamme.name}}</h4>
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div>
+          <ion-item button (click)="pickResource()" *ngIf="!removeToList">
+            <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+            <ion-label>Products</ion-label>
+          </ion-item>
+          <ion-row class="header-row">
+            <ion-col size="4" class="ion-align-self-center">
+              <div class="ion-text-center">Name</div>
+            </ion-col>
+
+            <ion-col size="4" class="ion-align-self-center">
+              <div class="ion-text-center">Price</div>
+            </ion-col>
+            <ion-col size="2" class="ion-align-self-center">
+              <div class="ion-text-center">toRemove</div>
+            </ion-col>
+            <ion-col size="2" class="ion-align-self-center">
+              <div class="ion-text-center"></div>
+            </ion-col>
+          </ion-row>
+          <ion-row
+            *ngFor="let prod of gamme.productList; let i= index"
+            class="data-row data-update"
+            [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+            #itemlist
+          >
+            <ion-col size="4" class="ion-align-self-center">
+              <div class="ion-text-center">{{prod.name}}</div>
+            </ion-col>
+
+            <ion-col size="4" class="ion-align-self-center">
+              <div class="ion-text-center">{{prod.sellingPrice}}</div>
+            </ion-col>
+            <ion-col size="2" class="ion-align-self-center">
+              <div class="ion-text-center">
+                <ion-input
+                  *ngIf="!removeToList"
+                  readonly
+                  type="number"
+                  placeholder="{{prod.toRemove}}"
+                ></ion-input>
+                <ion-input
+                  *ngIf="removeToList"
+                  debounce="500"
+                  (ionChange)="removeQuantity($event, prod, i)"
+                  type="number"
+                  placeholder="{{prod.toRemove}}"
+                ></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size="2" class="ion-align-self-center">
+              <div class="ion-text-center">
+                <ion-button
+                  [disabled]="removeToList"
+                  style="font-size: 10px"
+                  (click)="remove(prod)"
+                  color="danger"
+                  size="small"
+                >
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-item>
+            <ion-input
+              *ngIf="!removeToList"
+              type="number"
+              placeholder="prix de vente"
+              [(ngModel)]="gamme.sellingPrice"
+            ></ion-input>
+            <ion-input
+              *ngIf="removeToList"
+              readonly
+              type="number"
+              placeholder="prix de vente"
+              [(ngModel)]="gamme.sellingPrice"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              *ngIf="!removeToList"
+              type="number"
+              placeholder="quantity to sale"
+              [(ngModel)]="gamme.quantityToSale"
+            ></ion-input>
+
+            <ion-input
+              readonly
+              *ngIf="removeToList"
+              type="number"
+              placeholder="quantity to sale"
+              [(ngModel)]="gamme.quantityToSale"
+            ></ion-input>
+          </ion-item>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-button
+            *ngIf="!removeToList"
+            (click)="saveToCart()"
+            color="danger"
+            size="large"
+            >BUY</ion-button
+          >
+          <ion-button
+            *ngIf="removeToList"
+            [disabled]="this.removeProductList.length == 0"
+            (click)="saveToCart()"
+            color="danger"
+            size="large"
+            >SAVE</ion-button
+          >
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

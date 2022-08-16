@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/database"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{dbName}} collections list</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="header-main">
+      <ion-col size="3">
+        <div class="ion-text-center">Name</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">Company Name</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">Store Name</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">Action</div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let item of collections">
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <h4 style="font-size: 14px">{{item.name}}</h4>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <select
+            name="pets"
+            id="pet-select"
+            (change)="setSelected($event.target)"
+          >
+            <option value="">--Please choose an option--</option>
+            <option
+              value="{{ user._id }}"
+              *ngFor="let user of custumers let i= index"
+            >
+              {{ user.company }}
+            </option>
+          </select>
+
+          <!--
+            <ion-select
+            *ngIf="custumers.length >= 1"
+            placeholder="company"
+            cancelText="cancel"
+            okText="Okay"
+            interface="popover"
+            (ionChange)="selectCustomer($event)"
+          >
+            <ion-select-option
+              *ngFor="let user of custumers let i= index"
+              value="{{ user._id }}"
+              >{{ user.company }}</ion-select-option
+            >
+          </ion-select>
+         -->
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <select
+            name="pets"
+            id="pet-select"
+            (change)="selectStore($event.target)"
+          >
+            <option value="">--Please choose store--</option>
+            <option
+              value="{{ store.id }}"
+              *ngFor="let store of storeList let j= index"
+            >
+              {{ store.name}}
+            </option>
+          </select>
+          <!--
+            <ion-select
+            *ngIf="storeList.length >= 1"
+            placeholder="store"
+            cancelText="cancel"
+            okText="Okay"
+            interface="popover"
+            (ionChange)="selectStore($event)"
+          >
+            <ion-select-option
+              *ngFor="let store of storeList let j= index"
+              value="{{ store.id }}"
+              >{{ store.name }}</ion-select-option
+            >
+          </ion-select>
+         -->
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <ion-button
+            (click)="getCollectionDocuments(item)"
+            slot="end"
+            fill="clear"
+            >DROP
+            <ion-icon slot="end" name="trash"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!--
+        <ion-button (click)="getCollectionDocuments(item)" slot="end" fill="clear"
+        >Data
+        <ion-icon slot="end" name="trash"></ion-icon>
+      </ion-button>
+     -->
+</ion-content>

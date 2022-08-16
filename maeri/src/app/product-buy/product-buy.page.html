@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!--<ion-menu-button autoHide="false"></ion-menu-button> [disabled]="!totalItems" [disabled]="totalPrice == 0" -->
+      <ion-back-button
+        color="light"
+        fill="outline"
+        defaultHref="/start"
+      ></ion-back-button>
+      <ion-button *ngIf="budget">budget: {{budget}} FCFA</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button
+        color="light"
+        fill="outline"
+        (click)="openCart()"
+        *ngIf="totalItems || totalBtl"
+      >
+        <ion-badge slot="end" *ngIf="totalBtl == 0">{{ totalItems }}</ion-badge>
+        <ion-badge slot="end" *ngIf="totalBtl >= 1"
+          >{{ totalItems + totalBtl}}</ion-badge
+        >
+        <ion-icon color="dark" slot="end" name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-courses
+    [multiStoreResource]="multiStoreResourceitem"
+    [multiStoreList]="multiStoreList"
+    [multiStoreService]="multiStoreService"
+    [multiStoreResto]="productRestoItem"
+    [packs]="packs"
+    [storeTypeTab]="storeTypeTab"
+    (buyProduct)="buyItem($event)"
+    (buyPacks)="buyPackProduct($event)"
+    (addBtl)="updatePackProduct($event)"
+    (displayItems)="displayPriceQuantity($event)"
+    (getSlideInfo)="SlideInfo($event)"
+  ></app-courses>
+</ion-content>
+
+<div class="footer" *ngIf="totalItems > 0 || totalBtl > 0">
+  <div class="container footer2" *ngIf="totalBtl == 0">
+    {{totalItems}} items = FCFA {{totalPrice | currency:'CFA':'symbol':'3.0-0'}}
+  </div>
+  <div class="container footer2" *ngIf="totalBtl >= 1">
+    {{totalItems}} items + {{totalBtl}}item = FCFA {{totalPrice |
+    currency:'CFA':'symbol':'3.0-0'}}
+  </div>
+</div>

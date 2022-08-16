@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #form="ngForm" (ngSubmit)="register(form)">
+    <ion-item lines="full">
+      <ion-label position="floating">Nom</ion-label>
+      <ion-input
+        [(ngModel)]="store.name"
+        ngModel
+        name="name"
+        type="text"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Ville</ion-label>
+      <ion-input
+        [(ngModel)]="store.ville"
+        ngModel
+        name="ville"
+        type="email"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Quartier</ion-label>
+      <ion-input
+        [(ngModel)]="store.quartier"
+        ngModel
+        name="quartier"
+        type="text"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Telephone</ion-label>
+      <ion-input
+        [(ngModel)]="store.telephone"
+        ngModel
+        name="telephone"
+        type="text"
+        required
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label class="ion-text-wrap"> super wharehouse? </ion-label>
+      <ion-checkbox
+        color="primary"
+        mode="md"
+        slot="end"
+        (ionChange)="enableSuperWhareHouse()"
+        *ngIf="!store.super_warehouse"
+      ></ion-checkbox>
+
+      <ion-checkbox
+        *ngIf="store.super_warehouse"
+        color="primary"
+        mode="md"
+        slot="end"
+        (ionChange)="enableSuperWhareHouse()"
+        checked="true"
+      ></ion-checkbox>
+    </ion-item>
+
+    <ion-row>
+      <ion-col>
+        <ion-button
+          [disabled]="form.invalid"
+          type="submit"
+          color="danger"
+          expand="block"
+          >Submit</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

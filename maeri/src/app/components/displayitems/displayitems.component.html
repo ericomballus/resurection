@@ -1,0 +1,254 @@
+<div>
+  <ion-header mode="ios">
+    <ion-toolbar class="toolbarCart">
+      <ion-title></ion-title>
+      <ion-buttons slot="start">
+        <ion-menu-button autoHide="false"></ion-menu-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button [disabled]="!totalItems" (click)="openCart()">
+          <ion-badge slot="end">{{ totalItems }}</ion-badge>
+          <ion-icon color="dark" slot="end" name="cart"></ion-icon>
+        </ion-button>
+        <ion-button size="small">
+          {{ userName }} {{ erico }}
+          <ion-icon slot="end" name="contact"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-refresher slot="fixed" (ionRefresh)="clearCache($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-segment color="tertiary" (ionChange)="segmentChanged($event)">
+    <!--<ion-segment-button value="allProducts">
+      <ion-label>ALL</ion-label>
+    </ion-segment-button>-->
+    <ion-segment-button value="product" checked class="segBar">
+      <ion-label>BAR</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="productResto" class="segResto">
+      <ion-label>RESTO</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div>
+    <div class="listitems">
+      <ion-list
+        *ngIf="isItemAvailable2"
+        style="width: 100%; max-height: 200px; overflow-y: scroll"
+      >
+        <ion-item *ngFor="let pack of pack2" (click)="search(pack)">
+          <ion-avatar slot="start">
+            <img src="{{ pack.url }}" />
+          </ion-avatar>
+          <ion-label>
+            <h4 style="text-transform: uppercase; font-weight: bold">
+              {{ pack.name }}
+            </h4>
+            <h3 style="text-transform: uppercase; font-size: 10px">
+              {{ "MENU.sellingPirce" | translate }}: {{ pack.sellingPrice }}
+            </h3>
+          </ion-label>
+          <ion-button
+            (click)="buyPack(pack)"
+            color="danger"
+            class="round"
+            slot="end"
+            small
+            >{{ "MENU.buy" | translate }}</ion-button
+          >
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div>
+      <ion-grid [hidden]="!btnProducts">
+        <ion-row>
+          <ion-col
+            size="4"
+            size-md="3"
+            size-lg="2"
+            *ngFor="let prod of products"
+          >
+            <ion-card (click)="buyItem(prod)">
+              <ion-badge
+                class="badge"
+                slot="end"
+                color="warning"
+                *ngIf="prod.qty"
+                >{{ prod.qty }}</ion-badge
+              >
+
+              <div class="img-container">
+                <img
+                  class="img-container"
+                  src="{{ prod.url }}"
+                  style="width: 100px; height: 100px"
+                />
+              </div>
+
+              <ion-card-content>
+                <ion-row>
+                  <ion-col size="12" class="colp">
+                    <div
+                      class="ion-text-nowrap"
+                      style="text-transform: uppercase; font-size: 10px"
+                    >
+                      {{ prod.name }}
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" class="colp">
+                    <div
+                      class="ion-text-nowrap"
+                      style="text-transform: uppercase; font-size: 10px"
+                    >
+                      {{ prod.sellingPrice }}FCFA
+                    </div>
+                  </ion-col>
+                  <ion-col
+                    size="12"
+                    class="colp"
+                    style="text-transform: uppercase; font-size: 8px"
+                  >
+                    <div class="ion-text-nowrap">
+                      Avaible: {{ prod.quantityStore }}
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+            <!--ici on desactive la card si le quantityStore<= 0-->
+            <!--
+              <ion-card
+              (click)="buyItem(prod)"
+              *ngIf="prod.quantityStore <= 0"
+              disabled="true"
+            >
+              <img src="{{ prod.url }}" style="size: 100px; height: 65px;" />
+
+              <ion-card-content>
+                <ion-row>
+                  <ion-col size="12" class="colp">
+                    <div class="ion-text-nowrap">
+                      {{ prod.name }}
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" class="colp">
+                    <div class="ion-text-nowrap">
+                      {{ prod.sellingPrice }}FCFA
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" class="colp">
+                    <div class="ion-text-nowrap">
+                      Avaible: {{ prod.quantityStore }}
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+            -->
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div>
+      <ion-grid [hidden]="!btnPack">
+        <ion-row>
+          <ion-col size="4" size-md="3" size-lg="2" *ngFor="let pack of packs">
+            <ion-card (click)="buyItem(pack)">
+              <ion-badge
+                class="badge"
+                slot="end"
+                color="warning"
+                *ngIf="pack.qty"
+                >{{ pack.qty }}</ion-badge
+              >
+              <img src="{{ pack.url }}" style="width: 100px; height: 65px" />
+
+              <ion-card-content>
+                <ion-row>
+                  <ion-col size="12" class="colp">
+                    <div class="ion-text-nowrap">
+                      {{ pack.name }}
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" class="colp">
+                    <div class="ion-text-nowrap">
+                      {{ pack.sellingPrice }}FCFA
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" class="colp" *ngIf="pack.quantityStore">
+                    <div class="ion-text-nowrap">
+                      {{ "MENU.avaible" | translate }}: {{ pack.quantityStore }}
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div>
+      <ion-grid [hidden]="!btnResto">
+        <ion-row>
+          <ion-col
+            size="4"
+            size-md="3"
+            size-lg="2"
+            *ngFor="let pack of productResto"
+          >
+            <ion-card (click)="buyItemResto(pack)">
+              <ion-badge
+                class="badge"
+                slot="end"
+                color="warning"
+                *ngIf="pack.qty"
+                >{{ pack.qty }}</ion-badge
+              >
+
+              <div class="img-container">
+                <img
+                  class="img-container"
+                  src="{{ pack.url }}"
+                  style="width: 100px; height: 100px"
+                />
+              </div>
+
+              <ion-card-content>
+                <ion-row>
+                  <ion-col size="12" class="colp">
+                    <div
+                      class="ion-text-nowrap"
+                      style="text-transform: uppercase; font-size: 10px"
+                    >
+                      {{ pack.name }}
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" class="colp">
+                    <div
+                      class="ion-text-nowrap"
+                      style="text-transform: uppercase; font-size: 10px"
+                    >
+                      {{ pack.sellingPrice }}FCFA
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" class="colp">
+                    <div class="ion-text-nowrap">
+                      <!--
+                      Avaible: {{ pack.quantityStore}}
+                   -->
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</div>

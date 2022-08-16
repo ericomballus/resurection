@@ -1,0 +1,101 @@
+<ion-app>
+  <ion-split-pane contentId="content1">
+    <ion-menu side="start" menuId="first" contentId="content1" class="monmenu">
+      <ion-header>
+        <ion-toolbar color="dark">
+          <ion-buttons slot="secondary">
+            <ion-button size="small">
+              <ion-icon slot="end" name="contact"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title>MENU </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content id="splitMenu">
+        <ion-item>
+          <ion-label><p class="languageSelect">Select Language</p></ion-label>
+          <ion-select
+            interface="popover"
+            placeholder="Select One"
+            [(ngModel)]="selectedLanguage"
+            (ionChange)="languageChanged()"
+          >
+            <ion-select-option value="en">English</ion-select-option>
+            <ion-select-option value="fr">Français</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div *ngFor="let p of navigate">
+          <ion-menu-toggle *ngIf="p.url" auto-hide="false">
+            <ion-item [routerLink]="p.url" routerDirection="forward">
+              <ion-icon
+                [color]="p.color"
+                [name]="p.icon"
+                slot="start"
+                class="iconmenu"
+              ></ion-icon>
+              <!--
+              {{ "MENU.pos" | translate }}
+           -->
+              {{ p.title | translate }}
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-item
+            class="textItem"
+            *ngIf="p.children?.length > 0"
+            (click)="p.open = !p.open"
+            [class.active-parent]="p.open"
+            detail="false"
+          >
+            <ion-icon
+              slot="start"
+              name="arrow-forward"
+              *ngIf="!p.open"
+            ></ion-icon>
+            <ion-icon slot="start" name="arrow-down" *ngIf="p.open"></ion-icon>
+            {{ p.title | translate }}
+          </ion-item>
+          <ion-list *ngIf="p.open && !isDesktop">
+            <ion-menu-toggle>
+              <ion-item
+                class="sub-item"
+                *ngFor="let sub of p.children"
+                [routerLink]="sub.url"
+                routerDirection="forward"
+              >
+                <ion-icon
+                  [color]="p.color"
+                  [name]="sub.icon"
+                  slot="start"
+                ></ion-icon>
+                {{ sub.title | translate }}
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+          <ion-list *ngIf="p.open && isDesktop">
+            <ion-item
+              class="sub-item"
+              *ngFor="let sub of p.children"
+              [routerLink]="sub.url"
+              routerDirection="forward"
+            >
+              <ion-icon
+                [color]="p.color"
+                [name]="sub.icon"
+                slot="start"
+              ></ion-icon>
+              {{ sub.title | translate }}
+            </ion-item>
+          </ion-list>
+        </div>
+        <ion-menu-toggle>
+          <ion-item (click)="disconnect()">
+            <ion-icon slot="start" name="arrow-down"></ion-icon>
+            {{ "MENU.logout" | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="content1"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

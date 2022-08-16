@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-toolbar color="dark" no-border>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        color="light"
+        fill="outline"
+        (click)="selectSource()"
+        *ngIf="admin"
+      >
+        <ion-icon color="light" slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="true"></ion-menu-button>
+      <ion-button color="light" (click)="addCategorie()" fill="outline"
+        >{{ 'MENU.category' | translate}}</ion-button
+      >
+      <ion-button
+        (click)="addResource()"
+        *ngIf="setting && setting.check_resource"
+        color="light"
+        fill="outline"
+      >
+        {{ 'MENU.addresources' | translate}}</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true">
+    <ion-slide *ngFor="let products of multiStoreProductitem; let i = index">
+      <ion-grid>
+        <ion-row *ngIf="saveRandom.getStoreList().length > 1">
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>{{ products.storeName ? products.storeName: 'no name' }}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-segment [(ngModel)]="segment" *ngIf="display_segment">
+          <ion-segment-button value="enabled">
+            products enable
+          </ion-segment-button>
+          <ion-segment-button value="disabled">
+            products desable
+          </ion-segment-button>
+        </ion-segment>
+        <ion-list *ngIf="products && segment == 'enabled'">
+          <div *ngFor="let prod of products; let j = index">
+            <ion-item *ngIf="!prod.desabled">
+              <ion-avatar slot="start">
+                <img src="{{ prod.url }}" />
+              </ion-avatar>
+              <ion-label>
+                <p class="packName">{{ prod.name }}</p>
+                <p class="packName">
+                  {{ prod.purchasingPrice }} -- {{ prod.sellingPrice }}
+                </p>
+                <p class="packUnit" *ngIf="prod.unitName && prod.sizeUnit">
+                  {{ prod.sizeUnit }} {{ prod.unitName }}
+                </p>
+              </ion-label>
+              <ion-button
+                class="divBtnUpdate"
+                *ngIf="admin"
+                (click)="productUpdate(prod, i)"
+                >{{ 'MENU.update' | translate}}</ion-button
+              >
+              <ion-button
+                class="divBtnDelete"
+                *ngIf="admin"
+                (click)="deleteProduct(prod)"
+                color="danger"
+              >
+                <ion-icon slot="icon-only" name="trash"></ion-icon
+              ></ion-button>
+            </ion-item>
+          </div>
+        </ion-list>
+
+        <ion-list *ngIf="products && segment == 'disabled'">
+          <div *ngFor="let prod of products">
+            <ion-item *ngIf="prod.desabled">
+              <ion-avatar slot="start">
+                <ion-img [src]="prod.url"></ion-img>
+              </ion-avatar>
+              <ion-label>
+                <p class="packName">{{ prod.name }}</p>
+                <p class="packName">
+                  {{ prod.purchasingPrice }} -- {{ prod.sellingPrice }}
+                </p>
+                <p class="packUnit" *ngIf="prod.unitName && prod.sizeUnit">
+                  {{ prod.sizeUnit }} {{ prod.unitName }}
+                </p>
+              </ion-label>
+              <ion-button
+                class="divBtnUpdate"
+                *ngIf="admin"
+                (click)="productUpdate(prod, i)"
+                >{{ 'MENU.restore' | translate}}</ion-button
+              >
+            </ion-item>
+          </div>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+<!--
+
+  <div>
+    <img [src]="url" style="width: 80px;height:80px" />
+  </div>
+-->

@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <!--<ion-button (click)="addToAllStore()">Transfer to store</ion-button>-->
+      <ion-button (click)="addGamme()" color="light" fill="outline">
+        <ion-icon color="light" slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true">
+    <ion-slide *ngFor="let products of multiStoreGamme; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>{{ products.storeName ? products.storeName: 'no name' }}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-list *ngIf="gammeList.length">
+          <ion-list-header> ALL </ion-list-header>
+
+          <ion-item *ngFor="let gamme of products">
+            <ion-avatar *ngIf="gamme.url" slot="start">
+              <ion-img [src]="gamme.url"></ion-img>
+            </ion-avatar>
+            <ion-label>
+              <p class="p1">{{ gamme.name }}</p>
+              <p>Price: {{ gamme.sellingPrice}}</p>
+            </ion-label>
+            <div>
+              <div>
+                <!--
+                  <ion-button
+                  (click)="addToStore(gamme)"
+                  color="primary"
+                  slot="end"
+                  small
+                >
+                  add to store
+                </ion-button>
+               -->
+                <ion-button
+                  (click)="updateGamme(gamme)"
+                  color="primary"
+                  slot="end"
+                  small
+                >
+                  {{ 'MENU.modify' | translate}}
+                </ion-button>
+                <ion-button
+                  (click)="TransferOne(gamme)"
+                  color="primary"
+                  slot="end"
+                  small
+                >
+                  {{ 'MENU.transfer' | translate}}
+                </ion-button>
+
+                <ion-button
+                  (click)="deleteGamme(gamme)"
+                  color="danger"
+                  slot="end"
+                  small
+                >
+                  <ion-icon slot="icon-only" name="trash"></ion-icon
+                ></ion-button>
+              </div>
+              <div *ngIf="gamme.open">
+                <ion-select cancel-text="cancelar">
+                  <ion-select-option
+                    *ngFor="let store of storeList"
+                    value="store"
+                  >
+                    {{store.name}}
+                  </ion-select-option>
+                </ion-select>
+              </div>
+            </div>
+          </ion-item>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

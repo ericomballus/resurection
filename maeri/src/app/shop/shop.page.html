@@ -1,0 +1,1134 @@
+<ion-header>
+  <ion-toolbar color="primary" *ngIf="!flagAdd">
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+      <ion-button
+        fill="outline"
+        class="link"
+        *ngIf="!pos"
+        (click)=" this.router.navigateByUrl('activitie')"
+      >
+        {{ 'MENU.activities' | translate}}</ion-button
+      >
+      <ion-button
+        *ngIf="pos"
+        fill="outline"
+        (click)=" this.router.navigateByUrl('point-of-sale')"
+      >
+        {{ 'MENU.pos' | translate}}
+      </ion-button>
+      <ion-button
+        *ngIf="transaction.length"
+        (click)=" this.router.navigateByUrl('procurment-product-item')"
+      >
+        <ion-icon name="notifications-outline"></ion-icon>
+        <ion-badge id="notifications-badge" color="danger"
+          >{{transaction.length}}
+        </ion-badge>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-row class="ion-justify-content-start ion-align-items-center">
+      <ion-col size="4"> </ion-col>
+
+      <ion-col size="4">
+        <div class="ion-text-center ion-text-uppercase">
+          <ion-button
+            (click)="openCart()"
+            [disabled]="totalItems === 0"
+            id="notification-button"
+            fill="clear"
+          >
+            <ion-icon color="dark" slot="end" name="cart"></ion-icon>
+            <ion-badge id="notifications-badge" color="danger">
+              {{ totalItems }}
+            </ion-badge>
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col offset="1" size="3">
+        <div class="ion-text-end ion-text-uppercase ion-text-nowrap">
+          <small class="namesuser"
+            ><ion-icon
+              class="logouser"
+              color="dark"
+              slot="end"
+              name="contact"
+            ></ion-icon>
+            {{ userName }}
+          </small>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+
+  <ion-toolbar color="danger" *ngIf="flagAdd">
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-row class="">
+      <ion-col size="3">
+        <div
+          *ngIf="!pos"
+          class="ion-text-start ion-text-uppercase ion-text-nowrap main"
+          (click)=" this.router.navigateByUrl('activitie')"
+        >
+          <small class="btnshop">{{ 'MENU.activities' | translate}}</small>
+        </div>
+
+        <div
+          *ngIf="pos"
+          class="ion-text-start ion-text-uppercase ion-text-nowrap main"
+          (click)=" this.router.navigateByUrl('point-of-sale')"
+        >
+          <small class="btnshop"> {{ 'MENU.pos' | translate}}</small>
+        </div>
+      </ion-col>
+
+      <ion-col size="3">
+        <div class="ion-text-start ion-text-uppercase ion-text-nowrap">
+          <ion-button
+            (click)="openCart()"
+            [disabled]="totalItems === 0"
+            class="btncart"
+            fill="outline"
+            size="small"
+            color="light"
+          >
+            {{ totalItems }}
+            <ion-icon color="dark" slot="end" name="cart"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button> facture {{numFacture}}</ion-button>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button color="dark" (click)="cancelAdd()"> annuler </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  [scrollEvents]="true"
+  (ionScrollStart)="logScrollStart()"
+  (ionScroll)="logScrolling($event)"
+  (ionScrollEnd)="logScrollEnd()"
+>
+  <ion-segment
+    *ngIf="storeTypeTab && storeTypeTab.length > 1"
+    (ionChange)="segmentChanged($event)"
+    scrollable
+    value="{{ pet }}"
+    [(ngModel)]="pet"
+  >
+    <ion-segment-button
+      class="btnseg"
+      *ngFor="let elt of storeTypeTab; let i = index"
+      value="{{ elt }}"
+      style="text-align: center"
+    >
+      {{ elt }}
+    </ion-segment-button>
+  </ion-segment>
+  <div *ngIf="showMe">
+    <ion-grid *ngIf="pet === 'bar'">
+      <ion-row>
+        <ion-searchbar
+          showCancelButton="focus"
+          type="text"
+          debounce="500"
+          (ionChange)="findProductItemList($event)"
+        ></ion-searchbar>
+        <div *ngIf="isItemAvailable3">
+          <ion-col
+            *ngFor="let prod of arrList2"
+            size="4"
+            class="ion-no-padding"
+            sizeLg="3"
+            sizeMd="4"
+            sizeSm="6"
+            sizeXs="6"
+          >
+            <div class="cardimage">
+              <ion-card class="colstyle">
+                <div class="badge" *ngIf="!saleToPack">
+                  <ion-badge
+                    (click)="removeOne(prod, 'modeG')"
+                    slot="end"
+                    class="bG"
+                    *ngIf="prod.modeG || prod.modeNG"
+                    >{{ prod.modeG ? prod.modeG: 0}}</ion-badge
+                  >
+
+                  <ion-badge
+                    (click)="removeOne(prod, 'modeNG')"
+                    slot="end"
+                    class="bNG"
+                    *ngIf="prod.modeG || prod.modeNG"
+                    >{{ prod.modeNG ? prod.modeNG: 0 }}</ion-badge
+                  >
+                </div>
+
+                <div class="badge" *ngIf="saleToPack">
+                  <ion-badge
+                    (click)="removeOne(prod, 'BTL')"
+                    slot="end"
+                    class="bG"
+                    *ngIf=" prod.BTL || prod.CA"
+                    >{{ prod.BTL ? prod.BTL: 0}}</ion-badge
+                  >
+                  <ion-badge
+                    (click)="removeOne(prod, 'CA')"
+                    slot="end"
+                    class="bNG"
+                    *ngIf="prod.CA || prod.BTL"
+                    >{{ prod.CA ? prod.CA: 0 }}</ion-badge
+                  >
+                </div>
+
+                <div class="img-container">
+                  <app-cache-image
+                    [src]="prod.url"
+                    [spinner]="false"
+                    [isLoad]="isLoad"
+                  ></app-cache-image>
+                </div>
+
+                <ion-card-content>
+                  <div style="text-align: center" class="divname">
+                    <small>{{ prod.name }}</small>&nbsp;
+                    <small>{{ prod.sizeUnitProduct }}</small>
+                    <small>{{ prod.unitNameProduct }}</small>
+                  </div>
+
+                  <ion-row>
+                    <ion-col
+                      size="5"
+                      class="ion-no-padding"
+                      *ngIf="!saleToPack"
+                    >
+                      <div class="ion-text-start">
+                        <ion-button
+                          *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                          color="primary"
+                          size="small"
+                          fill="clear"
+                          (click)="buyItem(prod, prod.glace, 'G')"
+                        >
+                          G {{ prod.glace ? prod.glace: 0 }}
+                        </ion-button>
+                        <ion-button
+                          *ngIf="prod.resourceList && prod.resourceList.length  > 0"
+                          color="primary"
+                          size="small"
+                          fill="clear"
+                          (click)="buyItem(prod, prod.glace, 'G')"
+                        >
+                          G
+                        </ion-button>
+                      </div>
+                    </ion-col>
+
+                    <ion-col
+                      size="5"
+                      class="ion-no-padding"
+                      *ngIf="!saleToPack"
+                    >
+                      <div class="ion-text-end">
+                        <ion-button
+                          *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                          color="danger"
+                          size="small"
+                          fill="clear"
+                          (click)="buyItem(prod, prod.quantityStore, 'NG')"
+                        >
+                          N {{ prod.glace ? prod.quantityStore - prod.glace :
+                          prod.quantityStore}}
+                        </ion-button>
+                        <ion-button
+                          *ngIf="prod.resourceList && prod.resourceList.length > 0"
+                          color="danger"
+                          size="small"
+                          fill="clear"
+                          (click)="buyItem(prod, prod.quantityStore, 'NG')"
+                        >
+                          N
+                        </ion-button>
+                      </div>
+                    </ion-col>
+
+                    <ion-col size="5" class="ion-no-padding" *ngIf="saleToPack">
+                      <div class="ion-text-end">
+                        <ion-button
+                          *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                          color="primary"
+                          size="small"
+                          fill="clear"
+                          (click)="buyItem(prod, prod.btlsStore, 'BTL')"
+                        >
+                          BTL {{ prod.btlsStore ? prod.btlsStore: 0}}
+                        </ion-button>
+                      </div>
+                    </ion-col>
+                    <ion-col size="5" class="ion-no-padding" *ngIf="saleToPack">
+                      <div class="ion-text-end">
+                        <ion-button
+                          *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                          color="danger"
+                          size="small"
+                          fill="clear"
+                          (click)="buyItem(prod, prod.cassierStore, 'CA')"
+                        >
+                          CA {{ prod.cassierStore ? prod.cassierStore: 0}}
+                        </ion-button>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </div>
+      </ion-row>
+      <ion-row>
+        <ion-col
+          *ngFor="let prod of allUserProducts"
+          size="4"
+          class="ion-no-padding"
+          sizeLg="3"
+          sizeMd="4"
+          sizeSm="6"
+          sizeXs="6"
+        >
+          <div class="cardimage">
+            <ion-card class="colstyle">
+              <div class="badge" *ngIf="!saleToPack">
+                <ion-badge
+                  (click)="removeOne(prod, 'modeG')"
+                  slot="end"
+                  class="bG"
+                  *ngIf="prod.modeG || prod.modeNG"
+                  >{{ prod.modeG ? prod.modeG: 0}}</ion-badge
+                >
+
+                <ion-badge
+                  (click)="removeOne(prod, 'modeNG')"
+                  slot="end"
+                  class="bNG"
+                  *ngIf="prod.modeG || prod.modeNG"
+                  >{{ prod.modeNG ? prod.modeNG: 0 }}</ion-badge
+                >
+              </div>
+
+              <div class="badge" *ngIf="saleToPack">
+                <ion-badge
+                  (click)="removeOne(prod, 'BTL')"
+                  slot="end"
+                  class="bG"
+                  *ngIf=" prod.BTL || prod.CA"
+                  >{{ prod.BTL ? prod.BTL: 0}}</ion-badge
+                >
+                <ion-badge
+                  (click)="removeOne(prod, 'CA')"
+                  slot="end"
+                  class="bNG"
+                  *ngIf="prod.CA || prod.BTL"
+                  >{{ prod.CA ? prod.CA: 0 }}</ion-badge
+                >
+              </div>
+
+              <div class="img-container">
+                <app-cache-image
+                  [src]="prod.url"
+                  [spinner]="false"
+                  [isLoad]="isLoad"
+                ></app-cache-image>
+              </div>
+
+              <ion-card-content>
+                <div style="text-align: center" class="divname">
+                  <small>{{ prod.name }}</small>&nbsp;
+                  <small>{{ prod.sizeUnitProduct }}</small>
+                  <small>{{ prod.unitNameProduct }}</small>
+                </div>
+
+                <ion-row>
+                  <ion-col size="5" class="ion-no-padding" *ngIf="!saleToPack">
+                    <div class="ion-text-start">
+                      <ion-button
+                        *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                        color="primary"
+                        size="small"
+                        fill="clear"
+                        (click)="buyItem(prod, prod.glace, 'G')"
+                      >
+                        G {{ prod.glace ? prod.glace: 0 }}
+                      </ion-button>
+                      <ion-button
+                        *ngIf="prod.resourceList && prod.resourceList.length  > 0"
+                        color="primary"
+                        size="small"
+                        fill="clear"
+                        (click)="buyItem(prod, prod.glace, 'G')"
+                      >
+                        G
+                      </ion-button>
+                    </div>
+                  </ion-col>
+
+                  <ion-col size="5" class="ion-no-padding" *ngIf="!saleToPack">
+                    <div class="ion-text-end">
+                      <ion-button
+                        *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                        color="danger"
+                        size="small"
+                        fill="clear"
+                        (click)="buyItem(prod, prod.quantityStore, 'NG')"
+                      >
+                        N {{ prod.glace ? prod.quantityStore - prod.glace :
+                        prod.quantityStore}}
+                      </ion-button>
+                      <ion-button
+                        *ngIf="prod.resourceList && prod.resourceList.length > 0"
+                        color="danger"
+                        size="small"
+                        fill="clear"
+                        (click)="buyItem(prod, prod.quantityStore, 'NG')"
+                      >
+                        N
+                      </ion-button>
+                    </div>
+                  </ion-col>
+
+                  <ion-col size="5" class="ion-no-padding" *ngIf="saleToPack">
+                    <div class="ion-text-end">
+                      <ion-button
+                        *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                        color="primary"
+                        size="small"
+                        fill="clear"
+                        (click)="buyItem(prod, prod.btlsStore, 'BTL')"
+                      >
+                        BTL {{ prod.btlsStore ? prod.btlsStore: 0}}
+                      </ion-button>
+                    </div>
+                  </ion-col>
+                  <ion-col size="5" class="ion-no-padding" *ngIf="saleToPack">
+                    <div class="ion-text-end">
+                      <ion-button
+                        *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                        color="danger"
+                        size="small"
+                        fill="clear"
+                        (click)="buyItem(prod, prod.cassierStore, 'CA')"
+                      >
+                        CA {{ prod.cassierStore ? prod.cassierStore: 0}}
+                      </ion-button>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <app-fakedata style="display: none" [spinner]="spinner"></app-fakedata>
+
+    <!--
+    <div *ngIf="pet === 'bar' && userProducts2.length" style="display: none">
+    <div class="divslide" *ngIf="navSlide && isDesktop">
+      <div>
+        <ion-button color="primary" (click)="backToNextSlide()"
+          >prev</ion-button
+        >
+      </div>
+      <div>
+        <ion-button color="primary" (click)="goToNextSlide()">next</ion-button>
+      </div>
+    </div>
+    <ion-slides
+      pager="true"
+      (ionSlideNextStart)="fireSlide(slideWithNav)"
+      #mySlider
+    >
+      <ion-slide
+        *ngFor="let groupproducts of userProducts2; let i= index; let last= last"
+        #lastSlide
+      >
+        <ion-grid>
+          <ion-row *ngFor="let products of groupproducts" class="blockProd">
+            <ion-col class="ion-text-start ion-text-uppercase" size="12">
+              <div class="groupname">{{products[0]['categoryName']}}</div>
+            </ion-col>
+
+            <ion-col
+              *ngFor="let prod of products"
+              size="4"
+              class="ion-no-padding"
+              sizeLg="3"
+              sizeMd="4"
+              sizeSm="6"
+              sizeXs="6"
+            >
+              <div class="cardimage">
+                <ion-card class="colstyle">
+                  <div class="badge" *ngIf="!saleToPack">
+                    <ion-badge
+                      (click)="removeOne(prod, 'modeG')"
+                      slot="end"
+                      class="bG"
+                      *ngIf="prod.modeG || prod.modeNG"
+                      >{{ prod.modeG ? prod.modeG: 0}}</ion-badge
+                    >
+
+                    <ion-badge
+                      (click)="removeOne(prod, 'modeNG')"
+                      slot="end"
+                      class="bNG"
+                      *ngIf="prod.modeG || prod.modeNG"
+                      >{{ prod.modeNG ? prod.modeNG: 0 }}</ion-badge
+                    >
+                  </div>
+
+                  <div class="badge" *ngIf="saleToPack">
+                    <ion-badge
+                      (click)="removeOne(prod, 'BTL')"
+                      slot="end"
+                      class="bG"
+                      *ngIf=" prod.BTL || prod.CA"
+                      >{{ prod.BTL ? prod.BTL: 0}}</ion-badge
+                    >
+                    <ion-badge
+                      (click)="removeOne(prod, 'CA')"
+                      slot="end"
+                      class="bNG"
+                      *ngIf="prod.CA || prod.BTL"
+                      >{{ prod.CA ? prod.CA: 0 }}</ion-badge
+                    >
+                  </div>
+
+                  <div class="img-container">
+                    <app-cache-image
+                      [src]="prod.url"
+                      [spinner]="false"
+                      [isLoad]="isLoad"
+                    ></app-cache-image>
+                  </div>
+
+                  <ion-card-content>
+                    <div style="text-align: center" class="divname">
+                      <small>{{ prod.name }}</small>&nbsp;
+                      <small>{{ prod.sizeUnitProduct }}</small>
+                      <small>{{ prod.unitNameProduct }}</small>
+                    </div>
+
+                    <ion-row>
+                      <ion-col
+                        size="5"
+                        class="ion-no-padding"
+                        *ngIf="!saleToPack"
+                      >
+                        <div class="ion-text-start">
+                          <ion-button
+                            *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                            color="primary"
+                            size="small"
+                            fill="clear"
+                            (click)="buyItem(prod, prod.glace, 'G')"
+                          >
+                            G {{ prod.glace ? prod.glace: 0 }}
+                          </ion-button>
+                          <ion-button
+                            *ngIf="prod.resourceList && prod.resourceList.length  > 0"
+                            color="primary"
+                            size="small"
+                            fill="clear"
+                            (click)="buyItem(prod, prod.glace, 'G')"
+                          >
+                            G
+                          </ion-button>
+                        </div>
+                      </ion-col>
+
+                      <ion-col
+                        size="5"
+                        class="ion-no-padding"
+                        *ngIf="!saleToPack"
+                      >
+                        <div class="ion-text-end">
+                          <ion-button
+                            *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                            color="danger"
+                            size="small"
+                            fill="clear"
+                            (click)="buyItem(prod, prod.quantityStore, 'NG')"
+                          >
+                            N {{ prod.glace ? prod.quantityStore - prod.glace :
+                            prod.quantityStore}}
+                          </ion-button>
+                          <ion-button
+                            *ngIf="prod.resourceList && prod.resourceList.length > 0"
+                            color="danger"
+                            size="small"
+                            fill="clear"
+                            (click)="buyItem(prod, prod.quantityStore, 'NG')"
+                          >
+                            N
+                          </ion-button>
+                        </div>
+                      </ion-col>
+
+                      <ion-col
+                        size="5"
+                        class="ion-no-padding"
+                        *ngIf="saleToPack"
+                      >
+                        <div class="ion-text-end">
+                          <ion-button
+                            *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                            color="primary"
+                            size="small"
+                            fill="clear"
+                            (click)="buyItem(prod, prod.btlsStore, 'BTL')"
+                          >
+                            BTL {{ prod.btlsStore ? prod.btlsStore: 0}}
+                          </ion-button>
+                        </div>
+                      </ion-col>
+                      <ion-col
+                        size="5"
+                        class="ion-no-padding"
+                        *ngIf="saleToPack"
+                      >
+                        <div class="ion-text-end">
+                          <ion-button
+                            *ngIf="prod.resourceList && prod.resourceList.length <=0"
+                            color="danger"
+                            size="small"
+                            fill="clear"
+                            (click)="buyItem(prod, prod.cassierStore, 'CA')"
+                          >
+                            CA {{ prod.cassierStore ? prod.cassierStore: 0}}
+                          </ion-button>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-card-content>
+                </ion-card>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-slide>
+    </ion-slides>
+  </div>
+  -->
+
+    <div *ngIf="pet === 'resto'">
+      <ion-item>
+        <small *ngFor="let plat of plalist ; let j = index" #itemlist>
+          <ion-button fill="outline" size="small" (click)="showPlat(plat, j)"
+            >plat {{plat}}</ion-button
+          >
+        </small>
+        <ion-button
+          slot="end"
+          fill="outline"
+          size="small"
+          (click)="changeNumTable()"
+          >nouveau plat</ion-button
+        >
+      </ion-item>
+
+      <div *ngFor="let group of productResto2; let i = index ">
+        <ion-col class="ion-text-start ion-text-uppercase" size="12">
+          <div class="groupname">{{group[0]['categoryName']}}</div>
+        </ion-col>
+        <ion-row>
+          <ion-col
+            size="4"
+            sizeLg="3"
+            sizeMd="4"
+            sizeSm="6"
+            sizeXs="6"
+            *ngFor="let pack of group"
+          >
+            <div class="cardimage">
+              <ion-card class="colstyle">
+                <div class="badge2">
+                  <ion-badge
+                    slot="end"
+                    color="warning"
+                    *ngIf="pack.nbr"
+                    (click)="removeInPlat(pack, i)"
+                    >{{ pack.nbr }}</ion-badge
+                  >
+                </div>
+
+                <div class="img-container" (click)="buyItemResto(pack, i)">
+                  <app-cache-image
+                    style="width: 100%"
+                    [src]="pack.url"
+                    [spinner]="false"
+                    [isLoad]="isLoad"
+                  ></app-cache-image>
+                </div>
+                <ion-card-content>
+                  <div style="text-align: center" class="divname">
+                    <small>{{ pack.name }}</small>&nbsp;
+                  </div>
+                  <ion-row>
+                    <ion-col size="12" class="colp">
+                      <div class="ion-text-nowrap">
+                        <!--
+                          Avaible: {{ pack.quantityStore}}
+                      --></div>
+                    </ion-col>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+    <div *ngIf="pet === 'shop'">
+      <ion-searchbar
+        showCancelButton="focus"
+        type="text"
+        debounce="500"
+        (ionChange)="findProductList($event)"
+      ></ion-searchbar>
+      <ion-list *ngIf="isItemAvailable3">
+        <ion-item *ngFor="let prod of arrList2" (click)="buyItemProList(prod)">
+          <ion-label>
+            <ion-text color="primary">
+              <h6>{{ prod.name }}</h6>
+            </ion-text>
+            <p>{{prod.sellingPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}}</p>
+            <p>{{ 'MENU.avaible' | translate}}: {{prod.quantityStore}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-row class="row-header">
+        <ion-col
+          size-sm="3"
+          size-md="3"
+          size-xm="3"
+          size-lg="3"
+          class="ion-align-self-center"
+        >
+          <div class="ion-text-center ion-text-uppercase taille">
+            {{ 'MENU.name' | translate}}
+          </div>
+        </ion-col>
+        <ion-col
+          size-sm="3"
+          size-md="3"
+          size-xm="3"
+          size-lg="3"
+          class="ion-align-self-center"
+        >
+          <div class="ion-text-center ion-text-uppercase taille">
+            {{ 'MENU.price' | translate}}
+          </div>
+        </ion-col>
+        <ion-col
+          size-sm="1"
+          size-md="1"
+          size-xm="1"
+          size-lg="1"
+          class="ion-align-self-center"
+        >
+          <div class="ion-text-center ion-text-uppercase taille">
+            {{ 'MENU.avaible' | translate}}
+          </div>
+        </ion-col>
+        <ion-col
+          size-sm="5"
+          size-md="5"
+          size-xm="5"
+          size-lg="5"
+          class="ion-align-self-center"
+        >
+          <div class="ion-text-right ion-text-uppercase taille"></div>
+        </ion-col>
+      </ion-row>
+
+      <div *ngIf="productList && !saveRandom.getSetting().sale_Gaz">
+        <div *ngFor="let products of productList let i = index">
+          <div
+            style="
+              text-transform: uppercase;
+              width: 100%;
+              font-weight: bold;
+              text-align: center;
+              padding: 5px;
+            "
+          >
+            <h3
+              style="
+                background-color: var(--ion-color-dark);
+                display: inline-block;
+                width: 50%;
+                padding: 5px;
+                color: var(--ion-color-light);
+                font-size: 10px;
+                font-weight: bold;
+              "
+            >
+              {{products[0]['categoryName']}}
+            </h3>
+          </div>
+          <ion-row
+            color="primary"
+            *ngFor="let prod of products let i = index"
+            [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+          >
+            <ion-col
+              size-sm="3"
+              size-md="3"
+              size-xm="3"
+              size-lg="3"
+              class="ion-align-self-center"
+            >
+              <div class="ion-text-center ion-text-uppercase taille">
+                {{prod.name ? prod.name : 'no Name'}}
+                <div class="badge2">
+                  <ion-badge
+                    slot="end"
+                    color="warning"
+                    *ngIf="prod.nbr"
+                    (click)="removeIn(prod)"
+                    >{{ prod.nbr }}</ion-badge
+                  >
+                </div>
+              </div>
+            </ion-col>
+            <ion-col
+              size-sm="3"
+              size-md="3"
+              size-xm="3"
+              size-lg="3"
+              class="ion-align-self-center"
+            >
+              <div class="ion-text-center ion-text-uppercase taille">
+                {{prod.sellingPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+              </div>
+            </ion-col>
+            <ion-col
+              size-sm="1"
+              size-md="1"
+              size-xm="1"
+              size-lg="1"
+              class="ion-align-self-center"
+            >
+              <div class="ion-text-center ion-text-uppercase taille">
+                <ion-badge style="font-size: 9px" color="secondary"
+                  >{{prod.quantityStore}}</ion-badge
+                >
+              </div>
+            </ion-col>
+            <ion-col
+              size-sm="5"
+              size-md="5"
+              size-xm="5"
+              size-lg="5"
+              class="ion-align-self-center"
+            >
+              <div class="ion-text-right ion-text-uppercase taille">
+                <ion-button
+                  *ngIf="!saveRandom.getSetting().sale_Gaz"
+                  size="small"
+                  fill="clear"
+                  (click)="buyItemProList(prod)"
+                >
+                  <ion-icon
+                    color="dark"
+                    slot="end"
+                    name="add-circle-outline"
+                  ></ion-icon>
+                </ion-button>
+              </div>
+            </ion-col>
+            <ion-row
+              *ngIf="saveRandom.getSetting().sale_Gaz"
+              style="display: flex; justify-content: space-between"
+            >
+              <ion-button
+                size="small"
+                fill="outline"
+                (click)="buyEmptyBottle(prod)"
+                >v</ion-button
+              >
+
+              <ion-button
+                size="small"
+                fill="outline"
+                (click)="buyItemProList(prod)"
+                >P</ion-button
+              >
+
+              <ion-button
+                size="small"
+                fill="outline"
+                (click)="buyEmballagePro(prod)"
+                >E & p</ion-button
+              >
+            </ion-row>
+          </ion-row>
+        </div>
+      </div>
+      <div *ngIf="productList && saveRandom.getSetting().sale_Gaz">
+        <div *ngFor="let products of productList let i = index">
+          <div
+            style="
+              text-transform: uppercase;
+              width: 100%;
+              font-weight: bold;
+              text-align: center;
+              padding: 5px;
+            "
+          >
+            <h3
+              style="
+                background-color: var(--ion-color-dark);
+                display: inline-block;
+                width: 50%;
+                padding: 5px;
+                color: var(--ion-color-light);
+                font-size: 10px;
+                font-weight: bold;
+              "
+            >
+              {{products[0]['categoryName']}}
+            </h3>
+          </div>
+          <ion-row
+            color="primary"
+            *ngFor="let prod of products let i = index"
+            [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+          >
+            <ion-col size-sm="3" size-md="3" size-lg="3">
+              <div class="ion-text-start ion-text-uppercase smallSize">
+                {{ prod.name }}
+              </div>
+            </ion-col>
+
+            <ion-col size-sm="3" size-md="3" size-lg="3">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                <ion-input
+                  slot="end"
+                  placeholder="vide {{prod.bottle_empty}}"
+                  type="number"
+                  debounce="1500"
+                  (ionChange)="getValueVide($event, prod)"
+                ></ion-input>
+              </div>
+            </ion-col>
+            <ion-col size-sm="3" size-md="3" size-lg="3">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                <ion-input
+                  slot="end"
+                  placeholder="pleine {{prod.quantityStore}}"
+                  type="number"
+                  debounce="1500"
+                  (ionChange)="getValueBtl($event, prod)"
+                ></ion-input>
+              </div>
+            </ion-col>
+
+            <ion-col size-sm="3" size-md="3" size-lg="3">
+              <div class="ion-text-center ion-text-uppercase smallSize">
+                <ion-select
+                  cancelText="cancel"
+                  okText="Okay"
+                  interface="popover"
+                  (ionChange)="makeChanges($event, prod)"
+                >
+                  <ion-select-option
+                    *ngFor="let p of arrListRandom"
+                    value="{{ p._id }}"
+                    >{{ p.name }}</ion-select-option
+                  >
+                </ion-select>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="pet === 'produits'">
+      <ion-grid>
+        <ion-row *ngFor="let products of productListTab">
+          <div
+            style="text-transform: uppercase; width: 100%; font-weight: bold"
+          >
+            {{products[0]['categoryName']}}
+          </div>
+          <ion-col
+            size="4"
+            sizeLg="3"
+            sizeMd="4"
+            sizeSm="6"
+            sizeXs="6"
+            *ngFor="let pack of products"
+          >
+            <div
+              class="cardimage"
+              [ngClass]="{'masque': pack.quantityStore == 0}"
+            >
+              <ion-card class="colstyle">
+                <div class="badge2">
+                  <ion-badge
+                    slot="end"
+                    color="warning"
+                    *ngIf="pack.nbr"
+                    (click)="removeIn(pack)"
+                    >{{ pack.nbr }}</ion-badge
+                  >
+                </div>
+                <div (click)="buyItemGame(pack)">
+                  <div class="img-container">
+                    <app-cache-image
+                      [src]="pack.url"
+                      [spinner]="false"
+                      [isLoad]="isLoad"
+                    ></app-cache-image>
+                  </div>
+                  <ion-card-content>
+                    <div style="text-align: center" class="divname">
+                      <small>{{ pack.name }}</small>&nbsp;
+                    </div>
+                    <ion-row>
+                      <ion-col size="12" class="colp">
+                        <div
+                          class="ion-text-nowrap"
+                          style="font-weight: bold; font-size: 12px"
+                        >
+                          {{ 'MENU.avaible' | translate}}: {{ pack.quantityStore
+                          ? pack.quantityStore : 0}}
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-card-content>
+                </div>
+                <!--
+                <ion-card-content *ngIf="setting.change_price">
+                  <div style="text-align: center" class="divname">
+                    <small>{{ pack.name }}</small>&nbsp;
+                  </div>
+                  <ion-row>
+                    <ion-col size="6" class="colp">
+                      <div
+                        class="ion-text-nowrap"
+                        style="font-weight: bold; font-size: 12px"
+                      >
+                      <ion-button (click)="buyItemGame(pack)" fill="clear">
+                        <ion-icon
+                          slot="icon-only"
+                          name="cart-outline"
+                        ></ion-icon>
+                      </ion-button>
+                       s
+                      </div>
+                    </ion-col>
+                    <ion-col size="6" class="colp">
+                      <div
+                        class="ion-text-nowrap"
+                        style="font-weight: bold; font-size: 12px"
+                      >
+                       
+                          <ion-button
+                          (click)="buyItemGame(pack, true)"
+                          fill="clear"
+                        >
+                          <ion-icon
+                            slot="icon-only"
+                            name="pencil-outline"
+                          ></ion-icon>
+                        </ion-button>
+                         </div>
+                          </ion-col>
+                           </ion-row>
+                </ion-card-content>
+                       -->
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!--affichage en list-->
+
+    <!--affichage des gammes ici-->
+    <div *ngIf="pet === 'Gammes'">
+      <ion-grid>
+        <ion-row>
+          <ion-col
+            size="4"
+            sizeLg="3"
+            sizeMd="4"
+            sizeSm="6"
+            sizeXs="6"
+            *ngFor="let gamme of gammeListTab"
+          >
+            <div class="cardimage">
+              <ion-card class="colstyle">
+                <div class="badge2">
+                  <ion-badge
+                    slot="end"
+                    color="warning"
+                    *ngIf="gamme.nbr"
+                    (click)="removeIn(gamme)"
+                    >{{ gamme.nbr }}</ion-badge
+                  >
+                </div>
+
+                <div class="img-container" (click)="buyGamme(gamme)">
+                  <app-cache-image
+                    *ngIf="!gamme.url"
+                    [src]="urlPackage"
+                    [spinner]="false"
+                    [isLoad]="isLoad"
+                  ></app-cache-image>
+                  <app-cache-image
+                    *ngIf="gamme.url"
+                    [src]="gamme.url"
+                    [spinner]="false"
+                    [isLoad]="isLoad"
+                  ></app-cache-image>
+                </div>
+                <ion-card-content>
+                  <div style="text-align: center" class="divname">
+                    <small>{{ gamme.name }}</small>&nbsp;
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>
+<!--gestion des list ici -->
+<ion-footer *ngIf="totalItems">
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col size="6">
+      <div class="container footer2">
+        <small>{{totalItems }}</small> items =
+        <small>{{totalPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}} </small>
+      </div>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+</ion-footer>

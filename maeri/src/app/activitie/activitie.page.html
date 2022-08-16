@@ -1,0 +1,261 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-row class="ion-justify-content-start">
+      <ion-col size="3">
+        <div
+          class="ion-text-start ion-text-uppercase ion-text-nowrap"
+          (click)=" this.router.navigateByUrl('shop')"
+        >
+          <ion-button fill="outline" color="light"> service </ion-button>
+        </div>
+      </ion-col>
+      <!--
+        <ion-col size="3">
+        <div class="ion-text-center">
+          <small class="namesmall priceactivie2"
+            >{{ 'MENU.total' | translate}}:</small
+          >
+          <small class="namesmall priceactivie"
+            >{{sum | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <small class="namesmall priceactivie2"
+            >{{ 'MENU.paid' | translate}}:</small
+          >
+          <small class="namesmall priceactivie">
+            {{total | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </small>
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center">
+          <small class="namesmall priceactivie2">
+            {{ 'MENU.openorder' | translate}}:</small
+          >
+          <small class="namesmall priceactivie">
+            {{total2 | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </small>
+        </div>
+      </ion-col>
+      -->
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row *ngIf="invoices.length == 0">
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase">
+          <h3>Not result</h3>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="header-row" *ngIf="invoices.length">
+      <ion-col size="1" size-md="1" class="ion-align-self-center">
+        <div class="ion-text-center">N0</div>
+      </ion-col>
+      <ion-col size="2" size-md="2" class="ion-align-self-center">
+        <div class="ion-text-center">date</div>
+      </ion-col>
+
+      <ion-col size="3" size-md="3" class="ion-align-self-center">
+        <div class="ion-text-center">montant</div>
+      </ion-col>
+      <ion-col size="1" size-md="1" class="ion-align-self-center">
+        <div class="ion-text-center">table</div>
+      </ion-col>
+
+      <ion-col size="2" size-md="2" class="ion-align-self-center">
+        <div class="ion-text-center">N0 com</div>
+      </ion-col>
+      <ion-col size="2" size-md="2" class="ion-align-self-center">
+        <div class="ion-text-center">
+          <small></small>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let order of invoices let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="1" size-md="1" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          {{ order.numFacture }}
+        </div>
+      </ion-col>
+      <ion-col size="2" size-md="2" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          {{ order.created | date: "h:mm:ss" }}
+        </div>
+      </ion-col>
+      <ion-col size="3" size-md="3" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small
+            *ngIf="order.pick"
+            [ngClass]="{'order-pick': order.pick === true}"
+          >
+            <ion-icon name="checkbox-outline"></ion-icon>
+          </small>
+
+          {{ order.totalPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+
+      <ion-col size="1" size-md="1" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          {{order.tableNumber}}
+        </div>
+      </ion-col>
+      <ion-col size="2" size-md="2" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          {{ order.commandes.length}}
+        </div>
+      </ion-col>
+      <ion-col size="3" size-md="2" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap status">
+          <div *ngIf="order.sale">
+            <small>
+              <ion-icon
+                color="medium"
+                name="checkmark-circle-outline"
+              ></ion-icon
+            ></small>
+            <small
+              ><ion-icon
+                color="dark"
+                name="eye"
+                (click)="displayDetails(order)"
+              ></ion-icon
+            ></small>
+          </div>
+          <div *ngIf="!order.confirm && !order.Posconfirm">
+            <small>
+              <ion-icon
+                color="danger"
+                name="checkmark-circle-outline"
+              ></ion-icon
+            ></small>
+            <small
+              ><ion-icon
+                color="dark"
+                name="eye"
+                (click)="displayDetails(order)"
+              ></ion-icon
+            ></small>
+          </div>
+          <div
+            *ngIf="order.confirm && order.Posconfirm && !order.sale"
+            class="iconaction"
+          >
+            <small>
+              <ion-icon
+                color="success"
+                name="checkmark-circle-outline"
+                (click)="serviceConfirm(order)"
+              ></ion-icon>
+            </small>
+
+            <small>
+              <ion-icon name="add" (click)="pickInvoice(order)"></ion-icon>
+            </small>
+
+            <small>
+              <ion-icon
+                color="dark"
+                name="eye"
+                (click)="displayDetails(order)"
+              ></ion-icon>
+            </small>
+
+            <!--
+              <small>
+              <ion-icon
+                name="reader-outline"
+                (click)="updateOrder(order)"
+              ></ion-icon>
+            </small>
+            -->
+          </div>
+          <div *ngIf="!order.confirm && order.Posconfirm">
+            <small>
+              <ion-icon
+                (click)="serviceConfirm(order)"
+                color="warning"
+                name="checkmark-circle-outline"
+              ></ion-icon>
+            </small>
+
+            <small
+              ><ion-icon
+                color="dark"
+                name="eye"
+                (click)="displayDetails(order)"
+              ></ion-icon
+            ></small>
+            <small
+              class="smallToadd"
+              (click)="confirmCancel(order)"
+              *ngIf="!order.sale"
+            >
+              <ion-icon name="trash"></ion-icon
+            ></small>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <!--
+    <ion-buttons slot="end">
+            <ion-button
+             
+              
+              size="small"
+              fill="clear"
+            >
+              <ion-icon
+                slot="end"
+                *ngIf="!order.confirm && order.Posconfirm"
+                color="warning"
+                name="checkmark-circle-outline"
+              ></ion-icon>
+            </ion-button>
+     (click)="displayDetails(order)"
+    <p
+          class="tableNumber"
+          *ngIf="order.confirm && order.Posconfirm && !order.sale"
+        >
+          <ion-badge color="success">ok</ion-badge>
+        </p>
+        <p
+          class="tableNumber"
+          *ngIf="order.confirm && order.Posconfirm && order.sale"
+        >
+          <ion-badge color="dark">paid</ion-badge>
+        </p>
+     <p class="tableNumber2"></p>
+     <p><ion-badge (click)="displayDetails(order)">details</ion-badge></p>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  -->
+</ion-content>

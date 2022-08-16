@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="tab.length">
+      <ion-button fill="clear" (click)="done()" color="danger">
+        {{ 'MENU.save' | translate}}
+      </ion-button>
+    </ion-buttons>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true">
+    <ion-slide *ngFor="let prod of products">
+      <ion-row>
+        <ion-col size="12">
+          <div class="ion-text-center ion-text-uppercase">
+            <h3>{{prod._id}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="4" *ngFor="let produit of prod.entry">
+          <!-- <ion-card (click)="pickProduct(produit)" [disabled]="produit.exist">-->
+          <ion-card
+            (click)="pickProduct(produit)"
+            [disabled]="produit.exist && userStore.length == 1"
+          >
+            <div
+              *ngIf="produit.pick"
+              [ngClass]="{'product-pick': produit.pick === true}"
+            >
+              <ion-icon name="checkbox-outline"></ion-icon>
+            </div>
+            <img
+              class="img-container"
+              src="{{ produit.url }}"
+              style="width: 100px; height: 100px"
+            />
+            <ion-card-content>
+              <div style="text-align: center" class="divname">
+                <small>{{ produit.name }}</small>&nbsp;
+                <small>{{ produit.sizeUnit?produit.sizeUnit: '' }}</small>
+                <small>{{ produit.unitName?produit.unitName: ''}}</small>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

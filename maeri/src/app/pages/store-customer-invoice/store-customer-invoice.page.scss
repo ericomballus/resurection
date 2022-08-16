@@ -1,0 +1,118 @@
+p {
+  margin: 0px;
+  padding: 0px;
+  // background-color: #f1f1f1;
+}
+
+.orders {
+  background-color: #f1f1f1;
+  width: 100%;
+  // margin: 0px;
+  // padding: 0px;
+  // background-color: #f1f1f1;
+}
+
+.iconprint {
+  //position: relative;
+  // left: 90%;
+  //bottom: 65%;
+  //width: 500px;
+  margin-left: 15px;
+  //color: aqua;
+}
+
+.userName {
+  font-size: 11px;
+  position: absolute;
+  left: 80%;
+  bottom: 8%;
+  color: rgb(250, 52, 52);
+}
+
+.tableNumber {
+  font-size: 2px;
+  position: absolute;
+  left: 50%;
+  bottom: 40%;
+  //color: rgb(29, 114, 243);
+}
+
+ion-badge {
+  // margin-right: 5px;
+  text-transform: uppercase;
+  font-size: 7px;
+}
+
+.menu {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 5px;
+  font-size: 10px;
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+}
+.notif {
+  color: white;
+  font-size: 12px;
+  background-color: rgb(250, 52, 52);
+  padding: 5px;
+  margin: auto;
+  width: 50%;
+}
+.namesmalle2 {
+  font-size: 11px;
+}
+.btnend {
+  margin: 5px;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.date {
+  font-size: 8px;
+}
+@media (max-width: 567px) {
+  .mobile {
+    ion-col {
+      div {
+        font-size: 11px;
+        //font-weight: bold;
+        ion-button {
+          // width: 42px;
+        }
+      }
+    }
+  }
+  ion-buttons ion-button {
+    width: 70px;
+    font-size: 11px;
+    margin: 4px;
+  }
+
+  .data-row {
+    ion-col {
+      .namesmall {
+        font-size: 8px;
+      }
+      div {
+        font-size: 12px;
+        // font-weight: bold;
+      }
+    }
+  }
+  .header-row {
+    background-color: black;
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    ion-col {
+      div {
+        font-size: 9px;
+      }
+    }
+  }
+  .desktop {
+  }
+}
+@media (min-width: 567px) {
+}

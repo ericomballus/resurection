@@ -1,0 +1,89 @@
+.lesbtn2 {
+  font-size: 50%;
+  //text-align: center;
+  text-transform: uppercase;
+}
+
+.shopbtn {
+  position: relative;
+  left: 8px;
+}
+.col {
+  align-items: center;
+  text-align: center;
+  background-color: aqua;
+}
+
+.Btnitempack {
+  text-align: center;
+}
+
+ion-list > .productname {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.title {
+  font-size: 7px;
+  font-weight: bold;
+  // background-color: #05043b;
+  // width: 100%;
+  //text-align: center;
+}
+
+.spane {
+  font-size: 8px;
+  font-weight: bold;
+  position: absolute;
+  bottom: 70%;
+  background-color: rgb(21, 22, 21);
+  color: white;
+
+  // background-color: #05043b;
+  // width: 100%;
+  //text-align: center;
+}
+ion-card {
+  //border-radius: 0px;
+  // border: 0.5px solid white;
+  box-shadow: none !important;
+}
+
+.footer {
+  background-color: white;
+  padding-top: 8%;
+  padding-left: 8%;
+  padding-right: 8%;
+  position: relative;
+}
+
+.footer2 {
+  background-color: rgb(8, 212, 110);
+  padding: 3%;
+  text-align: center;
+}
+
+ion-card-content {
+  background-color: #f1f1f1;
+  padding: 0px;
+  color: black;
+  padding: 1%;
+  text-align: center;
+  // padding: 1%;
+  // text-align: center;
+}
+.colp {
+  font-size: 10px;
+  text-transform: uppercase;
+  // background-color: brown;
+  padding: 0px;
+}
+
+.badge {
+  position: absolute;
+  top: 7%;
+}
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+}

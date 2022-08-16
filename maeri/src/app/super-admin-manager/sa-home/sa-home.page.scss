@@ -1,0 +1,24 @@
+@media only screen and (max-width: 512px) {
+  .sa-main {
+    // display: block;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .sa-main {
+    display: flex;
+    justify-content: space-between;
+  }
+  .sa-main-div1 {
+    flex-grow: 1;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-right: 2px solid black;
+  }
+  .sa-main-div2 {
+    flex-grow: 1;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-right: 2px solid black;
+  }
+}

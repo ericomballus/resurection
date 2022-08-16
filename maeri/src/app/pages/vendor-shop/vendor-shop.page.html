@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/purchase"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!totalPrice" (click)="openCart()">
+        <ion-badge slot="end">{{ totalItems }}</ion-badge>
+        <ion-icon color="dark" slot="end" name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="packs" lines="full">
+    <div class="divitem" *ngFor="let pack of packs" lines="full">
+      <div class="img-container">
+        <img [src]="pack.url" width="25px" height="25px" />
+      </div>
+      <div class="inItem inItem3">
+        <p>
+          {{ pack.name }}<br />
+          {{ pack.sizeUnitProduct }} {{ pack.unitNameProduct }}<br />
+          {{ pack.cassier }} cassier
+        </p>
+      </div>
+      <div class="inItem">
+        <ion-input
+          [(ngModel)]="pack.inputValue"
+          slot="end"
+          placeholder="Enter "
+          type="number"
+          debounce="200"
+          (ionChange)="getValue($event, pack)"
+        ></ion-input>
+      </div>
+      <!--
+        <div class="inItem">
+        <ion-input
+          [(ngModel)]="pack.nbrBtl"
+          slot="end"
+          placeholder="Enter "
+          type="number"
+          debounce="1500"
+          (ionChange)="getValueBtl($event, pack)"
+        ></ion-input>
+      </div>
+      -->
+      <div class="inItem">
+        <div
+          [ngStyle]="{
+            opacity: pack.fisrtValueAdd && pack.fisrtValueAdd >= 0 ? '1' : '0.2'
+          }"
+          class="inItem2 displayPrice"
+        >
+          {{ pack.fisrtValueAdd * pack.packPrice | currency:
+          "CFA":"symbol":"3.0-0" }}
+        </div>
+        <div
+          class="inItem2 displayPrice"
+          [ngStyle]="{
+            opacity: '0.2'
+          }"
+          *ngIf="!pack.fisrtValueAdd"
+        >
+          0 CFA
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<div class="footer" *ngIf="totalItems">
+  <div class="container footer2">
+    {{totalItems}} items = FCFA {{totalPrice | currency:'CFA':'symbol':'3.0-0'}}
+  </div>
+</div>

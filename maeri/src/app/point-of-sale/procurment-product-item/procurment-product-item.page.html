@@ -1,0 +1,182 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!--<ion-menu-button autoHide="false"></ion-menu-button>
+      <ion-title *ngIf="!cashierFlag"
+      >{{ 'MENU.outgoing_item' | translate}}</ion-title
+    >
+    <ion-title *ngIf="cashierFlag"
+      >{{ 'MENU.incoming_item' | translate}}</ion-title
+    >
+      -->
+      <ion-back-button
+        color="light"
+        fill="outline"
+        *ngIf="!vendorRole"
+        defaultHref="/start"
+      ></ion-back-button>
+      <ion-back-button
+        *ngIf="vendorRole"
+        defaultHref="/vendor-start"
+        color="light"
+        fill="outline"
+      ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="tabRoles.includes(4)">
+  <ion-row class="header-component" *ngIf="transaction.length == 0">
+    <ion-col class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        no data found !
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row class="header-component" *ngIf="transaction && transaction.length">
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>send at</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>send By</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>name</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>quantity</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>status</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center"></div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row
+    *ngFor="let prod of transaction let i= index"
+    class="data-row data-update"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+  >
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <small class="namesmall"> {{ prod.created | date:'medium' }}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <small class="namesmall"> {{ prod.sender}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <small class="namesmall"> {{ prod.name }} </small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <small class="namesmall" *ngIf="prod.productType !== 'productItems'">
+          {{prod.quantityItems?prod.quantityItems: 0}}
+        </small>
+        <small class="namesmall" *ngIf="prod.productType == 'productItems'">
+          <a class="cassier">{{prod.cassier ? prod.cassier: 0}}</a>cas +
+          <a>{{ prod.btls}} </a>btl</small
+        >
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        {{prod.confirm ? 'ok': 'waiting...'}}
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <ion-button (click)="confirmTrasaction(prod, i)">valider</ion-button>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-content *ngIf="tabRoles.includes(2)">
+  <ion-row class="header-component">
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>send at</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>receive By</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>name</small>
+      </div>
+    </ion-col>
+    <ion-col size="3" size-md="3">
+      <div class="ion-text-center">
+        <small>quantity</small>
+      </div>
+    </ion-col>
+    <ion-col size="3" size-md="3">
+      <div class="ion-text-center">
+        <small>status</small>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row
+    *ngFor="let prod of transaction let i= index"
+    class="data-row data-update"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    (click)="cancelProcurement(prod)"
+  >
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <small class="namesmall"> {{ prod.created | date:'medium' }}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <small class="namesmall"> {{ prod.receiver}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <small class="namesmall"> {{ prod.name }} </small>
+      </div>
+    </ion-col>
+    <ion-col size="3" size-md="3" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <small class="namesmall" *ngIf="prod.productType !== 'productItems'">
+          {{prod.quantityItems?prod.quantityItems: 0}}
+        </small>
+        <small class="namesmall" *ngIf="prod.productType == 'productItems'">
+          <a class="cassier">{{prod.cassier ? prod.cassier: 0}}</a>cas +
+          <a>{{ prod.btls}} </a>btl</small
+        >
+      </div>
+    </ion-col>
+    <ion-col size="3" size-md="3" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase taille">
+        <p
+          [ngStyle]="{'background-color': prod.confirm ? 'var(--ion-color-success)' : 'var(--ion-color-danger)' }"
+        >
+          {{prod.confirm ? 'ok': 'waiting...'}}
+        </p>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

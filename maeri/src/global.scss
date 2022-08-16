@@ -1,0 +1,372 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ ion-content color="light"
+ */
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+.header-component {
+  background-color: #202020;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: white;
+  text-transform: uppercase;
+  ion-col {
+    div {
+      font-size: 11px;
+    }
+  }
+}
+.custom-btn {
+  font-size: 3px;
+}
+.header-component2 {
+  background-color: var(--ion-color-primary);
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: white;
+  text-transform: uppercase;
+  ion-col {
+    div {
+      font-size: 11px;
+    }
+  }
+}
+.data-row {
+  ion-col {
+    div {
+      font-size: 11px;
+    }
+  }
+}
+.row-component {
+  // padding-top: 10px;
+  // padding-bottom: px;
+  // color: white;
+  text-transform: uppercase;
+  ion-col {
+    div {
+      font-size: 11px;
+    }
+  }
+}
+
+table,
+td,
+th {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+.my-custom-class {
+  --background: rgb(255, 34, 108);
+  --color: black;
+  // --border-style:solid;
+  //  --border-width :5px;
+  //  --border-color:#FF3F22;
+}
+
+.closeCash {
+  width: 100%;
+}
+.my-custom-classIn {
+  --background: rgb(255, 152, 34);
+  --color: black;
+  // --border-style:solid;
+  //  --border-width :5px;
+  //  --border-color:#FF3F22;
+}
+ion-alert .my-alert {
+  color: rgb(243, 50, 50) !important;
+  //position: absolute;
+  //right: 10%;
+}
+
+ion-alert .my-alertconfirm {
+  color: greenyellow !important;
+  // position: absolute;
+  // right: 10%;
+}
+
+ion-alert .my-alertcancel {
+  color: rgb(204, 0, 255);
+  // position: absolute;
+  // right: 10%;
+}
+
+.my-custom-class2 {
+  --background: rgb(252, 17, 56);
+  --color: white;
+  // --border-style:solid;
+  //  --border-width :5px;
+  //  --border-color:#FF3F22;
+}
+.AlertStock {
+  --background: rgb(252, 17, 56);
+  --color: white;
+  // --border-style:solid;
+  //  --border-width :5px;
+  //  --border-color:#FF3F22;
+}
+
+.my-custom-modal-css .modal-wrapper {
+  // height: 50%;
+  //top: 80%;
+  //position: absolute;
+  // display: block;
+  // width: 80%;
+}
+
+@media screen and (max-width: 414px) {
+  ion-col {
+    border: none;
+  }
+  ion-col .taille {
+    font-size: 9px;
+    //color: red;
+  }
+  .round {
+    --width: 60px;
+    --height: 60px;
+    // --vertical-align: middle;
+    //--padding-start: 10px;
+    // --padding-end: 10px;
+    font-size: 8px;
+  }
+  .ion-no-border {
+    border: none;
+  }
+}
+@media screen and (max-width: 380px) {
+  .taille {
+    font-size: 9px;
+  }
+  .round {
+    --width: 60px;
+    --height: 60px;
+    // --vertical-align: middle;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    font-size: 9px;
+  }
+  .ion-no-border {
+    border: none;
+  }
+}
+
+@media screen and (min-width: 381px) {
+  .taille {
+    font-size: 11px;
+  }
+  .round {
+    --width: 60px;
+    --height: 60px;
+    // --vertical-align: middle;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    font-size: 9px;
+  }
+  .ion-no-border {
+    border: none;
+  }
+}
+@media screen and (min-width: 513px) {
+  .taille {
+    font-size: 13px;
+  }
+  .round {
+    --width: 90px;
+    --height: 90px;
+    // --vertical-align: middle;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    font-size: 13px;
+  }
+  .ion-no-border {
+    border: none;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .taille {
+    font-size: 13px;
+  }
+  .round {
+    --width: 100px;
+    --height: 100px;
+    // --vertical-align: middle;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    font-size: 11px;
+  }
+  .ion-no-border {
+    border: none;
+  }
+}
+.header-row {
+  font-weight: 500;
+  border-bottom: 2px solid black;
+  background-color: #1485ee;
+  color: white;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  ion-col div {
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+}
+.header-tab {
+  font-weight: 500;
+  border-bottom: 2px solid #f1f1f1;
+  background-color: #1485ee;
+  color: white;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  ion-col div {
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+}
+
+.data-row {
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.divrow {
+  width: 100%;
+}
+
+.namesmall {
+  font-size: 12px;
+}
+.divcenter {
+  margin: auto;
+  width: 50%;
+  padding: auto;
+  // border: 3px solid green;
+  //
+  padding: 10px;
+}
+
+.calcul {
+  border: 1px solid #f1f1f1;
+}
+.pad {
+  padding-top: 15px;
+  // padding-bottom: 10px;
+}
+
+.btnshop {
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.titre {
+  margin-left: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.img-container {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.divname {
+  /// border-bottom: 1px solid #22d2f1;
+  background-color: #3a3a3a;
+  color: white;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+}
+.slide1 {
+  height: 100%;
+}
+
+.slide2 {
+  height: 100%;
+}
+
+.nodejs {
+  padding-bottom: 40px;
+}
+
+.swiper-slide {
+  height: 83vh;
+  // max-height: 80vh;
+  align-items: normal;
+  overflow: scroll;
+}
+ion-slide {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+ion-segment {
+}
+.btnseg {
+  --indicator-box-shadow: transparent !important;
+  --background: var(--danger);
+  --color: red;
+  // --background-checked: linear-gradient(
+  // to right,
+  // #2d2e87,
+  // #0083cb
+  // ) !important;
+  --background-checked: rgb(250, 54, 54);
+  --color-checked: white;
+  border-radius: 0.5rem !important;
+  padding: 2px;
+  margin: 0;
+}
+
+#notification-button {
+  position: relative;
+  width: 42px;
+  top: 1px;
+  right: 1px;
+  overflow: visible !important;
+}
+
+#notifications-badge {
+  background-color: red;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  border-radius: 100%;
+}
+@media only screen and (min-width: 768px) {
+  ion-menu-button {
+    display: none;
+  }
+}
+ion-toolbar {
+  --background: var(--ion-color-dark);
+}
+.modal-size .modal-wrapper {
+  width: 80%;
+  height: 800px;
+  --background: rgb(91, 243, 91) !important;
+}

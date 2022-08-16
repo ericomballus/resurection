@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #form="ngForm" (ngSubmit)="register(form)">
+    <ion-item>
+      <ion-input
+        name="name"
+        type="text"
+        placeholder="Name"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        name="telephone"
+        type="number"
+        placeholder="phone number"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        name="ville"
+        type="text"
+        placeholder="ville"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        name="quartier"
+        type="text"
+        placeholder="quartier"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item *ngIf="storeList.length > 1">
+      <ion-label>ADD STORE</ion-label>
+      <ion-select
+        cancelText="cancel"
+        okText="Okay"
+        interface="popover"
+        (ionChange)="assignSore($event)"
+      >
+        <ion-select-option
+          *ngFor="let store of storeList"
+          value="{{ store.id }}"
+          >{{ store.name }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        name="password"
+        type="password"
+        placeholder="Password"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        name="confirm"
+        type="password"
+        placeholder="Password again"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+
+    <ion-button
+      color="danger"
+      size="large"
+      type="submit"
+      [disabled]="form.invalid"
+      expand="block"
+      >Register</ion-button
+    >
+  </form>
+</ion-content>

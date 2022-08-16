@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col
+      size-sm="12"
+      size-md="12"
+      size-xm="12"
+      size-lg="12"
+      class="ion-align-self-center"
+      [ngClass]="'separationBlock'"
+    >
+      <div
+        class="ion-text-center ion-text-uppercase taille"
+        (click)="displayOrders()"
+      >
+        proposition commandes
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row color="primary">
+    <ion-col
+      size-sm="4"
+      size-md="4"
+      size-xm="4"
+      size-lm="4"
+      size-lg="4"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">Journéé</div>
+    </ion-col>
+    <ion-col
+      size-sm="4"
+      size-md="4"
+      size-xm="4"
+      size-lm="4"
+      size-lg="4"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">company</div>
+    </ion-col>
+    <ion-col
+      size-sm="4"
+      size-md="4"
+      size-xm="4"
+      size-lm="4"
+      size-lg="4"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">statut</div>
+    </ion-col>
+  </ion-row>
+
+  <div *ngIf="commandeList">
+    <ion-row
+      color="primary"
+      *ngFor="let inv of commandeList let i = index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="openOrder(inv, i)"
+    >
+      <ion-col
+        size-sm="4"
+        size-md="4"
+        size-xm="4"
+        size-lm="4"
+        size-lg="4"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{inv.created | date}} {{ inv.created | date:'shortTime' }}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="4"
+        size-md="4"
+        size-xm="4"
+        size-lm="4"
+        size-lg="4"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille" *ngIf="retailer">
+          {{inv.vendorId.company}}
+        </div>
+        <div class="ion-text-center ion-text-uppercase taille" *ngIf="vendor">
+          {{inv.retailerId.company}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="4"
+        size-md="4"
+        size-xm="4"
+        size-lm="4"
+        size-lg="4"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">non livré</div>
+      </ion-col>
+      <ion-col size="12" *ngIf="inv.open">
+        <ion-row class="second-lastrow">
+          <ion-col size="3">
+            <div class="ion-text-center inte">name</div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="ion-text-center inte">price</div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="ion-text-center inte">Qty</div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="ion-text-center inte">T.price</div>
+          </ion-col>
+        </ion-row>
+        <ion-row
+          *ngFor="let art of inv.commandes; let i= index"
+          class="data-row data-update"
+        >
+          <ion-col size="3">
+            <div class="ion-text-center inte">{{art.item.name}}</div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="ion-text-center inte" *ngIf="art.item.packPrice">
+              {{art.item.packPrice | currency:'CFA':'symbol':'3.0-0'}}
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="ion-text-center inte">{{art.qty}}</div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="ion-text-center inte">
+              {{art.coast | currency:'CFA':'symbol':'3.0-0'}}
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="last-row">
+          <ion-col class="ion-align-self-center">
+            <div class="ion-text-center inte" *ngIf="retailer">
+              <ion-button (click)="confirmOrders(inv)" size="small">
+                valider
+              </ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

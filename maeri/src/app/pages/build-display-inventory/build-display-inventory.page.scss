@@ -1,0 +1,92 @@
+.userName {
+  font-size: 11px;
+  position: absolute;
+  left: 80%;
+  bottom: 8%;
+  color: rgb(250, 52, 52);
+}
+
+.tableNumber {
+  font-size: 2px;
+  position: absolute;
+  left: 50%;
+  bottom: 40%;
+  //color: rgb(29, 114, 243);
+}
+
+ion-col {
+  div {
+    font-size: 9px;
+  }
+  // text-align: center;
+}
+
+ion-col {
+  .inte {
+    font-size: 9px;
+  }
+  // text-align: center;
+}
+
+.data-lastrow {
+  background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.header-row {
+  // background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 9px;
+    }
+  }
+}
+
+.rowInventaire {
+  background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 9px;
+    }
+  }
+}
+
+.separation {
+  background-color: #111111;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 9px;
+    }
+  }
+}
+.lastDiv {
+  padding-top: 15px;
+}
+.resume {
+  padding-top: 15px;
+}
+.icone {
+  font-size: 30px;
+}
+.header-main {
+  font-weight: 500;
+  // border-bottom: 2px solid #f1f1f1;
+  //  background-color: #1485ee;
+  // color: white;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  ion-col {
+    div {
+      text-transform: uppercase;
+      font-size: 13px;
+      color: black;
+    }
+  }
+}

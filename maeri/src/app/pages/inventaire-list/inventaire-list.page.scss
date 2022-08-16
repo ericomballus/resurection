@@ -1,0 +1,54 @@
+.userName {
+  font-size: 11px;
+  position: absolute;
+  left: 80%;
+  bottom: 8%;
+  color: rgb(250, 52, 52);
+}
+
+.tableNumber {
+  font-size: 2px;
+  position: absolute;
+  left: 50%;
+  bottom: 40%;
+  //color: rgb(29, 114, 243);
+}
+
+ion-col {
+  div {
+    font-size: 9px;
+  }
+  // text-align: center;
+}
+
+ion-col {
+  .inte {
+    font-size: 9px;
+  }
+  // text-align: center;
+}
+
+.data-lastrow {
+  background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.found {
+  background-color: #16acf1;
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+.header-row {
+  // background-color: #f1f1f1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 9px;
+    }
+  }
+}
+.icone {
+  font-size: 30px;
+}

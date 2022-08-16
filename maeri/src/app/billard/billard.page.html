@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar no-border>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <!--
+        <ion-button (click)="updateAll()">changes</ion-button>
+     -->
+
+      <ion-button
+        color="light"
+        fill="outline"
+        (click)="selectSource()"
+        *ngIf="admin"
+      >
+        <ion-icon color="success" slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+      <ion-button
+        (click)="addToAllStore()"
+        *ngIf="setting && setting.multi_store"
+        color="light"
+        >{{ 'MENU.transfer' | translate}}</ion-button
+      >
+      <ion-button color="light" fill="outline" (click)="addCategorie()">
+        categorie
+      </ion-button>
+      <ion-button
+        (click)="addResource()"
+        *ngIf="setting && setting.use_resource"
+        fill="outline"
+        >resources
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true">
+    <ion-slide *ngFor="let products of multiStoreProductitem; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>{{ products.storeName ? products.storeName: 'no name' }}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-list *ngIf="products && segment == 'enabled'">
+          <ion-item *ngFor="let prod of products">
+            <!--
+              <ion-avatar slot="start" *ngIf="prod.url">
+              <ion-img [src]="prod.url" *ngIf="displayImages"></ion-img>
+            </ion-avatar>
+             <p>{{ prod.purchasingPrice }}</p>
+           -->
+            <ion-label>
+              <p>{{ prod.name }}</p>
+              <p>{{ prod.sellingPrice}}</p>
+            </ion-label>
+
+            <ion-button
+              (click)="TransferOne(prod)"
+              color="primary"
+              slot="end"
+              small
+              *ngIf="setting && setting.multi_store"
+            >
+              {{ 'MENU.transfer' | translate}}
+            </ion-button>
+
+            <ion-button (click)="productUpdate(prod)"
+              >{{ 'MENU.modify' | translate}}</ion-button
+            >
+
+            <ion-button
+              (click)="deleteBillard(prod)"
+              color="danger"
+              class="round"
+              slot="end"
+              small
+            >
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+
+        <ion-list *ngIf="products && segment == 'disabled'">
+          <ion-item *ngFor="let prod of products">
+            <ion-avatar slot="start" *ngIf="prod.url">
+              <ion-img [src]="prod.url"></ion-img>
+            </ion-avatar>
+            <ion-label>
+              <p>{{ prod.name }}</p>
+              <p>{{ prod.sellingPrice }}</p>
+              <p>{{ prod.quantity }}</p>
+            </ion-label>
+
+            <ion-button
+              class="divBtnUpdate"
+              *ngIf="admin"
+              (click)=" productUpdate(prod)"
+              >Restore</ion-button
+            >
+          </ion-item>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

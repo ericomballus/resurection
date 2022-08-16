@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
+
+    <main>
+      <div class="row">
+        <% for(let p of prods) {%>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xm-6">
+          <div class="card h-100">
+            <a href="#"
+              ><img
+                width="75px"
+                height="150px"
+                class="card-img-top"
+                src="<%= p.url%>"
+                alt=""
+            /></a>
+            <div class="card-body">
+              <h4 class="card-title">
+                <a href="#"> <%= p.name%> </a>
+              </h4>
+              <h5><%= p.sellingPrice%> FCFA</h5>
+              <!-- <p class="card-text">
+                                <%= p.description%>
+                            </p> -->
+            </div>
+            <div
+              class="btn-group"
+              role="group"
+              aria-label="Basic outlined example"
+            >
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                onclick="addDesSkills('<%= p._id %>')"
+              >
+                +
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                onclick="remove('<%= p._id %>')"
+              >
+                -
+              </button>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <div style="display: none">
+        <span id="url"><%= url %></span>
+        <span id="urlAdmin"><%= adminId %></span>
+        <span id="admin"><%= admin %></span>
+      </div>
+    </main>
+
+    <footer><%- include('../partials/footer'); %></footer>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      let uri = "http://localhost:3000/";
+      let ur = document.getElementById("url").textContent;
+      console.log(ur);
+      const socket = io(ur);
+      socket.on("connect", () => {
+        console.log("we are connect");
+      });
+
+      //
+    </script>
+
+    <script>
+      let tab = [];
+      let result = [];
+      let adminURL = document.getElementById("urlAdmin").textContent;
+      let serverUrl = document.getElementById("url").textContent;
+      let idAdmin = document.getElementById("admin").textContent;
+      let openId = "";
+      let openDate = "";
+      let storedItem = {};
+      totalQty = 0;
+      totalPrice = 0;
+      // fetch("http://localhost:3000/productsitem/?db=5dec5afea80aa112b00b4bbf")
+      fetch(adminURL)
+        .then((response) => response.json())
+        .then((data) => {
+          result = data["items"];
+        });
+
+      fetch(serverUrl + `/cashOpen/${idAdmin}?db=${idAdmin}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data["docs"][0]);
+          openId = data["docs"][0]._id;
+          openDate = data["docs"][0].openDate;
+        });
+      function addDesSkills(p) {
+        const found = result.find((prod) => prod._id == p);
+        console.log(found);
+        tab.push(found);
+        var Item = storedItem[p];
+        if (!Item) {
+          storedItem[p] = { item: found, qty: 0, price: 0 };
+        }
+        console.log(storedItem[p]);
+        if (storedItem[p].item.sellingPrice) {
+          storedItem[p].qty++;
+          storedItem[p].price =
+            storedItem[p].item.sellingPrice * storedItem[p].qty;
+          totalQty++;
+          totalPrice += storedItem[p].item.sellingPrice;
+        } else {
+          storedItem[p].qty++;
+          storedItem[p].price =
+            storedItem[p].item.purchasingPrice * storedItem[p].qty;
+          totalQty++;
+          totalPrice += storedItem[p].item.purchasingPrice;
+        }
+        document.getElementById("panier").innerText = totalQty;
+        document.getElementById("montant").innerText = totalPrice;
+        var test = document.getElementById("shopcontent");
+        // console.log(test);
+        const arr = [];
+        for (var id in storedItem) {
+          arr.push(storedItem[id]);
+        }
+        var myList = "<ul class= 'list-group'>";
+        for (var i = 0; i < arr.length; i++) {
+          console.log(arr[i]);
+          myList +=
+            "<li class='list-group-item'>" +
+            arr[i]["qty"] +
+            " " +
+            arr[i]["item"]["name"] +
+            "</li>";
+        }
+        myList += "</ul>";
+        test.innerHTML = myList;
+      }
+
+      // remove to cart
+      function remove(id) {
+        tab = tab.filter((elt) => {
+          return elt._id !== id;
+        });
+
+        if (storedItem[id].qty === 0) {
+          storedItem[id].qty = 0;
+          totalQty = totalQty;
+          storedItem[id].price = 0;
+          totalPrice = totalPrice;
+          return;
+        } else {
+          storedItem[id].qty--;
+          storedItem[id].item.qty--;
+        }
+        if (storedItem[id].item.sellingPrice) {
+          storedItem[id].price -= storedItem[id].item.sellingPrice;
+          totalQty--;
+          totalPrice -= storedItem[id].item.sellingPrice;
+        } else {
+          storedItem[id].price -= storedItem[id].item.sellingPrice;
+          totalQty--;
+          totalPrice -= storedItem[id].item.sellingPrice;
+        }
+
+        document.getElementById("panier").innerText = totalQty;
+        document.getElementById("montant").innerText = totalPrice;
+        var test = document.getElementById("shopcontent");
+        const arr = [];
+        for (var id in storedItem) {
+          arr.push(storedItem[id]);
+        }
+        var myList = "<ul class= 'list-group'>";
+        for (var i = 0; i < arr.length; i++) {
+          myList +=
+            "<li class='list-group-item'>" +
+            arr[i]["qty"] +
+            " " +
+            arr[i]["item"]["name"] +
+            "</li>";
+        }
+        myList += "</ul>";
+        test.innerHTML = myList;
+      }
+
+      // Get the modal
+      var modal = document.getElementById("myModal");
+
+      // var test = document.getElementById("shopcontent");
+
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks on the button, open the modal
+      btn.onclick = function (tab) {
+        console.log(storedItem);
+        const arr = [];
+        for (var id in storedItem) {
+          arr.push(storedItem[id]);
+        }
+        console.log(arr);
+        modal.style.display = "block";
+      };
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+      sendInvoices = async () => {
+        console.log(storedItem);
+        const arr = [];
+        for (var id in storedItem) {
+          arr.push(storedItem[id]);
+        }
+
+        modal.style.display = "none";
+        let lacommande = {};
+        cartdetails = {
+          items: storedItem,
+          totalQty: totalQty,
+          totalPrice: totalPrice,
+        };
+        let idL = Math.random()
+          .toString(36)
+          .replace(/[^a-z]+/g, "")
+          .substr(0, 5);
+        idL = idL + Date.now().toString();
+        lacommande["localId"] = idL;
+        lacommande["cartdetails"] = cartdetails;
+        lacommande["products"] = arr;
+        let id2 = document.getElementById("admin").textContent;
+        /*
+               storedItem = {};
+              totalPrice = 0;
+              totalQty = 0;
+
+              */
+        let data = {
+          cart: lacommande,
+          adminId: id2,
+          Posconfirm: false,
+          localId: idL,
+          openCashDateId: openId,
+          openCashDate: openDate,
+        };
+        let ur1 = document.getElementById("url").textContent;
+        let url =
+          ur1 +
+          "/" +
+          "invoice/commande/items/userName" +
+          "/" +
+          id2 +
+          "/custumer" +
+          "?db=" +
+          id2;
+        console.log(url);
+        fetch(url, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        }).then((res) => {
+          console.log(res);
+          console.log("hello ok");
+          var modal2 = document.getElementById("alertModal");
+          var span2 = document.getElementsByClassName("close2")[0];
+          span2.onclick = function () {
+            modal2.style.display = "none";
+          };
+          modal2.style.display = "block";
+          totalQty = 0;
+          totalPrice = 0;
+          storedItem = {};
+          lacommande = {};
+          document.getElementById("panier").innerText = totalQty;
+          document.getElementById("montant").innerText = totalPrice;
+        });
+      };
+    </script>
+    <script>
+      class Cart {
+        constructor(Cart) {
+          this.items = Cart.items || {};
+          this.totalQty = Cart.totalQty || 0;
+          this.totalPrice = Cart.totalPrice || 0;
+        }
+
+        add(item, id) {
+          var storedItem = this.items[id];
+          if (!storedItem) {
+            storedItem = this.items[id] = { item: item, qty: 0, price: 0 };
+          }
+
+          if (item.sellingPrice) {
+            storedItem.qty++;
+            storedItem.price = storedItem.item.sellingPrice * storedItem.qty;
+            this.totalQty++;
+            this.totalPrice += storedItem.item.sellingPrice;
+          } else {
+            storedItem.qty++;
+            storedItem.price = storedItem.item.purchasingPrice * storedItem.qty;
+            this.totalQty++;
+            this.totalPrice += storedItem.item.purchasingPrice;
+          }
+        }
+
+        addMoreOne(item, id, numb) {
+          console.log(item);
+
+          var storedItem = this.items[id];
+          if (!storedItem) {
+            storedItem = this.items[id] = { item: item, qty: 0, price: 0 };
+          }
+
+          if (item.sellingPrice) {
+            storedItem.qty = parseInt(numb);
+            storedItem.price = storedItem.item.sellingPrice * parseInt(numb);
+            this.totalQty = this.totalQty + parseInt(numb);
+            this.totalPrice =
+              this.totalPrice + storedItem.item.sellingPrice * parseInt(numb);
+          } else if (item["product"].sellingPrice) {
+            storedItem.qty = parseInt(numb);
+            storedItem.price =
+              storedItem.item["product"].sellingPrice * parseInt(numb);
+            this.totalQty = this.totalQty + parseInt(numb);
+            this.totalPrice =
+              this.totalPrice +
+              storedItem.item["product"].sellingPrice * parseInt(numb);
+          } else {
+            storedItem.qty = parseInt(numb);
+            storedItem.price = storedItem.item.purchasingPrice * parseInt(numb);
+            this.totalQty = this.totalQty + parseInt(numb);
+            this.totalPrice =
+              this.totalPrice +
+              storedItem.item.purchasingPrice * parseInt(numb);
+          }
+        }
+
+        reduceByOne(id) {
+          if (this.items[id].qty === 0) {
+            this.items[id].qty = 0;
+            this.totalQty = this.totalQty;
+            this.items[id].price = 0;
+            this.totalPrice = this.totalPrice;
+            return;
+          } else {
+            this.items[id].qty--;
+            this.items[id].item.qty--;
+          }
+          if (this.items[id].item.sellingPrice) {
+            this.items[id].price -= this.items[id].item.sellingPrice;
+            this.totalQty--;
+            this.totalPrice -= this.items[id].item.sellingPrice;
+            console.log(this.totalQty);
+          } else {
+            this.items[id].price -= this.items[id].item.sellingPrice;
+            this.totalQty--;
+            this.totalPrice -= this.items[id].item.sellingPrice;
+          }
+
+          if (this.items[id].qty <= 0) {
+            // delete this.items[id];
+          }
+        }
+
+        removeItem(id) {
+          //console.log("total", this.totalPrice);
+          // console.log("total", this.items[id]);
+          this.totalQty -= this.items[id].qty;
+          this.totalPrice -= this.items[id].price * this.items[id].qty;
+          delete this.items[id];
+        }
+
+        generateArray() {
+          const arr = [];
+          for (var id in this.items) {
+            arr.push(this.items[id]);
+          }
+          return arr;
+        }
+
+        generateArrayManagerMode(items) {
+          const arr = [];
+          for (var id in items) {
+            arr.push(items[id]);
+          }
+          return arr;
+        }
+      }
+    </script>
+  </body>
+</html>

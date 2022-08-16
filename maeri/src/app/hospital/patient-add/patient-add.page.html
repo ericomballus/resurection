@@ -1,0 +1,137 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="outline" color="light">
+        <ion-icon color="light" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #form="ngForm" (ngSubmit)="addPatient(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col size="12">
+          <div class="ion-text-center ion-text-uppercase">
+            Informations Générales
+          </div>
+        </ion-col>
+        <ion-col>
+          <div padding>
+            <ion-item>
+              <ion-label position="floating">nom:</ion-label>
+              <ion-input name="name" type="text" ngModel required></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Telephone:</ion-label>
+              <ion-input
+                name="phone"
+                type="number"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">sexe: </ion-label>
+              <ion-select interface="popover" (ionChange)="getSexe($event)">
+                <ion-select-option
+                  *ngFor="let sexe of sexeTab"
+                  value="{{ sexe.name }}"
+                  >{{ sexe.name}}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">age</ion-label>
+              <ion-input name="age" type="number" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">quartier</ion-label>
+              <ion-input
+                name="quartier"
+                type="texte"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">religion</ion-label>
+              <ion-input
+                name="religion"
+                type="texte"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">nationalité</ion-label>
+              <ion-input
+                name="nationalite"
+                type="texte"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+          </div>
+          <!-- [disabled]="form.invalid"-->
+        </ion-col>
+      </ion-row>
+      <ion-row justify-content-center>
+        <ion-col size="12">
+          <div class="ion-text-center ion-text-uppercase">
+            Paramétres du Patient
+          </div>
+        </ion-col>
+        <ion-col>
+          <div padding>
+            <ion-item>
+              <ion-label position="floating">Poids</ion-label>
+              <ion-input
+                name="weight"
+                type="number"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Température</ion-label>
+              <ion-input
+                name="temperature"
+                type="number"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Tension</ion-label>
+              <ion-input
+                name="tension"
+                type="number"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center">
+            <ion-button
+              color="danger"
+              type="submit"
+              size="large"
+              type="submit"
+              expand="block"
+              [disabled]="form.invalid"
+              >enregistrer</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

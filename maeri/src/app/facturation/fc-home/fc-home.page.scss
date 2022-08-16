@@ -1,0 +1,71 @@
+.invoices {
+  ion-item {
+    --background: rgba(0, 0, 0, 0);
+  }
+}
+
+ion-item {
+  --background: rgba(0, 0, 0, 0);
+}
+
+.invoices {
+  background-color: yellow;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 5%;
+}
+
+.divtable {
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 4px;
+  font-size: 11px;
+}
+tr {
+  background-color: #fff;
+  width: 100%;
+}
+
+tr:nth-child(even) {
+  // background-color: #dddddd;
+  background-color: #dddddd;
+}
+
+.otherrows > td {
+  // background-color: black;
+  height: 5px;
+  border: 1px solid #0c0c0ce8;
+  text-align: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 8px;
+}
+.title {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (min-width: 800px) {
+  tr td {
+    font-size: 14px;
+  }
+
+  .btnStatus {
+    div {
+      text-align: center;
+    }
+    div ion-icon {
+      font-size: 20px;
+    }
+  }
+}

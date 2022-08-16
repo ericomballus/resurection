@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin-page"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="addCustomer()">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col>
+      <div class="ion-text-center ion-text-uppercase">
+        <h4>custumers List</h4>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row class="header-row">
+    <ion-col size-sm="3" size-md="3" size-lg="2">
+      <div class="ion-text-center">firstName</div>
+    </ion-col>
+    <ion-col size-sm="3" size-md="3" size-lg="2">
+      <div class="ion-text-center">status</div>
+    </ion-col>
+    <ion-col size-sm="3" size-md="3" size-lg="2">
+      <div class="ion-text-center">Type</div>
+    </ion-col>
+
+    <ion-col size-sm="3" size-md="3" size-lg="2">
+      <div class="ion-text-center">connect</div>
+    </ion-col>
+    <ion-col class="ion-hide-lg-down" size-lg="2">
+      <div class="ion-text-center">phone</div>
+    </ion-col>
+    <ion-col class="ion-hide-lg-down" size-lg="2">
+      <div class="ion-text-center">nbr Store</div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row
+    *ngFor="let user of custumers let i= index"
+    class="data-row data-update"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    (click)="presentActionSheet(user)"
+  >
+    <ion-col size-sm="3" size-md="3" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase smallSize">
+        {{user.firstName}}
+      </div>
+    </ion-col>
+
+    <ion-col size-sm="3" size-md="3" size-lg="2">
+      <div
+        class="ion-text-center ion-text-uppercase smallSize disable"
+        *ngIf="user.autorization === false"
+      >
+        disable
+      </div>
+      <div
+        class="ion-text-center ion-text-uppercase smallSize enable"
+        *ngIf="user.autorization === true"
+      >
+        enable
+      </div>
+    </ion-col>
+
+    <ion-col size-sm="3" size-md="3" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase smallSize">
+        <div slot="end" color="light" *ngIf="user.venderRole">vendor</div>
+        <div slot="end" color="light" *ngIf="!user.venderRole">retailer</div>
+      </div>
+    </ion-col>
+    <ion-col size-sm="3" size-md="3" size-lg="2">
+      <div
+        class="ion-text-center ion-text-uppercase smallSize online"
+        *ngIf="(user | online)"
+      >
+        on
+      </div>
+
+      <div
+        class="ion-text-center ion-text-uppercase smallSize offline"
+        *ngIf="!(user | online)"
+      >
+        off
+      </div>
+    </ion-col>
+    <ion-col class="ion-hide-lg-down" size-lg="2">
+      <div class="ion-text-center">{{user.telephone}}</div>
+    </ion-col>
+    <ion-col class="ion-hide-lg-down" size-lg="2">
+      <div class="ion-text-center">
+        {{user.storeId ? user.storeId.length : 1}}
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row class="userconnect">
+    <ion-col>
+      <div class="ion-text-center ion-text-uppercase">
+        <h4>custumers connect</h4>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="header-row">
+    <ion-col size="2">
+      <div class="ion-text-center">custumer</div>
+    </ion-col>
+    <ion-col size="2">
+      <div class="ion-text-center">connect</div>
+    </ion-col>
+    <ion-col size="6">
+      <div class="ion-text-center">Last Request</div>
+    </ion-col>
+    <ion-col size="2">
+      <div class="ion-text-center">hour</div>
+    </ion-col>
+  </ion-row>
+  <ion-row
+    *ngFor="let user of custumersConnect let i= index"
+    class="data-row data-update"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    (click)="presentActionSheet(user)"
+  >
+    <ion-col size="2">
+      <div class="ion-text-center ion-text-uppercase smallSize">
+        {{user.firstName}}
+      </div>
+    </ion-col>
+
+    <ion-col size="2">
+      <div class="ion-text-center ion-text-uppercase smallSize online">
+        online
+      </div>
+    </ion-col>
+    <ion-col size="6">
+      <div *ngIf="user.lastRequest" class="ion-text-uppercase smallSize online">
+        {{user.lastRequest ? user.lastRequest : ''}}
+      </div>
+    </ion-col>
+
+    <ion-col size="2">
+      <div
+        *ngIf="user.userConnection && user.userConnection.lastConnection"
+        class="ion-text-uppercase ion-text-center smallSize online"
+      >
+        {{(user.userConnection.lastConnection ?
+        user.userConnection.lastConnection : '0000') | date:'medium'}}
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

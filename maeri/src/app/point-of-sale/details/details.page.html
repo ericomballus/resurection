@@ -1,0 +1,721 @@
+<ion-header *ngIf="!printer">
+  <ion-toolbar color="primary">
+    <ion-title class="titre">
+      {{ 'MENU.invoicesdetails' | translate}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        *ngIf="tabRoles.includes(10)"
+        color="success"
+        (click)="buyPack()"
+        fill="outline"
+      >
+        valider
+      </ion-button>
+      <ion-button (click)="closeModal()">
+        <ion-icon color="light" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-header *ngIf="tabRoles.includes(10)">
+  <ion-toolbar color="primary">
+    <ion-title class="titre">
+      {{ 'MENU.invoicesdetails' | translate}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        *ngIf="tabRoles.includes(10)"
+        color="success"
+        (click)="buyPack()"
+        fill="outline"
+      >
+        valider
+      </ion-button>
+      <ion-button (click)="closeModal()">
+        <ion-icon color="light" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="setting && setting.logo && printer" style="margin: 15px">
+    <img
+      style="
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        height: 100px;
+      "
+      src="{{setting.logo}}"
+      alt=""
+    />
+  </div>
+  <div
+    *ngIf="printer"
+    style="
+      border: 1px solid black;
+      padding: 5px;
+      text-align: center;
+      margin: 15px;
+      font-size: 10px;
+    "
+  >
+    FACTURE No 2022/{{order.numFacture}} /BCA DU: {{order.created |
+    date:'short'}}<br />
+    N/ref: No BL ______ /BC No ______ {{order.customer ? order.customer.ville :
+    ''}} CE/LAB/YDE/CMR
+  </div>
+  <div *ngIf="printer" id="print-section" class="printer-table">
+    <div><b>Yaoundé le, </b> {{order.created | date:'short'}}<br /></div>
+    <div class="section1">
+      <div style="flex-grow: 1; text-align: left; font-weight: bold">
+        <b
+          >POIDS ESTIMATIF: {{order.poids_estimatif ? order.poids_estimatif :
+          0}} g</b
+        >
+      </div>
+      <div
+        style="
+          flex-grow: 2;
+          border: 1px solid black;
+          text-align: center;
+          text-transform: uppercase;
+        "
+      >
+        <b>DOIT</b><br />
+        <b>CLIENT:</b><br />
+        NOM: {{order.customer.name}}<br />
+        TEL: {{order.customer.phone}}<br />
+        VILLE: {{order.customer.ville}}<br />
+      </div>
+    </div>
+    <b>veillez trouver ci joint les produits accompagnant:</b>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th style="text-align: center">Désignations</th>
+          <th style="text-align: center">Quantité</th>
+          <th style="text-align: center">Unité</th>
+          <th style="text-align: center">Prix Vu Ht</th>
+          <th style="text-align: center">Montant</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let row of order.commande.products; let i= index"
+          [ngStyle]="{'background-color': i % 2 == 0 ? 'white' : '#f1f1f1' }"
+        >
+          <td></td>
+          <td style="text-transform: uppercase">{{row.item.name}}</td>
+          <td style="text-align: center">
+            {{row.item.qty ? row.item.qty : row.qty ? row.qty : 0}}
+          </td>
+          <td
+            style="text-align: center"
+            *ngIf="row.item.productType !== 'Gamme'"
+          >
+            Piéce
+          </td>
+          <td
+            style="text-align: center"
+            *ngIf="row.item.productType == 'Gamme'"
+          >
+            Gamme
+          </td>
+          <td style="text-align: right">
+            {{row.item.randomPrice ? row.item.randomPrice :
+            row.item.sellingPrice | currency:' ':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td style="text-align: right">
+            {{ row.price | currency:' ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td colspan="3" style="text-align: right">MONTANT BRUT HORS TAXE</td>
+          <td></td>
+          <td style="font-weight: bold; text-align: right">
+            {{(order.montantReduction ? order.commande.cartdetails.totalPrice :
+            order.paiment_type == "Depot_Vente" ?
+            order.commande.cartdetails.totalPrice :
+            order.commande.cartdetails.totalPrice) | currency:'
+            ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" style="text-align: right" style="text-align: right">
+            REMISE {{(order.customer ? order.customer.reduction : 0)}} %
+          </td>
+          <td></td>
+          <td style="text-align: right">
+            {{(order.montantReduction ? order.commande.cartdetails.totalPrice -
+            order.montantReduction : 0) | currency:' ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" style="text-align: right" style="text-align: right">
+            MONTANT COMMERCIALE
+          </td>
+          <td></td>
+          <td style="text-align: right">
+            {{(order.montantReduction ? order.montantReduction :
+            order.commande.cartdetails.totalPrice) | currency:'
+            ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr *ngIf="order.transport_colis">
+          <td></td>
+          <td colspan="3" style="text-align: right" style="text-align: right">
+            TRANSPORT
+          </td>
+          <td></td>
+          <td style="text-align: right">
+            {{(order.transport_colis ? order.transport_colis : '0') | currency:'
+            ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr *ngIf="order.transport">
+          <td></td>
+          <td colspan="3" style="text-align: right">TRANSPORT DHL</td>
+          <td></td>
+          <td style="text-align: right">
+            {{(order.transport ? order.transport : '0') | currency:'
+            ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr *ngIf="order.phytosanitaire">
+          <td></td>
+          <td colspan="3" style="text-align: right">PHYTOSANITAIRE</td>
+          <td></td>
+          <td style="text-align: right">
+            {{(order.phytosanitaire ? order.phytosanitaire : '0') | currency: '
+            ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr *ngIf="order.emballage">
+          <td></td>
+          <td colspan="3" style="text-align: right">EMBALLAGES</td>
+          <td></td>
+          <td style="text-align: right">
+            {{(order.emballage ? order.emballage : '0') | currency: '
+            ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr *ngIf="order.taxeRetrait">
+          <td></td>
+          <td colspan="3" style="text-align: right">TAXE SUR LE RETRAIT</td>
+          <td></td>
+          <td style="text-align: right">
+            {{(order.taxeRetrait ? order.taxeRetrait : '0') | currency: '
+            ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" style="text-align: right">MONTANT A PAYER</td>
+          <td></td>
+          <td style="font-weight: bold; text-align: right">
+            {{(order.montantReduction ? order.montantReduction +
+            order.taxeRetrait + order.phytosanitaire + order.transport +
+            order.transport_colis : order.commande.cartdetails.totalPrice +
+            order.taxeRetrait + order.phytosanitaire + order.transport +
+            order.transport_colis) | currency:' ':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <div style="font-style: italic">Montants en Fcfa</div>
+      <div style="margin-top: 10px; margin-bottom: 10px">
+        Arreté la présente facture a la somme de: <b>{{total_en_chiffre}}</b>
+      </div>
+    </div>
+
+    <div style="text-transform: uppercase; font-weight: bold">
+      nb: bien vouloir controler le scellé des produits a la livraison
+    </div>
+
+    <div style="margin-top: 15px">
+      <div
+        style="text-transform: uppercase"
+        *ngIf="order.removeProductList && order.removeProductList.length"
+      >
+        <h5>supprimé de la gamme</h5>
+        <ul *ngIf="order.removeProductList && order.removeProductList.length">
+          <li *ngFor="let prod of order.removeProductList">{{prod.name}}</li>
+        </ul>
+      </div>
+      <div
+        style="text-transform: uppercase"
+        *ngIf="order.addProductList && order.addProductList.length"
+      >
+        <h5>remplacé par</h5>
+        <ul *ngIf="order.addProductList && order.addProductList.length">
+          <li *ngFor="let prod of order.addProductList">{{prod.name}}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align: right; text-transform: uppercase; margin-top: 20px">
+      La direction generale
+    </div>
+    <ion-grid *ngIf="tabRoles.includes(9) && !order.sale">
+      <ion-row>
+        <ion-col size="3"></ion-col>
+        <ion-col size="6">
+          <ion-input
+            id="my-ion-input"
+            *ngIf="montantR < sum"
+            (ionChange)="montabtPercu($event)"
+            debounce="500"
+            autofocus="true"
+            placeholder="montant perçu"
+            type="number"
+          ></ion-input>
+        </ion-col>
+        <ion-col size="3"></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="printable-content mballus" *ngIf="!printer">
+    <div #screen class="printable-area" id="printable-area">
+      <table class="header-table">
+        <tr>
+          <td
+            style="width: 25%"
+            class="title"
+            style="text-transform: uppercase"
+          >
+            {{ "MENU.invoice" | translate }}
+          </td>
+          <td style="width: 75%">
+            <table style="width: 100%; border: none">
+              <tr>
+                <td style="width: 50%; text-transform: uppercase">
+                  companyInfo.company
+                </td>
+                <td
+                  *ngIf="companyInfo && companyInfo.city"
+                  style="width: 50%; text-transform: uppercase"
+                >
+                  VILLE: {{companyInfo.city ? companyInfo.city : ''}}
+                </td>
+              </tr>
+              <tr>
+                <td
+                  *ngIf="companyInfo && companyInfo.email"
+                  style="text-transform: uppercase"
+                >
+                  Email: {{companyInfo.email}}
+                </td>
+                <td
+                  *ngIf="companyInfo && companyInfo.telephone"
+                  style="text-transform: uppercase"
+                >
+                  TEL: {{companyInfo.telephone}}
+                </td>
+              </tr>
+              <tr>
+                <td style="text-transform: uppercase">maeri.com</td>
+                <td style="text-transform: uppercase">Post Code</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <table
+        class="subheader-table"
+        *ngIf="order.commande && order.commande.customer"
+      >
+        <tr>
+          <td style="width: 30%">
+            <dd>
+              {{ "MENU.customer" | translate }}: {{order.commande.customer ?
+              order.commande.customer.name: 'No name'}}
+            </dd>
+            <dd>
+              {{ "MENU.town" | translate }}: {{order.commande.customer ?
+              order.commande.customer.ville: 'town'}}
+            </dd>
+            <dd>
+              TEL: {{order.commande.customer ? order.commande.customer.phone:
+              '000'}}
+            </dd>
+          </td>
+          <td style="width: 20%">
+            <dt>N0 {{ "MENU.bill" | translate }}:</dt>
+            <dd>{{order.numFacture}}</dd>
+          </td>
+          <td style="width: 20%">
+            <dt>DATE:</dt>
+            <dd>{{order.created | date:'short'}}</dd>
+          </td>
+          <td width="30%">
+            <dt>{{ "MENU.detailF" | translate }}:</dt>
+            <dd>{{sum | currency:'FCFA':'symbol':'3.0-0':'fr'}}</dd>
+          </td>
+        </tr>
+      </table>
+      <h3 style="background-color: #ffffff; color: black">
+        {{ "MENU.detailF" | translate }}
+      </h3>
+
+      <table
+        class="detail-table"
+        *ngFor="let commande of order.commandes; let j= index"
+      >
+        <tr>
+          <th>{{ "MENU.name" | translate }}</th>
+          <th>---</th>
+          <th>Qty</th>
+          <th>P.U</th>
+          <th>P.T</th>
+        </tr>
+        <tr
+          *ngFor="let row of commande.products; let i= index"
+          [ngStyle]="{'background-color': i % 2 == 0 ? 'white' : 'white' }"
+        >
+          <td>{{row.item.name}}</td>
+          <td
+            *ngIf="row.item.modeG && row.item.modeNG || !row.item.modeG && !row.item.modeNG"
+          >
+            {{''}}
+          </td>
+          <td *ngIf="!row.item.modeG && row.item.modeNG">{{'NG'}}</td>
+          <td *ngIf="row.item.modeG && !row.item.modeNG">{{'GL'}}</td>
+          <!--les quantités-->
+          <td *ngIf="row.item.modeG && row.item.modeNG">
+            {{row.item.modeG + row.item.modeNG}}
+          </td>
+          <td *ngIf="row.item.modeG && !row.item.modeNG">{{row.item.modeG}}</td>
+          <td *ngIf="!row.item.modeG && row.item.modeNG">
+            {{row.item.modeNG}}
+          </td>
+          <td *ngIf="row.item.CA || row.item.BTL">
+            <div *ngIf="row.item.CA">{{row.item.CA}}</div>
+            <ion-badge *ngIf="row.item.BTL" color="warning"
+              >+ {{row.item.BTL}} Btl</ion-badge
+            >
+          </td>
+          <td
+            *ngIf="!row.item.CA && !row.item.BTL && !row.item.modeNG && !row.item.modeG"
+          >
+            {{row.item.qty ? row.item.qty : row.qty ? row.qty : 0}}
+          </td>
+          <!--les prix unitaires-->
+          <td *ngIf="row.item.modeG || row.item.modeNG">
+            {{row.item.sellingPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td *ngIf="row.item.CA && !row.item.BTL">
+            {{row.item.sellingPackPrice |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td *ngIf="!row.item.CA && row.item.BTL">
+            {{row.item.sellingPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td *ngIf="row.item.CA && row.item.BTL">
+            {{row.item.sellingPrice + row.item.sellingPackPrice |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td
+            style="text-align: center"
+            *ngIf="!row.item.modeNG && !row.item.modeG && !row.item.CA && !row.item.BTL"
+          >
+            {{row.item.randomPrice ? row.item.randomPrice :
+            row.item.sellingPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <!--les totaux-->
+          <td *ngIf="row.item.CA && !row.item.BTL">
+            {{row.item.sellingPackPrice * row.item.CA |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td *ngIf="!row.item.CA && row.item.BTL">
+            {{ row.item.sellingPrice * row.item.BTL |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td *ngIf="row.item.CA && row.item.BTL">
+            {{(row.item.sellingPackPrice ? row.item.sellingPackPrice *
+            row.item.CA : 0) + (row.item.sellingPrice ? row.item.sellingPrice *
+            row.item.BTL : 0) | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td *ngIf="row.item.modeNG && row.item.modeG">
+            {{ row.item.sellingPrice * (row.item.modeNG + row.item.modeG) |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td *ngIf="row.item.modeNG && !row.item.modeG">
+            {{ row.item.sellingPrice * row.item.modeNG|
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td *ngIf="!row.item.modeNG && row.item.modeG">
+            {{ row.item.sellingPrice * row.item.modeG|
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td
+            *ngIf="!row.item.CA && !row.item.BTL && !row.item.modeNG && !row.item.modeG && row.item.qty"
+          >
+            {{ row.item.randomPrice ? row.item.randomPrice * row.item.qty :
+            row.item.sellinPrice * row.item.qty |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+          <td
+            *ngIf="!row.item.CA && !row.item.BTL && !row.item.modeNG && !row.item.modeG && !row.item.qty && row.qty"
+          >
+            {{ row.price | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold; font-size: 16px">Total articles:</td>
+          <td></td>
+          <td style="font-weight: bold; font-size: 16px">{{totalArticle}}</td>
+        </tr>
+      </table>
+
+      <h3
+        style="background-color: #ffffff; color: black"
+        *ngIf="order2 && order2.trancheList && order2.trancheList.length"
+      >
+        {{ "MENU.historiqueP" | translate }}
+      </h3>
+      <table
+        class="detail-table"
+        *ngIf="order2 && order2.trancheList && order2.trancheList.length"
+      >
+        <tr>
+          <th style="width: 40%">Date</th>
+          <th style="width: 40%">Montant</th>
+          <th style="width: 20%">Employe</th>
+        </tr>
+        <tr
+          *ngFor="let tranche of order2.trancheList; let i= index"
+          [ngStyle]="{'background-color': i % 2 == 0 ? 'white' : 'white' }"
+        >
+          <th>{{tranche.created | date: "short"}}</th>
+          <th>{{tranche.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}</th>
+          <th>{{tranche.employeName}}</th>
+        </tr>
+      </table>
+      <h3
+        style="background-color: #ffffff; color: black"
+        *ngIf="consigneTab && consigneTab.length > 0"
+      >
+        Emballages En consignes
+      </h3>
+
+      <table class="detail-table" *ngIf="consigneTab && consigneTab.length > 0">
+        <tr>
+          <th style="width: 30%">name</th>
+          <th style="width: 20%">cassier</th>
+          <th style="width: 20%">bouteille</th>
+          <th style="width: 30%">prix</th>
+        </tr>
+        <tr
+          *ngFor="let row of consigneTab let i= index"
+          [ngStyle]="{'background-color': i % 2 == 0 ? 'white' : 'white' }"
+        >
+          <th>{{row.item.name}}</th>
+          <th>{{row.cassier ? row.cassier : 0 }}</th>
+          <th>{{row.bouteille ? row.bouteille : 0 }}</th>
+          <th>{{row.price ? row.price : 0 }}</th>
+        </tr>
+        <tr>
+          <th style="font-weight: bold; font-size: 16px">Total:</th>
+          <th style="font-weight: bold; font-size: 16px">{{totalCassier}}</th>
+          <th style="font-weight: bold; font-size: 16px">{{totalBtl}}</th>
+          <th style="font-weight: bold; font-size: 16px">{{totalConsigne}}</th>
+        </tr>
+      </table>
+      <table class="footer-table" *ngIf="totalConsigne">
+        <tr>
+          <td style="width: 80%">TOTAL CONSIGNE:</td>
+          <td style="width: 20%">
+            {{totalConsigne ? totalConsigne: 0 |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 80%">Reçu:</td>
+          <td style="width: 20%">
+            {{montantR ? montantR: 0 | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+      </table>
+      <table class="footer-table" *ngIf="bonus">
+        <tr>
+          <td style="width: 80%">TOTAL POINT:</td>
+          <td style="width: 20%">{{bonus ? bonus: 0 }}</td>
+        </tr>
+      </table>
+      <table class="footer-table">
+        <tr>
+          <td style="width: 80%">{{ "MENU.Amount" | translate }}:</td>
+          <td style="width: 20%">
+            {{sumRandom ? sumRandom: 0 | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr
+          *ngIf="order.commande.montantReduction"
+          style="text-transform: uppercase"
+        >
+          <td style="width: 80%">{{ "MENU.reduction" | translate }}:</td>
+          <td style="width: 20%">
+            {{sumRandom ? sumRandom - order.commande.montantReduction: 0 |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr *ngIf="order.commande.montantReduction">
+          <td style="width: 80%">{{ "MENU.topay" | translate }}:</td>
+          <td style="width: 20%">
+            {{order.commande.montantReduction|
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 80%">{{ "MENU.percu" | translate }}:</td>
+          <td style="width: 20%">
+            {{montantR ? montantR: 0 | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </td>
+        </tr>
+        <tr>
+          <td>{{ "MENU.enterP" | translate }}:</td>
+          <td *ngIf="montantR < sum">
+            <ion-input
+              id="my-ion-input"
+              *ngIf="montantR < sum"
+              (ionChange)="montabtPercu($event)"
+              debounce="500"
+              autofocus="true"
+              placeholder="montant perçu"
+              type="number"
+            ></ion-input>
+          </td>
+        </tr>
+        <tr>
+          <div *ngIf="montantR < sum && resteP < 0">
+            {{ "MENU.reste" | translate }}: {{ resteP? -resteP: 0 |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+          <div *ngIf="montantR >= sum || rembourse >0">
+            {{ "MENU.remboursement" | translate }}: {{ reste |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+          <div
+            *ngIf="totalConsigne"
+            style="
+              display: inline-block;
+              background-color: rgb(247, 74, 74);
+              color: black;
+              padding: 3px;
+            "
+          >
+            Consigne : {{totalConsigne | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+          <div
+            style="
+              display: inline-block;
+              background-color: rgb(247, 74, 74);
+              color: black;
+              padding: 3px;
+            "
+          >
+            Dette : {{totalImpaye | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+          </div>
+        </tr>
+      </table>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer
+  *ngIf="!flag && order.confirm && order.Posconfirm || tabRoles.includes(9) || tabRoles.includes(10)"
+>
+  <div *ngIf="display_pied_page">
+    <div *ngIf="setting && setting.pied_page" style="margin: 15px">
+      <img
+        style="
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
+          height: 100px;
+        "
+        src="{{setting.pied_page}}"
+        alt=""
+        (load)="hidePiedPage()"
+      />
+    </div>
+  </div>
+
+  <div #sectionToHide>
+    <ion-row>
+      <ion-col size="4" *ngIf="!printer">
+        <ion-button size="block" color="danger" (click)="Print()">
+          {{ 'MENU.print' | translate}}
+        </ion-button>
+      </ion-col>
+      <ion-col *ngIf="printer" size="4">
+        <ion-button size="block" color="danger" (click)="WindowPrint()">
+          {{ 'MENU.print' | translate}}
+        </ion-button>
+        <!--
+        <button printTitle="Print Title" printSectionId="print-section" ngxPrint>
+        {{ 'MENU.print' | translate}}
+      </button>
+     -->
+      </ion-col>
+      <ion-col size="4">
+        <ion-button
+          *ngIf="!order.sale && tabRoles.includes(4)"
+          size="block"
+          color="warning"
+          (click)="ordersCancel2()"
+        >
+          {{ 'MENU.cancel' | translate}}
+        </ion-button>
+      </ion-col>
+      <ion-col size="4" *ngIf="!tabRoles.includes(8)">
+        <ion-button
+          [disabled]="order.sale || tabRoles.includes(7)"
+          size="block"
+          color="success"
+          (click)="buyPack()"
+        >
+          {{ 'MENU.paid' | translate}}
+        </ion-button>
+      </ion-col>
+      <ion-col size="4" *ngIf="tabRoles.includes(8) || tabRoles.includes(9)">
+        <ion-button size="block" color="success" (click)="closeModal()">
+          fermer
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-footer>
+<ion-footer *ngIf="useGamme && billView">
+  <ion-row>
+    <!--
+       <ion-col size="12">
+       <ion-button size="block" color="danger" (click)="Print()">
+        {{ 'MENU.print' | translate}}
+      </ion-button>
+    </ion-col>
+      <ion-col>
+      <ion-button size="block" color="warning" (click)="ordersCancel2()">
+        {{ 'MENU.cancel' | translate}} {{ 'MENU.invoicesdetails' | translate}}
+      </ion-button>
+    </ion-col>
+    -->
+  </ion-row>
+</ion-footer>
+<div id="download">
+  <img #canvas />
+  <a #downloadLink></a>
+</div>

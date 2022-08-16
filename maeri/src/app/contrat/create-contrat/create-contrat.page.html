@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="display: flex; justify-content: space-between">
+    <form class="form-inline">
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            style="display: none"
+            class="form-control"
+            placeholder="yyyy-mm-dd"
+            name="dp"
+            [(ngModel)]="model"
+            ngbDatepicker
+            #d="ngbDatepicker"
+          />
+          <div class="input-group-append">
+            <ion-button
+              fill="clear"
+              size="small"
+              class="btn btn-outline-secondary calendar"
+              (click)="d.toggle()"
+              type="button"
+              >start <ion-icon name="calendar"></ion-icon
+            ></ion-button>
+          </div>
+        </div>
+        <div>
+          <pre>{{model.day}}/{{model.month}}/{{model.year}}</pre>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div style="display: flex; justify-content: space-between">
+    <form class="form-inline">
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            style="display: none"
+            class="form-control"
+            placeholder="yyyy-mm-dd"
+            name="dp"
+            [(ngModel)]="model2"
+            ngbDatepicker
+            #d2="ngbDatepicker"
+          />
+
+          <div class="input-group-append">
+            <ion-button
+              fill="clear"
+              size="small"
+              class="btn btn-outline-secondary calendar"
+              (click)="d2.toggle()"
+              type="button"
+              >End <ion-icon name="calendar"></ion-icon
+            ></ion-button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div>
+      <pre>{{model2.day}}/{{model2.month}}/{{model2.year}}</pre>
+    </div>
+  </div>
+  <form #form="ngForm" (ngSubmit)="postContrat(form)">
+    <ion-item>
+      <ion-icon slot="start" name="pricetag"></ion-icon>
+      <ion-label position="floating">
+        <h2>Montant</h2>
+      </ion-label>
+      <ion-input
+        name="montant"
+        type="number"
+        placeholder="1000"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <div class="ion-text-center">
+      <ion-button color="danger" size="large" type="submit" expand="block"
+        >Register</ion-button
+      >
+    </div>
+  </form>
+</ion-content>

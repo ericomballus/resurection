@@ -1,0 +1,23 @@
+{
+  "name": "desktop-maeri",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "build": "electron-packager ./ maeri_desktop --platform=win32 --arch=ia32 --icon ./assets/logo.png --out ./build --overwrite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^15.1.1",
+    "electron-packager": "^15.4.0"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "electron-pos-printer": "^1.2.4",
+    "usb": "^2.0.3"
+  }
+}

@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin-display-custumers"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<!--
+  <div class="desktop landing">
+  
+  
+</div>
+-->
+
+<ion-content>
+  <form #form="ngForm" (ngSubmit)="register(form)">
+    <ion-item>
+      <ion-label>first name: </ion-label>
+      <ion-input
+        name="firstName"
+        type="text"
+        placeholder="first name"
+        ngModel
+        required
+      >
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>last name: </ion-label>
+      <ion-input
+        name="lastName"
+        type="text"
+        placeholder="lastname"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>company name: </ion-label>
+      <ion-input
+        name="company"
+        type="text"
+        placeholder="company name"
+        ngModel
+        required
+      >
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>customer city: </ion-label>
+      <ion-input
+        name="city"
+        type="text"
+        placeholder="your city"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+
+    <!--
+      <div>
+      <ion-input
+        name="email"
+        type="email"
+        placeholder="your@email.com"
+        ngModel
+        required
+      ></ion-input>
+    </div>
+    -->
+    <ion-item>
+      <ion-label>phone number: </ion-label>
+      <ion-input
+        name="telephone"
+        type="number"
+        placeholder="your phone number"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>password: </ion-label>
+      <ion-input
+        name="password"
+        type="password"
+        placeholder="Password"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>confirm password</ion-label>
+      <ion-input
+        name="confirm"
+        type="password"
+        placeholder="confirm password"
+        ngModel
+        required
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>customer type</ion-label>
+      <ion-select placeholder="Select One" (ionChange)="logValue($event)">
+        <ion-select-option value="v">Vendors</ion-select-option>
+        <ion-select-option value="r">Retailer</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div>
+      <!--
+        <ion-item>
+        <ion-select
+          placeholder="product type"
+          (ionChange)="productType($event)"
+        >
+          <ion-select-option value="list">List</ion-select-option>
+          <ion-select-option value="card">Card</ion-select-option>
+        </ion-select>
+      </ion-item>
+       <div>
+      <ion-item>
+        <div *ngIf="userStore.length">
+          <small *ngFor="let store of userStore ; let j = index">
+            <ion-button fill="outline" size="small" (click)="removeStore(store)"
+              >{{store.name}}</ion-button
+            >
+          </small>
+        </div>
+        <ion-button
+          *ngIf="multi_store"
+          slot="end"
+          fill="outline"
+          size="small"
+          (click)="addStore()"
+          >add Store</ion-button
+        >
+      </ion-item>
+    </div>
+      -->
+    </div>
+
+    <ion-item>
+      <ion-label>store type</ion-label>
+      <ion-select interface="popover" (ionChange)="storeType($event)">
+        <ion-select-option value="m">multy store</ion-select-option>
+        <ion-select-option value="o">one store</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div padding>
+      <ion-button
+        size="large"
+        expand="block"
+        color="danger"
+        (click)="register(form)"
+        [disabled]="form.invalid"
+        >Register</ion-button
+      >
+    </div>
+  </form>
+</ion-content>

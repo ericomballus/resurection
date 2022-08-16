@@ -1,0 +1,33 @@
+.header-row {
+  font-weight: 500;
+  border-bottom: 2px solid black;
+  background-color: #f1f1f1;
+  ion-col div {
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+}
+
+.data-row {
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.divrow {
+  width: 100%;
+}
+
+.namesmall {
+  font-size: 9px;
+}
+
+.pricesmall {
+  font-size: 10px;
+}
+
+.totalsmall {
+  font-size: 13px;
+  font-weight: bold;
+}
+.btnv {
+  --ion-grid-column-padding: 20px;
+}

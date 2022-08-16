@@ -1,0 +1,269 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button
+        color="light"
+        fill="outline"
+        (click)="goToStartPage()"
+      ></ion-back-button>
+      <ion-button
+        (click)="displayNotPaie()"
+        color="light"
+        size="small"
+        fill="outline"
+        ><div>factures non payées {{invoiceNotPaie}}</div></ion-button
+      >
+      <ion-button color="light" size="small" fill="outline"
+        ><div>factures Annulées {{invoiceCancel}}</div></ion-button
+      >
+    </ion-buttons>
+    <ion-buttons slot="end"> </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="invoices">
+    <ion-row class="header-row">
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">name</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Sale</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Price</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">T.Price</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Ben</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Rist</div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div *ngIf="invoices">
+    <ion-row
+      *ngFor="let row of invoices; let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-left">{{row.name}}</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">{{row.out}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">{{row.pvente}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">
+          {{row.out ? row.out * row.pvente : 0}}
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">
+          {{row.beneficeTotal ? (row.beneficeTotal | number: '1.0-0'): 0 }}
+        </div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">
+          {{row.ristourne ? (row.ristourne | number: '1.0-0'): 0 }}
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="data-lastrow data-update" *ngIf="total_amount">
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-left inte ion-text-uppercase">total</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">{{totalOut}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte"></div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">
+          {{total_amount | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">
+          {{totalBenefice | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">
+          {{total_ristourne | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="invoices">
+    <ion-grid>
+      <ion-row class="header-row2">
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte" style="font-size: 8px">
+            F.Annulées
+          </div>
+        </ion-col>
+
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte" style="font-size: 8px">
+            F.Non Payées
+          </div>
+        </ion-col>
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte" style="font-size: 8px">
+            F.Payées
+          </div>
+        </ion-col>
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte" style="font-size: 8px">
+            T.Reduction
+          </div>
+        </ion-col>
+
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte" style="font-size: 8px">
+            Total Vente
+          </div>
+        </ion-col>
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte" style="font-size: 8px">
+            Total Ben
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div *ngIf="invoices">
+    <ion-grid>
+      <ion-row class="data-lastrow data-update">
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte">
+            {{TotalCash3 | currency:'CFA':'symbol':'3.0-0'}}
+          </div>
+        </ion-col>
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte ion-text-uppercase">
+            {{TotalCash2 | currency:'CFA':'symbol':'3.0-0'}}
+          </div>
+        </ion-col>
+
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte">
+            {{total_amount | currency:'CFA':'symbol':'3.0-0'}}
+          </div>
+        </ion-col>
+        <ion-col size="2" class="ion-align-self-center">
+          <div class="ion-text-center inte">
+            {{reduction | currency:'CFA':'symbol':'3.0-0'}}
+          </div>
+        </ion-col>
+        <ion-col size="2" class="ion-align-self-center">
+          <div
+            class="ion-text-center inte"
+            style="font-weight: bold; font-size: 11px"
+          >
+            {{(total_amount - reduction + TotalCash2) |
+            currency:'CFA':'symbol':'3.0-0'}}
+          </div>
+        </ion-col>
+
+        <ion-col size="2" class="ion-align-self-center">
+          <div
+            class="ion-text-center inte"
+            style="font-weight: bold; font-size: 11px"
+          >
+            {{ totalBenefice | currency:'CFA':'symbol':'3.0-0'}}
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <ion-grid *ngIf="saveRandom.getSetting().manage_expenses">
+    <ion-row *ngIf="saveRandom.getSetting().manage_expenses">
+      <ion-col size="4" class="ion-text-center ion-text-uppercase">
+        Recette: {{(openCashDate.recipe ? openCashDate.recipe : '0') |
+        currency:'CFA':'symbol':'3.0-0'}}
+      </ion-col>
+      <ion-col size="4" class="ion-text-center ion-text-uppercase">
+        Dépense: {{(openCashDate.expense ? openCashDate.expense : '0') |
+        currency:'CFA':'symbol':'3.0-0'}}
+      </ion-col>
+      <ion-col size="4" class="ion-text-center ion-text-uppercase">
+        Reste: {{(openCashDate.recipe - openCashDate.expense) |
+        currency:'CFA':'symbol':'3.0-0'}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div>
+    <ion-row class="separation"></ion-row>
+  </div>
+  <div class="lastDiv" *ngIf="onvarevenirdessus">
+    <ion-row class="rowInventaire">
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase">Sale</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">Open Cash</div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">Close Cash</div>
+      </ion-col>
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase">Fund</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase">
+          {{total_amount | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{openCash | currency:'CFA':'symbol':'2.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{closeCash | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        *ngIf="TotalCash >= 0 && displayAmount <= 0"
+        [ngStyle]="{'background-color': 'red' }"
+        size="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          {{TotalCash | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        *ngIf="TotalCash <= 0 && displayAmount >= 0"
+        [ngStyle]="{'background-color': '#0ef82d' }"
+        size="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          {{displayAmount | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

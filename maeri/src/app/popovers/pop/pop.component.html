@@ -1,0 +1,25 @@
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>
+        <p>others</p>
+      </ion-label>
+      <ion-button color="primary" size="small" slot="end" (click)="NoPopover()"
+        >achat</ion-button
+      >
+    </ion-item>
+    <ion-item *ngFor="let vendor of venders">
+      <ion-label>
+        <p>{{ vendor.vendorId?.company }}</p>
+      </ion-label>
+      <ion-button
+        *ngIf="vendor.vendorId"
+        color="primary"
+        size="small"
+        slot="end"
+        (click)="ClosePopover(vendor)"
+        >achat</ion-button
+      >
+    </ion-item>
+  </ion-list>
+</ion-content>

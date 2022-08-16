@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button expand="block" fill="clear" (click)="scan()">
+        <ion-icon name="Bluetooth"></ion-icon>
+        <p>Scan</p>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-label class="ion-text-wrap"> active printer </ion-label>
+    <ion-checkbox
+      color="primary"
+      mode="md"
+      slot="end"
+      (ionChange)="enablePrinter()"
+      *ngIf="!auth.autorise"
+    ></ion-checkbox>
+
+    <ion-checkbox
+      *ngIf="auth.autorise"
+      color="primary"
+      mode="md"
+      slot="end"
+      (ionChange)="enablePrinter()"
+      checked="true"
+    ></ion-checkbox>
+  </ion-item>
+  <ion-list>
+    <ion-item
+      *ngFor="let item of bluetoothList"
+      (click)="selectPrinter(item.id)"
+    >
+      {{item.name}} {{item.id}}
+    </ion-item>
+  </ion-list>
+  <div>Selected Printer: {{selectedPrinter}}</div>
+  <ion-item>
+    <ion-label position="floating">order waiting time in seconds</ion-label>
+    <ion-input type="number" [(ngModel)]="timeToLeave"></ion-input>
+    <ion-button fill="outline" slot="end" (click)="saveTime()"
+      >Confirm</ion-button
+    >
+  </ion-item>
+  <div class="container">
+    <ion-item>
+      <ion-label>manage thermal printer size</ion-label>
+      <ion-select interface="popover" (ionChange)="thermalPrinter($event)">
+        <ion-select-option value="small">small</ion-select-option>
+        <ion-select-option value="large">large</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+  <!--
+    <ion-item>
+    <ion-icon slot="start" name="print"></ion-icon>
+    <ion-label position="floating">
+      <h2>Printer @Mac</h2>
+      <p *ngIf="selectedPrinter">
+        {{selectedPrinter}}
+      </p>
+    </ion-label>
+    <ion-input [(ngModel)]="selectedPrinter"></ion-input>
+  </ion-item>
+  -->
+</ion-content>

@@ -1,0 +1,295 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+      <ion-button
+        fill="outline"
+        color="primary"
+        (click)="removeCustomer()"
+        *ngIf="customer"
+        >{{ customer.name}}
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <div class="custom-header">
+      <ion-item>
+        <ion-searchbar
+          showCancelButton="focus"
+          type="text"
+          debounce="500"
+          (ionChange)="findProductList($event)"
+        ></ion-searchbar>
+      </ion-item>
+
+      <ion-item>
+        <!--
+          <ion-icon slot="start" name="man-outline"></ion-icon>
+        <ion-label>Type de client</ion-label>
+        <ion-select
+          value="REPRESENTANT"
+          interface="popover"
+          (ionChange)="typeDeClient($event)"
+        >
+          <ion-select-option value="RP">Répresentant</ion-select-option>
+          <ion-select-option value="SM">Super marché</ion-select-option>
+          <ion-select-option value="FR">Franchise</ion-select-option>
+        </ion-select>
+        -->
+      </ion-item>
+      <ion-item></ion-item>
+      <ion-item></ion-item>
+    </div>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" color="success" (click)="selectCustomer()"
+        >{{ 'MENU.addcustomer' | translate}}
+        <ion-icon slot="start" name="person-add-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="grammage > 0" fill="clear">
+        <ion-badge color="primary"> {{ grammage }} g</ion-badge>
+      </ion-button>
+      <ion-button
+        (click)="openCart()"
+        [disabled]="totalItems === 0"
+        id="notification-button"
+        fill="clear"
+      >
+        <ion-icon color="dark" slot="end" name="cart"></ion-icon>
+        <ion-badge id="notifications-badge" color="danger">
+          {{ totalItems }}
+        </ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment
+    *ngIf="storeTypeTab && storeTypeTab.length > 1"
+    (ionChange)="segmentChanged($event)"
+    scrollable
+    value="{{ pet }}"
+    [(ngModel)]="pet"
+  >
+    <ion-segment-button
+      class="btnseg"
+      *ngFor="let elt of storeTypeTab; let i = index"
+      value="{{ elt }}"
+      style="text-align: center"
+    >
+      {{ elt }}
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="isItemAvailable3">
+    <ion-grid>
+      <ion-row class="header-component">
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center">name</div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center">En stock</div>
+        </ion-col>
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center"></div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center"></div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row
+        *ngFor="let prod of arrList2; let i = index"
+        class="data-row data-update"
+        [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+        style="font-size: 11px"
+      >
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-start ion-text-uppercase smallSize">
+            {{ prod.name }}
+          </div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center ion-text-uppercase smallSize">
+            {{ prod.quantityItems }}
+          </div>
+        </ion-col>
+
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center ion-text-uppercase smallSize">
+            {{ prod.toSale ? prod.toSale : 0}}
+          </div>
+        </ion-col>
+        <ion-col size-sm="3" size-md="3" size-lg="3">
+          <div class="ion-text-center ion-text-uppercase smallSize">
+            <ion-input
+              slot="end"
+              placeholder="Enter "
+              type="number"
+              debounce="1500"
+              (ionChange)="getValueR($event, prod)"
+            ></ion-input>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="pet === 'produits'">
+    <div
+      *ngIf="!isItemAvailable3"
+      style="
+        flex-grow: 1;
+        padding-right: 10px;
+        padding-left: 10px;
+        border-right: 2px solid black;
+      "
+    >
+      <ion-grid *ngIf="productListTab.length">
+        <ion-row style="font-size: 14px; font-weight: bold">
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">
+              <p>Ravitaillement</p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="header-component">
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">name</div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">En stock</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center"></div>
+          </ion-col>
+
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center"></div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center"></div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          *ngFor="let prod of productListTab; let i = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+          style="font-size: 11px"
+        >
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-start ion-text-uppercase smallSize">
+              {{ prod.name }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ prod.quantityItems }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ prod.toSale ? prod.toSale : 0}}
+            </div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              <ion-input
+                slot="end"
+                placeholder="Enter "
+                type="number"
+                debounce="1500"
+                (ionChange)="getValueR($event, prod)"
+              ></ion-input>
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="2"
+            size-md="2"
+            size-lg="2"
+            *ngIf="prod && prod.toSale"
+          >
+            <!--
+              <div class="ion-text-center ion-text-uppercase smallSize">
+              <ion-input
+                slot="end"
+                placeholder="grammage"
+                type="number"
+                debounce="1500"
+                (ionChange)="calculGrammage($event, prod)"
+              ></ion-input>
+            </div>
+            -->
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+  <div *ngIf="pet === 'Gammes'">
+    <ion-grid>
+      <ion-row>
+        <ion-col
+          size="4"
+          sizeLg="3"
+          sizeMd="4"
+          sizeSm="6"
+          sizeXs="6"
+          *ngFor="let gamme of gammeListTab"
+        >
+          <div class="cardimage">
+            <ion-card class="colstyle">
+              <div class="badge2">
+                <ion-badge
+                  slot="end"
+                  color="warning"
+                  *ngIf="gamme.nbr"
+                  (click)="removeIn(gamme)"
+                  >{{ gamme.nbr }}</ion-badge
+                >
+              </div>
+
+              <div class="img-container" (click)="buyGamme(gamme)">
+                <app-cache-image
+                  *ngIf="!gamme.url"
+                  [src]="urlPackage"
+                  [spinner]="false"
+                  [isLoad]="isLoad"
+                ></app-cache-image>
+                <app-cache-image
+                  *ngIf="gamme.url"
+                  [src]="gamme.url"
+                  [spinner]="false"
+                  [isLoad]="isLoad"
+                ></app-cache-image>
+              </div>
+              <ion-card-content>
+                <div style="text-align: center" class="divname">
+                  <small>{{ gamme.name }}</small>&nbsp;
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="totalItems">
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col size="6">
+      <div class="container footer2">
+        <small>{{totalItems }}</small> items =
+        <small>{{totalPrice | currency:'FCFA':'symbol':'3.0-0':'fr'}} </small>
+      </div>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+</ion-footer>

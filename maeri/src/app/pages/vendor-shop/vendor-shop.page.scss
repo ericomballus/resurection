@@ -1,0 +1,77 @@
+.badge {
+  width: 25%;
+  // background-color: black;
+  position: absolute;
+  top: 7%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.badge2 {
+  width: 25%;
+  // background-color: black;
+  position: absolute;
+  top: 7%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 5px;
+  z-index: 2;
+}
+
+.colstyle {
+  border-radius: 5%;
+  border: 1px solid #f1f1f1;
+}
+.cardimage {
+  text-align: center;
+  // max-height: 200px;
+  // height: 200px;
+}
+.divitem {
+  display: flex;
+  flex-wrap: nowrap;
+  //  text-align: center;
+}
+
+.inItem {
+  flex-grow: 1;
+  width: 25%;
+  //background-color: yellow;
+}
+.inItem2 {
+  text-align: center;
+  //background-color: yellow;
+}
+.inItem3 {
+  font-size: 10px;
+  padding-left: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  //background-color: yellow;
+}
+.divBtn {
+  display: flex;
+  //background-color: yellow;
+}
+div ion-input {
+  background-color: #f1f1f1;
+}
+.displayPrice {
+  font-size: 11px;
+}
+.footer {
+  background-color: white;
+  padding: 8%;
+  position: relative;
+}
+
+.footer2 {
+  background-color: rgb(8, 212, 110);
+  padding: 3%;
+  text-align: center;
+}
+.img-container {
+  text-align: center;
+  display: block;
+}

@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="floating">ID Number</ion-label>
+    <ion-input type="number" [(ngModel)]="amount"></ion-input>
+  </ion-item>
+  <ion-button
+    color="danger"
+    size="large"
+    [disabled]="!amount"
+    expand="block"
+    (click)="updateAmount()"
+    >Register</ion-button
+  >
+
+  <ion-grid *ngIf="balanceList.length">
+    <ion-row class="header-component">
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">Date</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">Recharge</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">Retrait</div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center">Solde</div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let balance of balanceList; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      style="font-size: 12px"
+    >
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{ balance.created | date: "short"}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{(balance.amountRecharge ? balance.amountRecharge : 0 ) |
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{(balance.amountWithdrawal ? balance.amountWithdrawal : 0) |
+          currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase smallSize">
+          {{balance.amount | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

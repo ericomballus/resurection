@@ -1,0 +1,242 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="titre"></ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="cancelInvoices.length ">
+      <ion-button color="light" fill="outline" (click)="displayNotPaie()">
+        {{ 'MENU.invoicesannulee' | translate}}
+        {{cancelInvoices.length}}</ion-button
+      >
+    </ion-buttons>
+    <ion-buttons class="btnend" slot="end" *ngIf="!tabRoles.includes(7)">
+      <div style="color: white">
+        {{ 'MENU.amount' | translate}}: {{montant |
+        currency:'FCFA':'symbol':'3.0-0':'fr'}}
+      </div>
+    </ion-buttons>
+    <ion-buttons slot="end" class="btnend" *ngIf="!tabRoles.includes(7)">
+      <div style="color: white">
+        {{ 'MENU.remboursement' | translate}} : {{rembourse |
+        currency:'FCFA':'symbol':'3.0-0':'fr'}}
+      </div>
+    </ion-buttons>
+    <ion-buttons slot="end" class="btnend" *ngIf="!tabRoles.includes(7)">
+      <div style="color: white">
+        {{ 'MENU.cash' | translate}}: {{(montant + rembourse) |
+        currency:'FCFA':'symbol':'3.0-0':'fr'}}
+      </div>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row *ngIf="isDesktop" class="header-main">
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.date' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.invoicesdetails' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.percu' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.amount' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.remboursement' | translate}} </small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.made_by' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>TYPE</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1"> </ion-col>
+  </ion-row>
+  <div *ngIf="isDesktop">
+    <ion-row
+      *ngFor="let invoice of invoices let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': invoice.reimbursed == 1 ? 'red' : i % 2 == 0 ? 'white' : '#f1f1f1' }"
+      (click)="presentActionSheet(invoice, i)"
+    >
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2"> {{invoice.created | date }}</small> <br />
+          <small class="namesmalle2">
+            {{invoice.created | date: "shortTime" }}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2">
+            {{invoice.numFacture ? invoice.numFacture : 0}}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="2" size-md="2" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small
+            class="namesmalle2"
+            *ngIf="!invoice.montantReduction && invoice.rembourse"
+          >
+            {{invoice.recu ? invoice.recu : ( invoice.montant +
+            invoice.rembourse) | currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+          >
+          <small
+            class="namesmalle2"
+            *ngIf="!invoice.montantReduction && !invoice.rembourse"
+          >
+            {{invoice.recu ? invoice.recu : ( invoice.montant) |
+            currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+          >
+          <small class="namesmalle2" *ngIf="invoice.montantReduction">
+            {{invoice.recu ? invoice.recu : (invoice.montantReduction +
+            invoice.rembourse) | currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="2" size-md="2" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2" *ngIf="!invoice.montantReduction">
+            {{ invoice.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+          <small class="namesmalle2" *ngIf="invoice.montantReduction">
+            {{ invoice.montantReduction |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+
+      <ion-col
+        size="2"
+        size-md="2"
+        class="ion-no-margin"
+        *ngIf="invoice.rembourse"
+      >
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2">
+            {{ invoice.rembourse |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col
+        size="2"
+        size-md="2"
+        class="ion-no-margin"
+        *ngIf="!invoice.rembourse"
+      >
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2">
+            {{ 0| currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+
+      <ion-col size="2" size-md="2" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2"> {{ invoice.userName}}</small>
+        </div>
+      </ion-col>
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <small class="namesmalle2">
+            {{ invoice.paiment_type ? invoice.paiment_type : 'CASH'}}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="1" size-md="1" class="ion-no-margin">
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          <!--
+            <ion-button (click)="displayDetails(invoice, i)">
+            <ion-icon slot="icon-only" name="eye"></ion-icon>
+          </ion-button>
+
+          <ion-button
+            [disabled]="invoice.reimbursed !== 1 && printAutorisation || !printAutorisation"
+            fill="outline"
+            (click)="updateReimbursed(invoice, i)"
+            ><ion-icon name="reader-outline"></ion-icon
+          ></ion-button>
+          <ion-button
+            *ngIf="useGamme && tabRoles.includes(2)"
+            fill="outline"
+            (click)="deleteInvoice(invoice)"
+            ><ion-icon slot="icon-only" name="trash"></ion-icon
+          ></ion-button>
+         -->
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="!isDesktop">
+    <ion-row class="header-row">
+      <ion-col size-sm="3">
+        <div class="ion-text-center">
+          <small>{{ 'MENU.date' | translate}}</small>
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3">
+        <div class="ion-text-center">
+          <small>{{ 'MENU.amount' | translate}}</small>
+        </div>
+      </ion-col>
+      <ion-col size-sm="3">
+        <div class="ion-text-center">
+          <small>{{ 'MENU.made_by' | translate}}</small>
+        </div>
+      </ion-col>
+      <ion-col size-sm="3"> </ion-col>
+    </ion-row>
+    <ion-row
+      class="mobile"
+      *ngFor="let invoice of invoices let i= index"
+      [ngStyle]="{'background-color': invoice.reimbursed == 1 ? 'red' : 'white' }"
+    >
+      <ion-col>
+        <div class="ion-text-center">
+          {{invoice.created | date: "shortTime" }}
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <div class="ion-text-center">
+          {{ invoice.montant | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div></ion-col
+      >
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+          {{ invoice.userName}}
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-button size="small" (click)="displayDetails(invoice, i)">
+            {{ 'MENU.display' | translate}}
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

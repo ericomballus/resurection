@@ -1,0 +1,35 @@
+.instock {
+  font-size: 60%;
+  font-weight: bold;
+}
+
+.instore {
+  font-size: 60%;
+  font-weight: bold;
+  color: rgb(28, 116, 247);
+}
+.btnWarehouse {
+  font-size: 50%;
+}
+
+.stock-alert {
+  // background-color: rgb(248, 82, 82);
+  --ion-background-color: rgb(248, 82, 82);
+  --color: white;
+  opacity: 0.9;
+  .instore {
+    color: white;
+  }
+  .instock {
+    color: white;
+  }
+  .btnWarehouse {
+    --border-color: black;
+    --color: black;
+  }
+}
+
+.smallborder {
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+}

@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <!--<ion-menu-button autoHide="false"></ion-menu-button> [disabled]="!totalItems"-->
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="consigneTab.length == 0">
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase">
+          <h2 style="font-weight: bold">No consigne found</h2>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="consigneTab.length > 0">
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase">
+          <h6 style="font-weight: bold">en consigne</h6>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-list>
+      <ion-list>
+        <ion-item *ngFor="let con of consigneTab">
+          <ion-avatar slot="start" *ngIf="con.Fund == false">
+            <img src="../../assets/user.png" />
+          </ion-avatar>
+          <ion-label *ngIf="con.Fund == false">
+            <h3>{{ con.customer.name }}</h3>
+            <h3>Telephone: {{ con.customer.telephone }}</h3>
+            <h5>date: {{ con.created |date: 'short' }}</h5>
+          </ion-label>
+          <ion-button
+            *ngIf="con.Fund == false"
+            color="dark"
+            fill="outline"
+            (click)="displayConsigne(con)"
+          >
+            display
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-list>
+  </ion-grid>
+</ion-content>
+
+<!--
+
+  
+      
+-->

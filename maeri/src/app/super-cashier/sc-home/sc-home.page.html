@@ -1,0 +1,223 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="refreshAll()"> Refresh </ion-button>
+      <ion-button fill="outline" (click)="goToShop()"> commande </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="display: flex; justify-content: space-between">
+    <div
+      style="
+        flex-grow: 1;
+        padding-right: 15px;
+        padding-left: 15px;
+        border-right: 2px solid black;
+      "
+    >
+      <div class="ion-text-center" *ngIf="agencesCommandes.length == 0">
+        <app-fakedata></app-fakedata>
+      </div>
+      <ion-grid *ngIf="agencesCommandes.length">
+        <ion-row style="font-size: 14px; font-weight: bold">
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">
+              <p>commandes agences</p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="header-component">
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Date</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Agence</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Quantité</div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">status</div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          *ngFor="let com of agencesCommandes; let i = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white'}"
+          (click)="display(com, i)"
+          style="font-size: 11px"
+        >
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.created | date: "short" }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.store.name }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.quantity }}
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="1"
+            size-md="1"
+            size-lg="1"
+            [ngStyle]="{ 'background-color': com.scConfirm ? 'var(--ion-color-success)' : 'white' }"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+          <ion-col
+            size-sm="1"
+            size-md="1"
+            size-lg="1"
+            [ngStyle]="{ 'background-color': com.scConfirm && !com.swConfirm ? 'var(--ion-color-warning)' : com.scConfirm && com.swConfirm ? 'var(--ion-color-success)' : 'white' }"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+          <ion-col
+            size-sm="1"
+            size-md="1"
+            size-lg="1"
+            [ngStyle]="{ 'background-color': com.scConfirm && com.swConfirm && !com.managerConfirm ? 'var(--ion-color-warning)' : com.scConfirm && com.swConfirm && com.managerConfirm ? 'var(--ion-color-success)' : 'white' }"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div
+      style="
+        flex-grow: 1;
+        padding-right: 15px;
+        padding-left: 15px;
+        border-right: 2px solid black;
+      "
+    >
+      <div class="ion-text-center" *ngIf="billTab.length == 0">
+        <app-fakedata></app-fakedata>
+      </div>
+
+      <ion-grid *ngIf="billTab.length">
+        <ion-row style="font-size: 14px; font-weight: bold">
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">
+              <p>Commandes clients</p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="header-component">
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">Date</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">Client</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">Emp</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Montant</div>
+          </ion-col>
+          <ion-col size-sm="1" size-md="1" size-lg="1">
+            <div class="ion-text-center"></div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">status</div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          *ngFor="let com of billTab; let i = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white'}"
+          style="font-size: 11px"
+        >
+          <ion-col
+            (click)="displayBill(com, i)"
+            size-sm="2"
+            size-md="2"
+            size-lg="2"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.created | date: "short" }}
+            </div>
+          </ion-col>
+
+          <ion-col
+            (click)="displayBill(com, i)"
+            size-sm="2"
+            size-md="2"
+            size-lg="2"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.customer ? com.customer.name : 'No Name'}}
+            </div>
+          </ion-col>
+
+          <ion-col
+            (click)="displayBill(com, i)"
+            size-sm="2"
+            size-md="2"
+            size-lg="2"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.userName ? com.userName : 'No Name'}}
+            </div>
+          </ion-col>
+
+          <ion-col
+            (click)="displayBill(com, i)"
+            size-sm="3"
+            size-md="3"
+            size-lg="3"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{(com.montantReduction ? com.montantReduction + com.taxeRetrait +
+              com.phytosanitaire + com.transport + com.transport_colis :
+              com.commande.cartdetails.totalPrice + com.taxeRetrait +
+              com.phytosanitaire + com.transport + com.transport_colis) |
+              currency:' ':'symbol':'3.0-0':'fr'}}
+            </div>
+          </ion-col>
+          <ion-col size-sm="1" size-md="1" size-lg="1">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              <ion-button
+                *ngIf="!com.caisseConfirm"
+                style="font-size: 10px"
+                size="small"
+                (click)="deleteBill(com, i)"
+                >suppr</ion-button
+              >
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="1"
+            size-md="1"
+            size-lg="1"
+            [ngStyle]="{ 'background-color': com.scConfirm ? 'var(--ion-color-success)' : 'white' }"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+          <ion-col
+            size-sm="1"
+            size-md="1"
+            size-lg="1"
+            [ngStyle]="{ 'background-color': com.scConfirm && !com.swConfirm ? 'var(--ion-color-warning)' : com.scConfirm && com.swConfirm ? 'var(--ion-color-success)' : 'white' }"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize"></div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,36 @@
+ion-label {
+  font-size: 5px;
+}
+.packName {
+  font-size: 12px;
+  margin: 0px;
+  padding: 0px;
+  // position: absolute;
+  // bottom: 55%;
+}
+.packPrice {
+  // position: absolute;
+  font-size: 12px;
+  margin: 0px;
+  padding: 0px;
+  // bottom: 55%;
+}
+.packUnit {
+  font-size: 12px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.divBtn {
+  height: 10px;
+  width: 15;
+}
+
+.divBtn ion-button {
+  font-size: 55%;
+}
+
+.divBtnUpdate {
+  position: relative;
+  right: 30%;
+}

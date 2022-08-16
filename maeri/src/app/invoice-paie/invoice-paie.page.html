@@ -1,0 +1,261 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="titre"></ion-title>
+    <ion-buttons slot="start" *ngIf="admin || manager">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center">
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase">
+          <ion-button
+            *ngIf="!btn0"
+            color="light"
+            size="small"
+            fill="outline"
+            (click)="getAll()"
+            >{{ 'MENU.invoicesall' | translate}}&nbsp;
+          </ion-button>
+          <ion-button
+            color="light"
+            size="small"
+            fill="outline"
+            (click)="getInvoice()"
+            >All&nbsp; <small class="notif">{{all}}</small></ion-button
+          >
+          <ion-button
+            *ngIf="!btn1"
+            color="light"
+            size="small"
+            fill="outline"
+            (click)="getInvoice()"
+            >{{ 'MENU.invoicespayee' | translate}}&nbsp;
+            <small class="notif">{{paye}}</small></ion-button
+          >
+          <ion-button
+            *ngIf="!btn1"
+            color="light"
+            size="small"
+            fill="outline"
+            (click)="getInvoice()"
+            >cash&nbsp; <small class="notif">{{paye2}}</small></ion-button
+          >
+          <ion-button *ngIf="btn1" color="medium" size="small"
+            >{{ 'MENU.invoicespayee' | translate}}&nbsp;
+            <small class="notif">{{paye}}</small></ion-button
+          >
+
+          <ion-button
+            *ngIf="!btn2"
+            color="light"
+            size="small"
+            fill="outline"
+            (click)="getNonPaye()"
+            >{{ 'MENU.invoicesnonpayee' | translate}}&nbsp;
+            <small class="notif">{{nonpaye}}</small></ion-button
+          >
+          <ion-button *ngIf="btn2" color="medium" size="small"
+            >{{ 'MENU.invoicesnonpayee' | translate}}&nbsp;
+            <small class="notif">{{nonpaye}}</small></ion-button
+          >
+
+          <ion-button
+            *ngIf="!btn3"
+            color="light"
+            size="small"
+            fill="outline"
+            (click)="getHalfPaie()"
+            >{{ 'MENU.invoicesamoitiee' | translate}}&nbsp;
+            <small class="notif">{{partiel}}</small></ion-button
+          >
+
+          <ion-button *ngIf="btn3" color="medium" size="small"
+            >{{ 'MENU.invoicesamoitiee' | translate}}&nbsp;
+            <small class="notif">{{partiel}}</small></ion-button
+          >
+
+          <ion-button
+            *ngIf="!btn4"
+            color="light"
+            size="small"
+            fill="outline"
+            (click)="getAnnule()"
+            >{{ 'MENU.invoicesannulee' | translate}}&nbsp;
+            <small class="notif">{{annule}}</small></ion-button
+          >
+          <ion-button *ngIf="btn4" color="medium" size="small"
+            >{{ 'MENU.invoicesannulee' | translate}}&nbsp;
+            <small class="notif">{{annule}}</small></ion-button
+          >
+
+          <ion-button
+            *ngIf="!btn5"
+            color="light"
+            size="small"
+            fill="outline"
+            (click)="getOuvert()"
+            >{{ 'MENU.openorder' | translate}}&nbsp;
+            <small class="notif">{{ouvert}}</small></ion-button
+          >
+          <ion-button *ngIf="btn5" color="medium" size="small"
+            >{{ 'MENU.openorder' | translate}}&nbsp;
+            <small class="notif">{{ouvert}}</small></ion-button
+          >
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-buttons slot="start" *ngIf="!admin && !manager">
+      <ion-back-button defaultHref="/point-of-sale"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="header-row">
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.date' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.table' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.amount' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.paid' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.change' | translate}}</small>
+      </div>
+    </ion-col>
+
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.made_by' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.customer' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small>{{ 'MENU.phone' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1">
+      <div class="ion-text-center">
+        <small></small>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row
+    *ngFor="let invoice of invoices let i= index"
+    class="data-row data-update"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    (click)="displayDetails(invoice)"
+  >
+    <ion-col size="1" size-md="1" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmalle2"> {{invoice.created | date: "h:mm" }}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmalle2"> {{invoice.tableNumber}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmalle2">
+          {{ invoice.commande.cartdetails.totalPrice |
+          currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+        >
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmalle2">
+          {{ invoice.avance | currency:'FCFA':'symbol':'3.0-0':'fr' }}</small
+        >
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmalle2">
+          {{ invoice.reste | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+        >
+      </div>
+    </ion-col>
+
+    <ion-col size="1" size-md="1" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmalle2"> {{ invoice.userName}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmalle2"> {{ invoice.custumerName}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmalle2"> {{ invoice.custumerPhone}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="1" size-md="1" class="ion-no-margin">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <div class="divcenter">
+          <ion-icon
+            slot="end"
+            color="danger"
+            name="checkmark-circle-outline"
+            *ngIf="invoice.invoiceCancel"
+          ></ion-icon>
+
+          <ion-icon
+            slot="end"
+            *ngIf="invoice.partially"
+            color="warning"
+            name="checkmark-circle-outline"
+          ></ion-icon>
+          <ion-icon
+            slot="end"
+            *ngIf="invoice.cash"
+            color="success"
+            name="checkmark-circle-outline"
+          ></ion-icon>
+
+          <ion-icon
+            slot="end"
+            *ngIf="invoice.onAccount"
+            color="dark"
+            name="checkmark-circle-outline"
+          ></ion-icon>
+          <ion-icon
+            slot="end"
+            *ngIf="!invoice.invoiceCancel && !invoice.onAccount && !invoice.partially && !invoice.sale"
+            color="primary"
+            name="alarm"
+          ></ion-icon>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

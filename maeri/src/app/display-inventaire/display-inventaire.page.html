@@ -1,0 +1,164 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goToStartPage()"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="invoices">
+    <ion-row class="header-row">
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">{{ "MENU.name" | translate }}</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">IN</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Out</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">More</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Res</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">rist</div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div *ngIf="invoices">
+    <ion-row
+      *ngFor="let row of invoices; let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">{{row.name}}</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">{{row.start}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">{{row.out}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">{{row.more ? row.more : 0}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">
+          {{row.start ? row.start - row.out: 0}}
+        </div>
+      </ion-col>
+      <!--
+   <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center" class="taille">
+          {{row.remaining ? row.start - row.out-row.remaining: row.more
+          ?(row.start - row.out) + row.remaining: row.start - row.out}}
+        </div>
+      </ion-col>
+-->
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">
+          {{row.ristourne ? (row.ristourne | number: '1.0-0'): 0 }}
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="data-lastrow data-update" *ngIf="total_amount">
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte ion-text-uppercase">total</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">{{totalProduct}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">{{totalOut}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">{{totalLost ? totalLost : 0}}</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">{{totalReste}}</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center inte">
+          {{total_ristourne | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div>
+    <ion-row class="separation"></ion-row>
+  </div>
+  <div class="lastDiv">
+    <ion-row class="rowInventaire">
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ "MENU.notfound" | translate }}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ "MENU.opencash" | translate }}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ "MENU.closecash" | translate }}
+        </div>
+      </ion-col>
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ "MENU.reste" | translate }}
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center ion-text-uppercase">
+          {{total_amount | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{openCash | currency:'CFA':'symbol':'2.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{closeCash | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        *ngIf="TotalCash >= 0 && displayAmount <= 0"
+        [ngStyle]="{'background-color': 'red' }"
+        size="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          {{TotalCash | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        *ngIf="TotalCash <= 0 && displayAmount >= 0"
+        [ngStyle]="{'background-color': '#0ef82d' }"
+        size="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase">
+          {{displayAmount | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

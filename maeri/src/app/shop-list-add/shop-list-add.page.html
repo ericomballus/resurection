@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-title></ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" color="light" fill="outline">
+        <ion-icon color="light" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #form="ngForm" (ngSubmit)="postProduct(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col>
+          <div padding>
+            <ion-item>
+              <ion-label position="floating"
+                >{{'MENU.name' | translate}}</ion-label
+              >
+              <ion-input name="name" type="text" ngModel required></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>{{'MENU.category' | translate}}</ion-label>
+              <ion-select interface="popover" (ionChange)="test($event)">
+                <ion-select-option
+                  *ngFor="let prod of categorys"
+                  value="{{ prod._id }}"
+                  >{{ prod.name }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating"
+                >{{'MENU.purchasingPrice' | translate}}</ion-label
+              >
+              <ion-input
+                name="purchasingPrice"
+                type="number"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating"
+                >{{'MENU.sellingPrice' | translate}}</ion-label
+              >
+              <ion-input
+                name="sellingPrice"
+                type="number"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating"> Stock Min Alert </ion-label>
+              <ion-input
+                type="number"
+                name="quantityToAlert"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item *ngIf="userStore.length > 1">
+              <ion-label>{{'MENU.store' | translate}}</ion-label>
+              <ion-select
+                cancelText="cancel"
+                okText="Okay"
+                interface="popover"
+                (ionChange)="assignStore($event)"
+              >
+                <ion-select-option
+                  *ngFor="let role of userStore"
+                  value="{{ role.id }}"
+                  >{{ role.name }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <!--
+               <ion-item>
+              <ion-input
+                name="image"
+                type="file"
+                (change)="readUrl($event)"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            -->
+          </div>
+          <!-- [disabled]="form.invalid"-->
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center">
+            <ion-button
+              color="danger"
+              type="submit"
+              size="large"
+              type="submit"
+              expand="block"
+              >{{'MENU.save' | translate}}</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

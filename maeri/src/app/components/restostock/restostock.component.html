@@ -1,0 +1,60 @@
+<ion-row class="header-component">
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center">name</div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center">En stock</div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center">En vente</div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center">Total</div>
+  </ion-col>
+  <ion-col class="ion-hide-lg-down" size-lg="2">
+    <div class="ion-text-center">consigne</div>
+  </ion-col>
+  <ion-col class="ion-hide-lg-down" size-lg="2">
+    <div class="ion-text-center">ristourne</div>
+  </ion-col>
+</ion-row>
+
+<ion-row
+  *ngFor="let prod of products; let i = index"
+  class="data-row data-update"
+  [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+>
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.name }}
+    </div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.quantityItems }}
+    </div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.quantityStore }}
+    </div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.quantityStore + prod.quantityItems }}
+    </div>
+  </ion-col>
+  <ion-col class="ion-hide-lg-down" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ 0 }}
+    </div>
+  </ion-col>
+  <ion-col class="ion-hide-lg-down" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ 0 }}
+    </div>
+  </ion-col>
+</ion-row>

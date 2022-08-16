@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>manufactured-buy</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!totalItems" (click)="openCart()">
+        <ion-badge slot="end">{{ totalItems }}</ion-badge>
+        <ion-icon color="dark" slot="end" name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-courses
+    *ngIf="manufacturedItem.length"
+    [productResto]="manufacturedItem"
+    (buyProduct)="buyItem($event)"
+  ></app-courses>
+</ion-content>
+<div class="footer" *ngIf="totalItems">
+  <div class="container footer2">
+    {{totalItems}} items = FCFA {{totalPrice}}
+  </div>
+</div>

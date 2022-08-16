@@ -1,0 +1,82 @@
+<div class="desktop landing">
+  <section class="container">
+    <div class="dark-overlay">
+      <div class="landing-inner">
+        <h1 class="x-large">MAERI</h1>
+        <p class="lead">point of sale</p>
+
+        <form #formadmin="ngForm" (ngSubmit)="login(formadmin)" class="form">
+          <div class="form-group">
+            <ion-input
+              class="form-control"
+              name="telephone"
+              inputmode="tel"
+              placeholder="phone number"
+              ngModel
+              required
+              maxlength="11"
+              [(ngModel)]="userNumber"
+            ></ion-input>
+          </div>
+          <div class="form-group">
+            <ion-input
+              class="form-control"
+              name="password"
+              type="password"
+              placeholder="Password"
+              ngModel
+              required
+              (ionChange)="handleInput($event)"
+            ></ion-input>
+          </div>
+          <div class="btnhome">
+            <ion-button
+              size="large"
+              expand="block"
+              color="danger"
+              (click)="login(formadmin)"
+              [disabled]="formadmin.invalid"
+              >Login</ion-button
+            >
+          </div>
+
+          <div class="btnhome" *ngIf="!maeriAdmin">
+            <ion-button size="small" clear expand="block" color="success"
+              >forgot password ?</ion-button
+            >
+          </div>
+          <div class="btnhome" *ngIf="!maeriAdmin" (click)="addLocalServerIp()">
+            <ion-button size="small" clear expand="block" color="danger"
+              >use local server ?</ion-button
+            >
+          </div>
+          <!--
+            <div class="btnhome" *ngIf="!maeriAdmin" (click)="sendNotification()">
+            <ion-button size="small" clear expand="block" color="danger"
+              >notification</ion-button
+            >
+          </div>
+         -->
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+<ion-row>
+  <ion-col
+    *ngIf="maeriAdmin"
+    size="12"
+    offset-lg="4"
+    size-lg="4"
+    offset-md="4"
+    size-md="4"
+  >
+    <ion-button
+      size="large"
+      expand="block"
+      color="success"
+      (click)="goRegisterPage()"
+      >Register</ion-button
+    >
+  </ion-col>
+</ion-row>

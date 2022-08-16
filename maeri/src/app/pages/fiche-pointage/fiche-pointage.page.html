@@ -1,0 +1,109 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/start"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button
+        *ngIf="!firstTime"
+        color="success"
+        fill="outline"
+        (click)="updateFiche()"
+        >{{ 'MENU.update' | translate}}</ion-button
+      >
+      <ion-button
+        *ngIf="!firstTime && isOpen"
+        fill="outline"
+        (click)="saveFiche()"
+        >Enregistrer</ion-button
+      >
+      <ion-button *ngIf="firstTime" fill="outline" (click)="createFiche()"
+        >Enregistrer</ion-button
+      >
+      <ion-button *ngIf="confirm" fill="outline" (click)="closeFiche()"
+        >Terminer</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row color="primary" class="header-component">
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">name</div>
+    </ion-col>
+
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">S.I</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">Pointage</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">Qté</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">S.F</div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2">
+      <div class="ion-text-center ion-text-uppercase">VENTES</div>
+    </ion-col>
+  </ion-row>
+  <ion-row
+    *ngFor="let prod of productsServices let i= index"
+    [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    class="row-component"
+  >
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-start ion-text-uppercase" style="font-weight: bold">
+        {{prod.name}}
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.quantityStore ? prod.quantityStore: 0}}
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        <ion-input
+          slot="end"
+          placeholder="Enter quantity"
+          type="number"
+          debounce="2000"
+          (ionChange)="addIncrementProductService($event, prod, i)"
+        ></ion-input>
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.pointage ? prod.pointage: 0}}
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        <ion-input
+          *ngIf="isOpen"
+          slot="end"
+          placeholder="0"
+          type="number"
+          disabled
+        ></ion-input>
+        <ion-input
+          *ngIf="!isOpen"
+          slot="end"
+          placeholder="Enter quantity"
+          type="number"
+          debounce="2000"
+          (ionChange)="getStockFinale($event, prod, i)"
+        ></ion-input>
+      </div>
+    </ion-col>
+    <ion-col size-sm="2" size-md="2" size-lg="2" class="ion-align-self-center">
+      <div class="ion-text-center ion-text-uppercase">
+        {{prod.ventes ? prod.ventes: 0}}
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

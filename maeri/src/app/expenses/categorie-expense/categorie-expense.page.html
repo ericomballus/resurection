@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title></ion-title>
+    <ion-buttons slot="end"> </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home-expense"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #form="ngForm" (ngSubmit)="register(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div padding>
+            <ion-item>
+              <ion-label position="floating"
+                >{{ 'MENU.name' | translate}}</ion-label
+              >
+              <ion-input name="name" type="text" ngModel required></ion-input>
+            </ion-item>
+          </div>
+          <div padding>
+            <ion-button
+              color="danger"
+              size="large"
+              type="submit"
+              [disabled]="form.invalid"
+              expand="block"
+              >{{ 'MENU.save' | translate}}</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+  <div class="container" *ngIf="categories.length">
+    <ion-list>
+      <ion-list-header></ion-list-header>
+
+      <ion-item *ngFor="let category of categories">
+        <ion-label>
+          <p class="p1">{{ category.name }}</p>
+          <p>{{ category.created | date }}</p>
+        </ion-label>
+        <ion-button
+          (click)="deleteCategories(category)"
+          color="danger"
+          slot="end"
+          small
+        >
+          <ion-icon slot="icon-only" name="trash"></ion-icon
+        ></ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div *ngIf="!response">
+    <app-fakedata></app-fakedata>
+  </div>
+</ion-content>

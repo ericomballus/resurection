@@ -1,0 +1,887 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container contenthome">
+    <form #form="ngForm" (ngSubmit)="update(form)">
+      <div>
+        <ion-item>
+          <div *ngIf="userStore.length">
+            <small *ngFor="let store of userStore ; let j = index">
+              <ion-button
+                fill="outline"
+                size="small"
+                (click)="presentActionSheet(store)"
+                >store {{store.numStore}}</ion-button
+              >
+            </small>
+          </div>
+          <ion-button
+            slot="end"
+            fill="outline"
+            size="small"
+            (click)="addStore()"
+            >add Store</ion-button
+          >
+        </ion-item>
+      </div>
+      <div class="container">
+        <ion-item>
+          <ion-label>manage custumer</ion-label>
+          <ion-select interface="popover" (ionChange)="test($event)">
+            <ion-select-option value="true">Active</ion-select-option>
+            <ion-select-option value="false">Desable</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+      <div class="form-group">
+        <ion-input
+          name="firstName"
+          type="text"
+          placeholder="first name"
+          ngModel
+          required
+          [(ngModel)]="custumer.firstName"
+        ></ion-input>
+      </div>
+      <div class="form-group">
+        <ion-input
+          name="lastName"
+          type="text"
+          placeholder="lastname"
+          ngModel
+          required
+          [(ngModel)]="custumer.lastName"
+        ></ion-input>
+      </div>
+      <div class="form-group">
+        <ion-input
+          name="company"
+          type="text"
+          placeholder="company name"
+          ngModel
+          required
+          [(ngModel)]="custumer.company"
+        ></ion-input>
+      </div>
+      <div>
+        <ion-input
+          name="city"
+          type="text"
+          placeholder="your city"
+          ngModel
+          required
+          [(ngModel)]="custumer.city"
+        ></ion-input>
+      </div>
+      <div>
+        <ion-input
+          name="email"
+          type="email"
+          placeholder="your@email.com"
+          ngModel
+          required
+          [(ngModel)]="custumer.email"
+        ></ion-input>
+      </div>
+      <div>
+        <ion-input
+          name="telephone"
+          type="number"
+          placeholder="your phone number"
+          ngModel
+          required
+          [(ngModel)]="custumer.telephone"
+        ></ion-input>
+      </div>
+      <div class="form-group">
+        <ion-input
+          name="new password"
+          type="text"
+          placeholder="password"
+          ngModel
+          required
+          [(ngModel)]="newpassword"
+        ></ion-input>
+      </div>
+      <div class="form-group">
+        <ion-item>
+          <ion-label>Forfait mensuel</ion-label>
+          <ion-input
+            name="montant abonnement"
+            type="text"
+            ngModel
+            required
+            [(ngModel)]="custumer.montant"
+          ></ion-input>
+        </ion-item>
+      </div>
+      <div>
+        <h1>type:</h1>
+        <div class="form-group">
+          <ion-item>
+            <ion-label *ngIf="!custumer.venderRole" class="ion-text-wrap">
+              Retailer</ion-label
+            >
+            <ion-label *ngIf="custumer.venderRole" class="ion-text-wrap"
+              >Vendor</ion-label
+            >
+            <ion-select (ionChange)="logValue($event)">
+              <ion-select-option value="v" *ngIf="!custumer.venderRole"
+                >Vendors</ion-select-option
+              >
+              <ion-select-option value="r" *ngIf="custumer.venderRole"
+                >Retailer</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <div class="form-group">
+          <ion-item>
+            <ion-label class="ion-text-wrap"
+              >Store Type: {{custumer.storeType ? custumer.storeType :
+              'card'}}</ion-label
+            >
+            <ion-select multiple="true" (ionChange)="pickCompanyType($event)">
+              <ion-select-option
+                value="{{company.name}}"
+                *ngFor="let company of companyTypes"
+                >{{company.name}}</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+      <div>
+        <h1>server type</h1>
+
+        <div class="form-group">
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Local ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableLocalServer()"
+              *ngIf="!this.custumerSetting['use_LocalServer']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_LocalServer']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableLocalServer()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> cloud ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCloudServer()"
+              *ngIf="!this.custumerSetting['use_CloudServer']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_CloudServer']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCloudServer()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> both ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCloudAndLocal()"
+              *ngIf="!this.custumerSetting['use_CloudAndLocal']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_CloudAndLocal']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCloudAndLocal()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+        </div>
+      </div>
+      <div>
+        <h1>Connection type</h1>
+        <div class="form-group">
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">Network ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableWifi()"
+              *ngIf="!this.custumerSetting['use_wifi']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_wifi']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableWifi()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Desktop ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableDesktop()"
+              *ngIf="!this.custumerSetting['use_desktop']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_desktop']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableDesktop()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+        </div>
+      </div>
+
+      <div>
+        <h1>Multi store</h1>
+        <div class="form-group">
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Use multi store ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableMultiStore()"
+              *ngIf="!this.custumerSetting['multi_store']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['multi_store']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableMultiStore()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">Corporate products? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableUseSameVariety()"
+              *ngIf="!this.custumerSetting['use_same_variety']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_same_variety']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableUseSameVariety()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Central Warehousing? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableProductionRefueling()"
+              *ngIf="!this.custumerSetting['refueling_from_warehouse_production']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['refueling_from_warehouse_production']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableProductionRefueling()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+        </div>
+      </div>
+      <div>
+        <h1>check quantity:</h1>
+        <div class="form-group">
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">
+              Services Check Quantity Before Sale?
+            </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCheckQuantity()"
+              *ngIf="!this.custumerSetting['check_service_quantity']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['check_service_quantity']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCheckQuantity()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">
+              Bar Check Quantity Before Sale?
+            </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCheckBar()"
+              *ngIf="!this.custumerSetting['check_bar_quantity']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['check_bar_quantity']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCheckBar()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">
+              Shop Check Quantity Before Sale?
+            </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCheckList()"
+              *ngIf="!this.custumerSetting['check_List_quantity']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['check_List_quantity']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCheckList()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">
+              Gaz Check Quantity Before Sale?
+            </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableGazProduct()"
+              *ngIf="!this.custumerSetting['check_Gaz_quantity']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['check_Gaz_quantity']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableGazProduct()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">Check Resources? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCheckResource()"
+              *ngIf="!this.custumerSetting['check_resource']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['check_resource']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCheckResource()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+        </div>
+      </div>
+      <div>
+        <h1>Enable Registration:</h1>
+        <div class="form-group">
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Use Customer </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="registerCustomer()"
+              *ngIf="!this.custumerSetting['register_customer']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['register_customer']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="registerCustomer()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+        </div>
+      </div>
+      <div>
+        <h1>Discount type</h1>
+        <div class="form-group">
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Employée Discount? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enablePourcentage()"
+              *ngIf="!this.custumerSetting['employePercentPrice']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['employePercentPrice']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enablePourcentage()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Customer Discount? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCustomerPourcentage()"
+              *ngIf="!this.custumerSetting['customerPercentPrice']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['customerPercentPrice']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCustomerPourcentage()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Reseller Discount? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableResellerPourcentage()"
+              *ngIf="!this.custumerSetting['ResellerPercentPrice']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['ResellerPercentPrice']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableResellerPourcentage()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+        </div>
+      </div>
+      <div>
+        <h1>Advanced Features:</h1>
+        <div class="form-group">
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">
+              Kanban board live (pos live)?
+            </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enablePosLive()"
+              *ngIf="!this.custumerSetting['use_pos_live']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_pos_live']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enablePosLive()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> sale to reseller ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableSaleToRetailer()"
+              *ngIf="!this.custumerSetting['saleToRetailer']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['saleToRetailer']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableSaleToRetailer()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> is Hospital ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="isHospital()"
+              *ngIf="!this.custumerSetting['is_Hospital']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['is_Hospital']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="isHospital()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+          <!--
+            <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">
+              Use Customer Ordered ?
+            </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCustomerOrdered()"
+              *ngIf="!this.custumerSetting['check_customer_ordered']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['check_customer_ordered']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableCustomerOrdered()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+         -->
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Sale packs? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableSaleInPack()"
+              *ngIf="!this.custumerSetting['SaleInPack']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['SaleInPack']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableSaleInPack()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Reset Product ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableReset()"
+              *ngIf="!this.custumerSetting['reset_product']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['reset_product']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableReset()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Set product bonus? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableUseBonus()"
+              *ngIf="!this.custumerSetting['use_bonus']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_bonus']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableUseBonus()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Use Resources ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableResource()"
+              *ngIf="!this.custumerSetting['use_resource']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_resource']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableResource()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Build product set? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableUseGamme()"
+              *ngIf="!this.custumerSetting['use_gamme']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_gamme']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableUseGamme()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <!--
+            <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> POS with warehouse? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableGestionStock()"
+              *ngIf="!this.custumerSetting['manageStockWithService']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['manageStockWithService']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableGestionStock()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+          -->
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> POS change price ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableChangePrice()"
+              *ngIf="!this.custumerSetting['change_price']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['change_price']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableChangePrice()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap">
+              Set product ristourne?
+            </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableRistourne()"
+              *ngIf="!this.custumerSetting['use_Ristourne']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_Ristourne']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableRistourne()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Shipping details? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="shipPackages()"
+              *ngIf="!this.custumerSetting['ship_packages']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['ship_packages']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="shipPackages()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Manage expenses? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="manageExpense()"
+              *ngIf="!this.custumerSetting['manage_expenses']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['manage_expenses']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="manageExpense()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+
+          <!--
+            <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> sale Gaz? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="saleGaz()"
+              *ngIf="!this.custumerSetting['sale_Gaz']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['sale_Gaz']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="saleGaz()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+          -->
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> Set table number? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableNumeroTable()"
+              *ngIf="!this.custumerSetting['use_TableNumber']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_TableNumber']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableNumeroTable()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
+        </div>
+      </div>
+
+      <div padding>
+        <ion-button
+          size="large"
+          expand="block"
+          color="danger"
+          (click)="update(form)"
+          >UPDATE</ion-button
+        >
+      </div>
+    </form>
+  </div>
+
+  <ion-row *ngIf="custumer.qrcode">
+    <ion-col>
+      <div class="ion-text-center">
+        <img src="{{ custumer.qrcode }}" />
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>
+<!-- [disabled]="form.invalid"-->

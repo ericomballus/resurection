@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="end">
+      <ion-button (click)="selectSource()" *ngIf="admin">
+        <ion-icon color="success" slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="true"></ion-menu-button>
+      <ion-button color="primary" fill="solid" (click)="addCategorie()"
+        >{{'MENU.categories' | translate}}</ion-button
+      >
+      <ion-button
+        (click)="addResource()"
+        *ngIf="setting && setting.check_resource"
+        color="primary"
+        fill="solid"
+      >
+        {{'MENU.resources' | translate}}</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true">
+    <ion-slide *ngFor="let products of multiStoreProduct; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>{{ products.storeName ? products.storeName: 'no name' }}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <div class="nodejs">
+          <ion-list *ngIf="products">
+            <ion-item *ngFor="let prod of products">
+              <ion-avatar slot="start">
+                <ion-img [src]="prod.url"></ion-img>
+              </ion-avatar>
+              <ion-label>
+                <p>{{ prod.name }}</p>
+                <p>{{ prod.sellingPrice }}</p>
+                <p>{{ prod.quantity }}</p>
+              </ion-label>
+
+              <ion-button
+                class="divBtnUpdate"
+                *ngIf="admin"
+                (click)="productRestoUpdate(prod, i)"
+                >{{'MENU.update' | translate}}</ion-button
+              >
+              <ion-button
+                class="divBtnDelete"
+                *ngIf="admin"
+                (click)="deleteProduct(prod)"
+                color="danger"
+              >
+                <ion-icon slot="icon-only" name="trash"></ion-icon
+              ></ion-button>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

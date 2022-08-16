@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin-page"></ion-back-button>
+    </ion-buttons>
+    <ion-title>database list</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-list-header> DATABASE </ion-list-header>
+
+    <ion-item *ngFor="let db of database" (click)="getCollectionNames(db)">
+      <ion-avatar class="avatar" slot="start">
+        <img src="../../assets/database.png" />
+      </ion-avatar>
+      <ion-label>
+        <h2>name:{{db.name}}</h2>
+        <p>size: {{db.sizeOnDisk}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

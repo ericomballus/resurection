@@ -1,0 +1,201 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="url">
+    <img [src]="url" />
+  </ion-card>
+  <form #form="ngForm" (ngSubmit)="register(form)">
+    <ion-grid>
+      <ion-row color="primary">
+        <ion-col>
+          <div padding>
+            <ion-item>
+              <ion-input
+                name="name"
+                type="text"
+                placeholder="Name"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating"
+                >{{ 'MENU.size' | translate}}</ion-label
+              >
+              <ion-input
+                name="sizeUnit"
+                type="number"
+                placeholder="size"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>{{ 'MENU.unit' | translate}}</ion-label>
+              <ion-select interface="popover" (ionChange)="unitMeasure($event)">
+                <ion-select-option value="g">g</ion-select-option>
+                <ion-select-option value="kg">kg</ion-select-option>
+                <ion-select-option value="cl">cl</ion-select-option>
+                <ion-select-option value="l">l</ion-select-option>
+                <ion-select-option value="l">piece</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                name="sellingPrice"
+                type="number"
+                placeholder="prix de vente"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>{{ 'MENU.category' | translate}}</ion-label>
+              <ion-select
+                color="warning"
+                interface="popover"
+                (ionChange)="test($event)"
+              >
+                <ion-select-option
+                  *ngFor="let prod of categorys"
+                  value="{{ prod._id }}"
+                  >{{ prod.name }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <!--
+              <ion-item>
+              <ion-label>Super Category</ion-label>
+              <ion-select
+                color="warning"
+                interface="popover"
+                (ionChange)="test2($event)"
+              >
+                <ion-select-option
+                  *ngFor="let prod of supcategories; let j = index"
+                  value="{{ prod._id }}"
+                  >{{ prod.name }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            -->
+
+            <ion-item *ngIf="userStore.length > 1">
+              <ion-label>{{ 'MENU.store' | translate}}</ion-label>
+              <ion-select
+                cancelText="cancel"
+                okText="Okay"
+                interface="popover"
+                (ionChange)="assignStore($event)"
+                color="warning"
+              >
+                <ion-select-option
+                  *ngFor="let role of userStore"
+                  value="{{ role.id }}"
+                  >{{ role.name }}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <ion-item button (click)="pickResource()">
+              <ion-icon slot="end" name="add-circle-outline"></ion-icon>
+              <ion-label>Resources</ion-label>
+            </ion-item>
+            <ion-row
+              class="header-row"
+              *ngIf="resourceList && resourceList.length"
+            >
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center">{{ 'MENU.name' | translate}}</div>
+              </ion-col>
+
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center">
+                  {{ 'MENU.quantity' | translate}}
+                </div>
+              </ion-col>
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center">{{ 'MENU.unit' | translate}}</div>
+              </ion-col>
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center">{{ 'MENU.coast' | translate}}</div>
+              </ion-col>
+            </ion-row>
+            <ion-row
+              *ngFor="let prod of resourceList; let i= index"
+              class="data-row data-update"
+              [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+              #itemlist
+            >
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center">{{prod.name}}</div>
+              </ion-col>
+
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center">{{prod.quantity}}</div>
+              </ion-col>
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center">{{prod.unitName}}</div>
+              </ion-col>
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center">
+                  {{prod.coast | currency:'CFA':'symbol':'3.0-0'}}
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row
+              *ngIf="resourceList && resourceList.length"
+              class="header-row2"
+            >
+              <ion-col size="5" class="ion-align-self-center">
+                <div class="ion-text-center ion-text-uppercase"></div>
+              </ion-col>
+
+              <ion-col size="2" class="ion-align-self-center">
+                <div class="ion-text-center"></div>
+              </ion-col>
+              <ion-col size="3" class="ion-align-self-center">
+                <div class="ion-text-center totalCoast">
+                  {{totalCoast | currency:'CFA':'symbol':'3.0-0'}}
+                </div>
+              </ion-col>
+              <ion-col size="2" class="ion-align-self-center">
+                <div class="ion-text-center"></div>
+              </ion-col>
+            </ion-row>
+
+            <ion-item>
+              <ion-input
+                name="image"
+                type="file"
+                (change)="readUrl($event)"
+                ngModel
+                required
+              ></ion-input>
+            </ion-item>
+          </div>
+          <div padding>
+            <ion-button
+              color="success"
+              size="large"
+              type="submit"
+              expand="block"
+              [disabled]="!unitName "
+              >{{ 'MENU.save' | translate}}</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

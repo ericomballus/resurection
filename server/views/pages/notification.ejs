@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
+
+    <main>
+      <div class="alert alert-primary" role="alert" id="firstalert">
+        <span id="userPhone"><%= customer.phone %></span> your request is was
+        send succesfuly!
+      </div>
+
+      <div class="card" style="width: 100%; height: 100%">
+        <img src="<%= pubUrl %>" class="card-img-top" style="width: 100%" />
+      </div>
+      <div class="alert alert-success" role="alert" id="erico">
+        <span id="userPhone"><%= customer.phone %></span>
+        transaction reussie!!
+      </div>
+      <div style="display: none">
+        <span id="url"><%= url %></span>
+      </div>
+    </main>
+
+    <footer><%- include('../partials/footer'); %></footer>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      const notif = document.getElementById("erico");
+      document.getElementById("erico").style.display = "none";
+      let user = document.getElementById("userPhone");
+      textContent = user.textContent;
+
+      let phone = parseInt(textContent);
+      let uri = "http://localhost:3000/";
+      let ur = document.getElementById("url").textContent;
+      const socket = io(ur);
+      socket.on("connect", () => {
+        console.log("we are connect");
+      });
+      socket.on(`${phone}paimentRequest`, (data) => {
+        console.log("result", data);
+        document.getElementById("firstalert").style.display = "none";
+        document.getElementById("erico").style.display = "block";
+      });
+      //
+    </script>
+  </body>
+</html>

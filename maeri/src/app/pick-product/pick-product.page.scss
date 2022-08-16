@@ -1,0 +1,143 @@
+.lesbtn2 {
+  font-size: 50%;
+  //text-align: center;
+  text-transform: uppercase;
+}
+
+.shopbtn {
+  position: relative;
+  left: 8px;
+}
+.col {
+  align-items: center;
+  text-align: center;
+  background-color: aqua;
+}
+
+.Btnitempack {
+  text-align: center;
+}
+
+ion-list > .productname {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.title {
+  font-size: 7px;
+  font-weight: bold;
+  // background-color: #05043b;
+  // width: 100%;
+  //text-align: center;
+}
+
+.spane {
+  font-size: 8px;
+  font-weight: bold;
+  position: absolute;
+  bottom: 70%;
+  background-color: rgb(21, 22, 21);
+  color: white;
+
+  // background-color: #05043b;
+  // width: 100%;
+  //text-align: center;
+}
+ion-card {
+  //border-radius: 0px;
+  // border: 0.5px solid white;
+  box-shadow: none !important;
+}
+segment-button-checked {
+  background: rgb(255, 0, 140);
+  color: var(--ion-color-primary);
+  border-bottom: 3px solid var(--ion-color-primary);
+}
+ion-segment-button {
+  // background: rgb(255, 0, 140);
+  font-size: 10px;
+  color: var(--ion-color-medium);
+  border: 0px;
+  border-radius: 0px;
+}
+
+ion-segment {
+  padding: 0px;
+  margin: 0px;
+}
+
+ion-segment-button {
+  padding: 0px;
+  margin: 0px;
+  font-size: 10px;
+  // background-color: chartreuse;
+}
+
+.footer {
+  background-color: white;
+  padding: 8%;
+  position: relative;
+}
+
+.footer2 {
+  background-color: rgb(8, 212, 110);
+  padding: 3%;
+  text-align: center;
+}
+
+ion-card-content {
+  //background-color: rgb(48, 47, 47);
+  background-color: #f1f1f1;
+  padding: 0px;
+  color: black;
+  padding: 1%;
+  text-align: center;
+  // font-size: 5px;
+}
+.colp {
+  font-size: 8px;
+  text-transform: uppercase;
+  // background-color: brown;
+  padding: 0px;
+}
+
+ion-segment .segBar {
+  //font-size: 12px;
+  // background-color: rgb(77, 238, 28);
+  // background-color: rgb(247, 243, 18);
+}
+
+ion-segment .segResto {
+  //font-size: 12px;
+  // background-color: rgb(77, 238, 28);
+  // background-color: rgb(247, 102, 18);
+}
+
+.badge {
+  position: absolute;
+  top: 7%;
+}
+
+.product-pick {
+  ion-icon {
+    color: greenyellow;
+    font-size: 25px;
+  }
+  // margin: 0px;
+  z-index: 2;
+  position: absolute;
+}
+
+.prod-isselect {
+  background-color: red;
+}
+ion-slides {
+  // height: 100% !important;
+  // margin-top: 0px;
+  // padding-top: 0px;
+  //	background: var(--ion-color-primary);
+  //color: #fff;
+
+  ion-slide {
+  }
+}

@@ -1,0 +1,646 @@
+<ion-header #mballus2>
+  <ion-toolbar no-border>
+    <ion-menu-button autoHide="true"></ion-menu-button>
+
+    <ion-buttons *ngIf="adminstrator" slot="end">
+      <ion-button color="light" fill="outline">
+        <ion-icon slot="end" name="person-outline"></ion-icon>
+        <div>{{ userName }}</div>
+      </ion-button>
+      <ion-button color="light" fill="outline" (click)="logOut()">
+        <ion-icon color="light" name="stop-circle-outline"></ion-icon>
+      </ion-button>
+      <!--
+         <div>{{ 'MENU.logout' | translate}}</div>
+          <ion-button
+          *ngIf="!adminstrator"
+          color="light" fill="outline"
+          [routerLink]="['/retailer-order']"
+        >
+          <ion-icon slot="end" name="document-outline"></ion-icon>
+          <div>{{ 'MENU.orders' | translate}}</div>
+        </ion-button>
+      -->
+    </ion-buttons>
+
+    <ion-buttons slot="start" *ngIf="!adminstrator && !showMe">
+      <ion-button
+        *ngIf="setting && setting.check_customer_ordered"
+        color="light"
+        fill="outline"
+        [routerLink]="['/retailer-order']"
+        routerDirection="root"
+        routerLinkActive="active-link"
+      >
+        <div class="btnfooter2">
+          <ion-icon
+            class="btnfooter2"
+            slot="end"
+            name="document-outline"
+            color="light"
+          ></ion-icon>
+          {{ 'MENU.orders' | translate}}
+        </div>
+      </ion-button>
+      <ion-button
+        *ngIf="setting && setting.register_customer"
+        color="light"
+        fill="outline"
+        [routerLink]="['/store-customer']"
+        routerDirection="root"
+        routerLinkActive="active-link"
+      >
+        <div class="btnfooter2">
+          <ion-icon
+            class="btnfooter2"
+            slot="end"
+            name="people-outline"
+            color="light"
+          ></ion-icon>
+
+          {{ 'MENU.customers' | translate}}
+        </div>
+      </ion-button>
+      <ion-button
+        *ngIf="setting && setting.is_Hospital"
+        color="light"
+        fill="outline"
+        [routerLink]="['/patient-list']"
+        routerDirection="root"
+        routerLinkActive="active-link"
+      >
+        <div class="btnfooter2" style="color: white">
+          <ion-icon
+            class="btnfooter2"
+            slot="end"
+            name="people-outline"
+            color="light"
+          ></ion-icon>
+
+          patients
+        </div>
+      </ion-button>
+      <ion-button
+        *ngIf="setting && setting.saleToRetailer"
+        color="light"
+        fill="outline"
+        (click)="listYourRetailer()"
+      >
+        <div class="btnfooter2">
+          <ion-icon
+            class="btnfooter2"
+            slot="end"
+            name="people-outline"
+            color="light"
+          ></ion-icon>
+
+          {{ 'MENU.retailer' | translate}}
+        </div>
+      </ion-button>
+      <ion-button
+        *ngIf="proposalOrders"
+        color="light"
+        fill="outline"
+        (click)="displayProposalOrders()"
+      >
+        <ion-badge color="primary">{{proposalOrders}}</ion-badge>
+        <ion-icon color="light" name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button
+        color="light"
+        fill="outline"
+        [routerLink]="['/employees-update-password']"
+      >
+        <ion-icon color="light" slot="end" name="person-outline"></ion-icon>
+        {{ userName }}
+      </ion-button>
+      <ion-button color="light" fill="outline" (click)="logOut()">
+        <ion-icon color="light" name="stop-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row
+    class="ion-justify-content-between"
+    *ngIf="enableFooter"
+    style="--background: var(--ion-color-dark)"
+  >
+    <ion-col class="ion-no-border mb" class="ion-align-self-center">
+      <div class="ion-text-center" *ngIf="setting && setting.use_Consigne">
+        <ion-button
+          class="round"
+          color="dark"
+          fill="outline"
+          [routerLink]="['/consigne']"
+        >
+          {{ 'MENU.consigne' | translate}}
+        </ion-button>
+      </div>
+    </ion-col>
+    <ion-col class="ion-no-border mb" class="ion-align-self-center">
+      <div class="ion-text-center" *ngIf="setting && setting.use_pos_live">
+        <ion-button
+          class="round"
+          color="dark"
+          fill="outline"
+          [routerLink]="['/poslive']"
+        >
+          {{ 'MENU.poslive' | translate}}
+        </ion-button>
+      </div>
+    </ion-col>
+
+    <ion-col class="ion-no-border mb" class="ion-align-self-center">
+      <div class="ion-text-uppercase">
+        <ion-button
+          class="round"
+          color="dark"
+          fill="outline"
+          (click)="postCashOpen()"
+        >
+          <div class="btnmenu">{{ 'MENU.Inventory' | translate}}</div>
+        </ion-button>
+      </div>
+    </ion-col>
+    <ion-col class="ion-no-border mb" class="ion-align-self-center">
+      <div class="ion-text-uppercase">
+        <ion-button
+          class="round"
+          color="dark"
+          fill="outline"
+          (click)="displayBill()"
+        >
+          <div class="btnmenu">{{ 'MENU.bill' | translate}}</div>
+        </ion-button>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col
+      size-sm="12"
+      size-md="12"
+      size-xm="12"
+      size-lg="12"
+      class="ion-align-self-center"
+      [ngClass]="'separationBlock'"
+    >
+      <div class="ion-text-center ion-text-uppercase taille stock">
+        {{'MENU.stock_alert' | translate}}
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">
+        {{'MENU.name' | translate}}
+      </div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">
+        {{'MENU.onsale' | translate}}
+      </div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">
+        {{'MENU.wharehouse' | translate}}
+      </div>
+    </ion-col>
+    <ion-col
+      size-sm="3"
+      size-md="3"
+      size-xm="3"
+      size-lg="3"
+      class="ion-align-self-center"
+    >
+      <div class="ion-text-center ion-text-uppercase taille">
+        {{'MENU.provider' | translate}}
+      </div>
+    </ion-col>
+  </ion-row>
+  <div *ngIf="productItem">
+    <ion-row
+      color="primary"
+      *ngFor="let pro of productItem let i = index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{pro.name}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{pro.quantityStore}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+        [ngClass]="{alertStock: pro.quantityItems <= pro.quantityToAlert}"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{pro.quantityItems}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{pro.produceBy !== 'null' ? pro.produceBy : ' '}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div *ngIf="inventaireList">
+    <ion-row>
+      <ion-col
+        size-sm="12"
+        size-md="12"
+        size-xm="12"
+        size-lg="12"
+        class="ion-align-self-center"
+        [ngClass]="'separationBlock'"
+      >
+        <div class="ion-text-center ion-text-uppercase taille jourvente">
+          {{'MENU.last' | translate}}
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row color="primary">
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-xm="2"
+        size-lm="2"
+        size-lg="2"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{'MENU.day' | translate}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{'MENU.opening' | translate}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{'MENU.closing' | translate}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-xm="2"
+        size-lm="2"
+        size-lg="2"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{'MENU.amount' | translate}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-xm="2"
+        size-lm="2"
+        size-lg="2"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">ristourne</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      color="primary"
+      *ngFor="let inv of inventaireList let i = index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-xm="2"
+        size-lm="2"
+        size-lg="2"
+        class="ion-align-self-center"
+      >
+        <div
+          class="ion-text-center ion-text-uppercase taille"
+          *ngIf="inv.entry[0][0] && inv.entry[0][0].openDate"
+        >
+          {{inv.entry[0][0].openDate | date}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div
+          class="ion-text-center ion-text-uppercase taille"
+          *ngIf="inv.entry[0][0] && inv.entry[0][0].openDate"
+        >
+          {{inv.entry[0][0].ouverture}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div
+          class="ion-text-center ion-text-uppercase taille"
+          *ngIf="inv.entry[0][0] && inv.entry[0][0].openDate"
+        >
+          {{inv.entry[0][0].fermeture}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-xm="2"
+        size-lm="2"
+        size-lg="2"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{inv.totalSalesAmount | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="2"
+        size-md="2"
+        size-xm="2"
+        size-lm="2"
+        size-lg="2"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{inv.ristourneGenerate | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col
+        size-sm="12"
+        size-md="12"
+        size-xm="12"
+        size-lm="2"
+        size-lg="12"
+        class="ion-align-self-center"
+        [ngClass]="'separationBlock'"
+      >
+        <div class="ion-text-center ion-text-uppercase taille plusvendus">
+          {{'MENU.bestselling' | translate}}
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row color="primary">
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{'MENU.name' | translate}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lm="2"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">qty</div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lm="3"
+        size-lg="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{'MENU.sale' | translate}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        size-lm="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{'MENU.bill' | translate}}
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      color="primary"
+      *ngFor="let prod of cart let i = index"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        size-lm="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{prod._id.name}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        size-lm="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{prod.quantity}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        size-lm="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{prod.totalSalesAmount | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size-sm="3"
+        size-md="3"
+        size-xm="3"
+        size-lg="3"
+        size-lm="3"
+        class="ion-align-self-center"
+      >
+        <div class="ion-text-center ion-text-uppercase taille">
+          {{prod.count}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="enableFooter" #appfooter class="square">
+  <ion-toolbar color="light">
+    <ion-row class="ion-align-items-center">
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center" class="btnfooter btnfooter2">
+          <ion-button
+            fill="outline"
+            color="dark"
+            (click)="this.router.navigateByUrl('purchase')"
+          >
+            <div class="btnfooter2">
+              <ion-icon
+                class="btnfooter2"
+                slot="end"
+                name="basket-outline"
+              ></ion-icon>
+              {{ 'MENU.purchasing' | translate}}
+            </div>
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center" class="btnfooter btnfooter2">
+          <ion-button
+            fill="outline"
+            color="dark"
+            (click)="this.router.navigateByUrl('ravitaillement')"
+            *ngIf="showBtn"
+          >
+            <div class="btnfooter2">
+              <ion-icon
+                class="btnfooter2"
+                slot="end"
+                name="book-outline"
+              ></ion-icon>
+              {{ 'MENU.procurment' | translate}}
+            </div>
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center" class="btnfooter">
+          <ion-button
+            (click)="this.router.navigateByUrl('warehouse')"
+            fill="outline"
+            color="dark"
+            *ngIf="showBtn"
+          >
+            <div class="btnfooter2">
+              <ion-icon
+                class="btnfooter2"
+                slot="end"
+                name="add-circle-outline"
+              ></ion-icon>
+              {{ 'MENU.warehouse' | translate}}
+            </div>
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center" class="btnfooter btnfooter2">
+          <ion-button
+            fill="outline"
+            color="dark"
+            (click)="this.router.navigateByUrl('sale-per-day')"
+          >
+            <div class="btnfooter2">
+              <ion-icon
+                class="btnfooter2"
+                slot="end"
+                name="book-outline"
+              ></ion-icon>
+              {{ 'MENU.sale' | translate}}
+            </div>
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

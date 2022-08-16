@@ -1,0 +1,194 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" class="btnmenu">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start">
+      <ion-button (click)="goTo()">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <ion-badge id="notifications-badge" color="danger"
+          >{{transaction.length}}
+        </ion-badge>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="display: flex; justify-content: space-between">
+    <div
+      style="
+        flex-grow: 1;
+        padding-right: 10px;
+        padding-left: 10px;
+        border-right: 2px solid black;
+      "
+    >
+      <div class="ion-text-center" *ngIf="productServiceTab.length == 0">
+        <app-fakedata></app-fakedata>
+      </div>
+      <ion-grid *ngIf="productServiceTab.length">
+        <ion-row style="font-size: 14px; font-weight: bold">
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">
+              <p>Ravitaillement</p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="header-component">
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">name</div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">En stock</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">En vente</div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Ravitailler</div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          *ngFor="let prod of productServiceTab; let i = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': prod.quantityItems <= prod.quantityToAlert ? 'var(--ion-color-danger)' : i % 2 == 0 ? '#f1f1f1' : 'white' }"
+          style="font-size: 11px"
+        >
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-start ion-text-uppercase smallSize">
+              {{ prod.name }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ prod.quantityItems }}
+            </div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ prod.quantityStore }}
+            </div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              <ion-input
+                slot="end"
+                placeholder="quantité"
+                type="number"
+                debounce="500"
+                (ionChange)="addValue($event, i)"
+              ></ion-input>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div
+      style="
+        flex-grow: 1;
+        padding-right: 10px;
+        padding-left: 10px;
+        border-right: 2px solid black;
+      "
+    >
+      <div class="ion-text-center" *ngIf="billTab.length == 0">
+        <app-fakedata></app-fakedata>
+      </div>
+      <ion-grid *ngIf="billTab.length">
+        <ion-row style="font-size: 14px; font-weight: bold">
+          <ion-col size="12">
+            <div class="ion-text-center ion-text-uppercase">
+              <p>commandes clients</p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="header-component">
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">Date</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">Client</div>
+          </ion-col>
+          <ion-col size-sm="2" size-md="2" size-lg="2">
+            <div class="ion-text-center">Emp</div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">Montant</div>
+          </ion-col>
+
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center">status</div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row
+          *ngFor="let com of billTab; let i = index"
+          class="data-row data-update"
+          [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white'}"
+          style="font-size: 11px"
+        >
+          <ion-col
+            size-sm="2"
+            size-md="2"
+            size-lg="2"
+            (click)="displayBill(com, i)"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.created | date: "short" }}
+            </div>
+          </ion-col>
+
+          <ion-col
+            size-sm="2"
+            size-md="2"
+            size-lg="2"
+            (click)="displayBill(com, i)"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.customer ? com.customer.name : 'No Name'}}
+            </div>
+          </ion-col>
+          <ion-col
+            (click)="displayBill(com, i)"
+            size-sm="2"
+            size-md="2"
+            size-lg="2"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ com.userName ? com.userName : 'No Name'}}
+            </div>
+          </ion-col>
+          <ion-col
+            size-sm="3"
+            size-md="3"
+            size-lg="3"
+            (click)="displayBill(com, i)"
+          >
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              {{ (com.montantReduction ? com.montantReduction :
+              com.commande.cartdetails.totalPrice )|
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}
+            </div>
+          </ion-col>
+          <ion-col size-sm="3" size-md="3" size-lg="3">
+            <div class="ion-text-center ion-text-uppercase smallSize">
+              <ion-button
+                style="font-size: 10px"
+                size="small"
+                (click)="valider(com, i)"
+                >valider</ion-button
+              >
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,68 @@
+<ion-row class="header-component">
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center">{{ "MENU.name" | translate }}</div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center">{{ "MENU.warehouse" | translate }}</div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center">{{ "MENU.in_stock" | translate }}</div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center">Total</div>
+  </ion-col>
+  <ion-col class="ion-hide-lg-down" size-lg="2">
+    <div class="ion-text-center">consigne</div>
+  </ion-col>
+  <ion-col class="ion-hide-lg-down" size-lg="2">
+    <div class="ion-text-center">ristourne</div>
+  </ion-col>
+</ion-row>
+
+<ion-row
+  *ngFor="let prod of products; let i = index"
+  class="data-row data-update"
+  [ngStyle]="{
+    'background-color':
+      prod.quantityItems <= prod.quantityToAlert ? 'red' : 'white'
+  }"
+>
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-start ion-text-uppercase smallSize">
+      {{ prod.name }}
+    </div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.cassier ? prod.cassier : 0 }}
+      cassier {{ prod.btls ? prod.btls : 0 }} btl
+    </div>
+  </ion-col>
+
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.cassierStore ? prod.cassierStore : 0 }} cassier
+      {{ prod.btlsStore ? prod.btlsStore : 0 }}
+      btl
+    </div>
+  </ion-col>
+  <ion-col size-sm="3" size-md="3" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.cassierTotal ? prod.cassierTotal : 0 }} cassier
+      {{ prod.btlsTotal ? prod.btlsTotal : 0 }}
+      btl
+    </div>
+  </ion-col>
+  <ion-col class="ion-hide-lg-down" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.consigne }}
+    </div>
+  </ion-col>
+  <ion-col class="ion-hide-lg-down" size-lg="2">
+    <div class="ion-text-center ion-text-uppercase smallSize">
+      {{ prod.ristourneGenerate }}
+    </div>
+  </ion-col>
+</ion-row>

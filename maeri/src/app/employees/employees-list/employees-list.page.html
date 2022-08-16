@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        color="light"
+        fill="outline"
+        (click)="employeeAdd()"
+        *ngIf="admin"
+      >
+        <ion-icon color="light" slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager="true">
+    <ion-slide *ngFor="let allEmployes of multiStoreEmploye; let i = index">
+      <ion-grid>
+        <ion-row *ngIf="this.storeList.length > 1">
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>
+                {{ allEmployes.storeName ? allEmployes.storeName: 'no name' }}
+              </h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-list>
+          <ion-list>
+            <ion-list-header *ngIf="admin"> </ion-list-header>
+
+            <ion-item *ngFor="let employe of allEmployes">
+              <ion-label>
+                <h3>{{ employe.name }}</h3>
+                <h3>{{ 'MENU.poste' | translate}}: {{ employe.poste }}</h3>
+                <h6 class="role" *ngFor="let rol of employe.role index as i">
+                  Role {{i+1}}-: {{ rol.name}}
+                </h6>
+                <h3>{{ 'MENU.phone' | translate}}: {{ employe.telephone }}</h3>
+                <div>
+                  <ion-button
+                    color="primary"
+                    fill="clear"
+                    (click)="updateEmploye(employe)"
+                  >
+                    <ion-icon class="btnicone" name="add"></ion-icon>
+                  </ion-button>
+                  <ion-button
+                    color="danger"
+                    fill="clear"
+                    (click)="deleteEmploye(employe)"
+                  >
+                    <ion-icon class="btnicone" name="trash"></ion-icon>
+                  </ion-button>
+
+                  <ion-button
+                    color="success"
+                    fill="clear"
+                    (click)="viewEmploye(employe)"
+                  >
+                    <ion-icon class="btnicone" name="contact"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-label>
+              <ion-icon
+                color="primary"
+                size="large"
+                slot="start"
+                name="person-circle-outline"
+              ></ion-icon>
+            </ion-item>
+          </ion-list>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

@@ -1,0 +1,27 @@
+.header-row-consigne {
+  background-color: black;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  ion-col {
+    div {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (max-width: 567px) {
+  ion-grid {
+    .data-row-consigne {
+      ion-col {
+        div {
+          font-size: 10px;
+          font-weight: bold;
+        }
+        ion-input {
+          text-align: center;
+        }
+      }
+    }
+  }
+}

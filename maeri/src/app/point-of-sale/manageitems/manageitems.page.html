@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>stock</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row class="header-row">
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>logo</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>name</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>capacity</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small> {{ 'MENU.noglace' | translate}}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small> {{ 'MENU.glace' | translate}}</small>
+      </div>
+    </ion-col>
+
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center">
+        <small>action</small>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row
+    *ngFor="let prod of productsItem let i= index"
+    class="data-row data-update"
+    [ngClass]="{'stock-alert':prod.quantityItems <= stock_min}"
+  >
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <ion-item lines="none">
+          <ion-avatar slot="start">
+            <img src="{{ prod.url }}" />
+          </ion-avatar>
+        </ion-item>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall"> {{ prod.name }}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall">
+          {{ prod.sizeUnitProduct }}{{ prod.unitNameProduct }}</small
+        >
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall">
+          {{prod.glace ? prod.quantityStore - prod.glace :
+          prod.quantityStore}}</small
+        >
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+        <small class="namesmall"> {{ prod.glace ? prod.glace: 0 }}</small>
+      </div>
+    </ion-col>
+    <ion-col size="2" size-md="2">
+      <div
+        class="ion-text-center ion-text-uppercase ion-text-nowrap smallborder"
+        (click)="updateStore(prod)"
+      >
+        <small class="namesmall"> {{ 'MENU.fresh' | translate}}</small>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

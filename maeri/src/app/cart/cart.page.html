@@ -1,0 +1,992 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <select
+      *ngIf="setting && setting.employePercentPrice && setting.register_customer"
+      style="
+        background-color: rgb(11, 102, 238);
+        color: white;
+        padding: 10px;
+        margin-left: 5px;
+        text-transform: uppercase;
+        font-size: 10px;
+      "
+      name="pets"
+      id="pet-select"
+      (change)="selectEmploye($event.target)"
+    >
+      <option value="" disabled selected hidden>
+        {{ 'MENU.employe' | translate}}
+      </option>
+      <option
+        value="{{ user._id }}"
+        *ngFor="let user of employeList let i= index"
+      >
+        <div style="padding: 30px">{{ user.name }}</div>
+      </option>
+    </select>
+
+    <ion-buttons slot="end">
+      <ion-button
+        fill="outline"
+        color="warning"
+        (click)="selectPatient()"
+        *ngIf="(!commande && setting && setting.register_customer && setting.is_Hospital)"
+        >patient
+        <ion-icon slot="start" name="person-add-outline"></ion-icon>
+      </ion-button>
+      <ion-button
+        fill="outline"
+        color="success"
+        (click)="selectCustomer()"
+        *ngIf="(!commande && setting && setting.register_customer)"
+        >{{ 'MENU.addcustomer' | translate}}
+        <ion-icon slot="start" name="person-add-outline"></ion-icon>
+      </ion-button>
+      <ion-button
+        fill="outline"
+        size="small"
+        clear
+        color="danger"
+        (click)="removeAll()"
+        *ngIf="!commande && totalAmount"
+        >{{ 'MENU.cancel' | translate}}
+        <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        fill="outline"
+        color="success"
+        (click)="updateProd()"
+        *ngIf="commande"
+        >{{ 'MENU.send' | translate}}
+        <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start">
+      <ion-button fill="outline" (click)="closeModal()">
+        <ion-icon slot="start" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!commande">
+  <div style="width: 50%; margin-right: 25px; margin-left: 25px">
+    <ion-item *ngIf="customer && zoneList.length">
+      <ion-icon slot="start" name="man-outline"></ion-icon>
+      <ion-label>Selectionner la Zone</ion-label>
+      <ion-select
+        value="_"
+        interface="popover"
+        (ionChange)="selectZone($event)"
+        *ngIf="customer && zoneList.length"
+      >
+        <ion-select-option *ngFor="let z of zoneList" value="{{z.name}}"
+          >{{z.name}}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+  </div>
+  <div>
+    <ion-grid *ngIf="customer">
+      <ion-row *ngIf="customer">
+        <ion-col size="11">
+          <div class="ion-text-center">
+            <ion-icon
+              style="width: 80px; height: 80px; text-transform: uppercase"
+              name="person-outline"
+            ></ion-icon>
+            <h3>{{ 'MENU.customer' | translate}}</h3>
+          </div>
+        </ion-col>
+        <ion-col size="1">
+          <div class="ion-text-right">
+            <ion-button
+              fill="clear"
+              class="btn-consigne"
+              (click)="CreatePopover()"
+            >
+              <ion-icon
+                slot="icon-only"
+                name="ellipsis-vertical-outline"
+                color="medium"
+              ></ion-icon>
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.name' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                padding: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.name"
+              type="text"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.phone' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                padding: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.phone"
+              type="text"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.town' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.ville"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.district' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.quartier"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col *ngIf="customer.reduction">
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.pReduction' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.reduction"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <ion-grid>
+    <ion-row class="header-row">
+      <ion-col size="3" size-md="2" size-sm="3">
+        <div class="ion-text-center">{{ 'MENU.name' | translate}}</div>
+      </ion-col>
+      <ion-col size="1" size-md="1" size-sm="1">
+        <div class="ion-text-center">st</div>
+      </ion-col>
+      <ion-col size="2" size-md="2" size-sm="2">
+        <div class="ion-text-center">Qty</div>
+      </ion-col>
+
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">{{ 'MENU.price' | translate}}</div>
+      </ion-col>
+      <ion-col size="3" size-md="2" size-sm="3" class="ion-align-self-center">
+        <div class="ion-text-center">T.{{ 'MENU.price' | translate}}</div>
+      </ion-col>
+      <ion-col
+        size="2"
+        size-md="2"
+        size-sm="0"
+        class="ion-align-self-center ion-hide-sm-down"
+      >
+        <div class="ion-text-center"></div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div *ngIf="!commande && allCart">
+    <ion-grid>
+      <ion-row
+        *ngFor="let row of allCart.products let i= index"
+        class="data-row data-update"
+        [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      >
+        <!-- gere d'abord le glacés-- debut -->
+        <ion-col size="3" size-md="2" size-sm="3" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}}</small>
+          </div>
+        </ion-col>
+        <ion-col size="1" size-md="1" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> gl </small>
+          </div>
+        </ion-col>
+        <ion-col size="2" size-md="2" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-uppercase">
+            {{row.item.modeG}}
+          </div>
+        </ion-col>
+
+        <ion-col size="3" size-md="3" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice |
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col size="3" size-md="2" size-sm="3" *ngIf="row.item.modeG">
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice * row.item.modeG |
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col
+          size="2"
+          size-md="2"
+          *ngIf="row.item.modeG"
+          class="ion-hide-sm-down"
+        >
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="3"
+              ><ion-button
+                size="small"
+                (click)="addOne(row, 'modeG')"
+                fill="clear"
+              >
+                <ion-icon name="add"></ion-icon>
+              </ion-button>
+            </ion-col>
+
+            <ion-col size="3" class="ion-margin-end">
+              <ion-button
+                size="small"
+                fill="clear"
+                (click)="removeOne(row, 'modeG')"
+              >
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <!-- gere d'abord le glacés-- fin -->
+        <!-- gestion nonglacés-- debut-->
+        <ion-col size="3" size-md="2" size-sm="3" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}}</small>
+          </div>
+        </ion-col>
+        <ion-col size="1" size-md="1" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> ng </small>
+          </div>
+        </ion-col>
+        <ion-col size="2" size-md="2" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-uppercase">
+            {{row.item.modeNG}}
+          </div>
+        </ion-col>
+
+        <ion-col size="3" size-md="3" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice |
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col size="3" size-md="2" size-sm="3" *ngIf="row.item.modeNG">
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.item.sellingPrice * row.item.modeNG |
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col
+          size="2"
+          size-md="2"
+          *ngIf="row.item.modeNG"
+          class="ion-hide-sm-down"
+        >
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="3"
+              ><ion-button
+                size="small"
+                (click)="addOne(row, 'modeNG')"
+                fill="clear"
+              >
+                <ion-icon name="add"></ion-icon>
+              </ion-button>
+            </ion-col>
+
+            <ion-col size="3" class="ion-margin-end">
+              <ion-button
+                size="small"
+                fill="clear"
+                (click)="removeOne(row, 'modeNG')"
+              >
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <!-- vente des cassiers-->
+        <ion-col
+          size="3"
+          size-md="2"
+          size-sm="3"
+          *ngIf="row.item.CA || row.item.BTL"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}}</small>
+          </div>
+        </ion-col>
+        <ion-col size="1" size-md="1" *ngIf="row.item.CA || row.item.BTL">
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall" *ngIf="row.item.CA"> cas </small>
+            <small class="namesmall" *ngIf="!row.item.CA"> --- </small>
+          </div>
+        </ion-col>
+        <ion-col size="2" size-md="2" *ngIf="row.item.CA || row.item.BTL">
+          <div class="ion-text-center">
+            <div *ngIf="row.item.CA">{{row.item.CA}}</div>
+            <ion-badge *ngIf="row.item.BTL" color="warning"
+              >+ {{row.item.BTL}} Btl</ion-badge
+            >
+          </div>
+        </ion-col>
+
+        <ion-col size="3" size-md="3" *ngIf="row.item.CA || row.item.BTL">
+          <div class="ion-text-center ion-text-wrap" *ngIf="!checkPack">
+            <small class="pricesmall" *ngIf="row.item.BTL && row.item.CA">
+              {{ row.item.sellingPackPrice + row.item.sellingPrice |
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+            <small class="pricesmall" *ngIf="row.item.BTL && !row.item.CA">
+              {{ row.item.sellingPrice |
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+            <small class="pricesmall" *ngIf="!row.item.BTL && row.item.CA">
+              {{ row.item.sellingPackPrice |
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+          </div>
+          <div class="ion-text-center ion-text-wrap" *ngIf="checkPack">
+            <ion-input
+              class="changepriceinput"
+              *ngIf="row.item.BTL && row.item.CA"
+              slot="end"
+              placeholder=" {{row.item.randomPrice ? row.item.randomPrice:
+              row.item.sellingPackPrice + row.item.sellingPrice |
+               currency:'FCFA':'symbol':'3.0-0':'fr'}}"
+              type="number"
+              readonly
+            ></ion-input>
+
+            <ion-input
+              class="changepriceinput"
+              *ngIf="row.item.BTL && !row.item.CA && setting.change_price"
+              slot="end"
+              placeholder=" {{row.item.randomPrice ? row.item.randomPrice:
+                row.item.sellingPrice |
+             currency:'FCFA':'symbol':'3.0-0':'fr'}}"
+              type="number"
+              debounce="1500"
+              (ionChange)="changeProdPrice($event, row)"
+            ></ion-input>
+
+            <ion-input
+              class="changepriceinput"
+              *ngIf="!row.item.BTL && row.item.CA && setting.change_price"
+              slot="end"
+              placeholder=" {{row.item.randomPrice ? row.item.randomPrice:
+               row.item.sellingPackPrice |
+             currency:'FCFA':'symbol':'3.0-0':'fr'}}"
+              type="number"
+              debounce="1500"
+              (ionChange)="changeProdPrice($event, row)"
+            ></ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col
+          size="3"
+          size-md="2"
+          size-sm="3"
+          *ngIf="row.item.CA || row.item.BTL"
+        >
+          <div class="ion-text-center ion-text-wrap">
+            <small class="pricesmall">
+              {{row.price | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col
+          size="2"
+          size-md="2"
+          *ngIf="row.item.CA || row.item.BTL"
+          class="ion-hide-sm-down"
+        >
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="3"
+              ><ion-button
+                [disabled]="!row.item.CA"
+                size="small"
+                (click)="addOne(row, 'CA')"
+                fill="clear"
+              >
+                <ion-icon name="add"></ion-icon>
+              </ion-button>
+            </ion-col>
+
+            <ion-col size="3" class="ion-margin-end">
+              <ion-button
+                size="small"
+                fill="clear"
+                (click)="removeOne(row, 'CA')"
+                [disabled]="!row.item.CA"
+              >
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+
+        <!-- vente des bouteilles-->
+
+        <!--affichage cassier et bouteille-->
+
+        <!-- affichage produit resto-->
+        <ion-col
+          size="3"
+          size-md="2"
+          size-sm="3"
+          *ngIf="!row.item.modeNG && !row.item.modeG && !row.item.CA && !row.item.BTL"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.name}}</small>
+          </div>
+        </ion-col>
+        <ion-col
+          size="1"
+          size-md="1"
+          *ngIf="!row.item.modeNG && !row.item.modeG && !row.item.CA && !row.item.BTL"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small class="namesmall"> {{row.item.numPlat}} </small>
+          </div>
+        </ion-col>
+        <ion-col
+          size="2"
+          size-md="2"
+          *ngIf="!row.item.modeNG && !row.item.modeG && !row.item.CA && !row.item.BTL"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <small> {{row.qty ? row.qty : row.item.nbr}} </small>
+          </div>
+        </ion-col>
+
+        <ion-col
+          size="3"
+          size-md="3"
+          *ngIf="!row.item.modeNG && !row.item.modeG && !row.item.CA && !row.item.BTL"
+        >
+          <div class="ion-text-center ion-text-uppercase ion-text-nowrap">
+            <!--
+              <small class="pricesmall">
+              {{row.item.sellingPrice ? row.item.sellingPrice:
+              row.item.purchasingPrice |
+              currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+           -->
+            <ion-input
+              *ngIf="setting.change_price"
+              class="changepriceinput"
+              slot="end"
+              placeholder=" {{row.item.randomPrice ? row.item.randomPrice:
+                row.item.sellingPrice |
+                currency:'FCFA':'symbol':'3.0-0':'fr'}}"
+              type="number"
+              debounce="1500"
+              (ionChange)="changeProdPrice($event, row)"
+            ></ion-input>
+          </div>
+        </ion-col>
+        <ion-col
+          size="3"
+          size-md="2"
+          size-sm="3"
+          *ngIf="!row.item.modeNG && !row.item.modeG && !row.item.CA && !row.item.BTL"
+        >
+          <div class="ion-text-center ion-text-nowrap">
+            <small class="pricesmall">
+              {{row.price | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+            >
+          </div>
+        </ion-col>
+        <ion-col
+          class="divIcon ion-hide-sm-down"
+          size="2"
+          size-md="2"
+          *ngIf="!row.item.modeG && !row.item.modeNG && !row.item.CA && !row.item.BTL"
+        >
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="3"
+              ><ion-button size="small" (click)="addOne(row)" fill="clear">
+                <ion-icon name="add"></ion-icon> </ion-button
+            ></ion-col>
+
+            <ion-col size="3" class="ion-margin-end">
+              <ion-button size="small" fill="clear" (click)="removeOne(row)">
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="!commande && totalAmount">
+    <ion-row>
+      <ion-col size="4" class="calcul pad">
+        <div class="ion-text-center inte">
+          TOTAL:
+          <small class="smalle"
+            >{{ totalAmount | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="4" class="calcul">
+        <div class="ion-text-center inte" *ngIf="manageStockWithService">
+          <div class="ion-text-center inte" *ngIf="enterPrice">
+            <ion-input
+              *ngIf="!voucher"
+              (ionChange)="montabtPercu($event)"
+              debounce="500"
+              placeholder="montant perçu"
+              type="number"
+            ></ion-input>
+            <ion-input
+              *ngIf="voucher"
+              placeholder="{{voucher.price}}"
+              type="number"
+            ></ion-input>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="4" class="calcul pad">
+        <div class="ion-text-center inte" *ngIf="manageStockWithService">
+          RESTE:
+          <small class="smalle"
+            >{{ reste | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <ion-grid *ngIf="consigneTab && consigneTab.length > 0">
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center ion-text-uppercase">
+          <h6 style="font-weight: bold">en consigne</h6>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="header-row-consigne">
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">{{ 'MENU.name' | translate}}</div>
+      </ion-col>
+      <ion-col size="2" size-md="2" size-sm="2">
+        <div class="ion-text-center">{{ 'MENU.cassier' | translate}}</div>
+      </ion-col>
+      <ion-col size="2" size-md="2" size-sm="2">
+        <div class="ion-text-center">{{ 'MENU.bottle' | translate}}</div>
+      </ion-col>
+      <ion-col size="5" size-md="5" size-sm="5">
+        <div class="ion-text-center">{{ 'MENU.price' | translate}}</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let row of consigneTab let i= index"
+      class="data-row data-update"
+      [ngStyle]="{'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+      (click)="manageConsigne(row)"
+    >
+      <ion-col size="3" size-md="3" size-sm="3">
+        <div class="ion-text-center">{{row.item.name}}</div>
+      </ion-col>
+      <ion-col size="2" size-md="2" size-sm="2">
+        <div class="ion-text-center">{{row.cassier ? row.cassier : 0 }}</div>
+      </ion-col>
+      <ion-col size="2" size-md="2" size-sm="2">
+        <div class="ion-text-center">
+          {{row.bouteille ? row.bouteille : 0 }}
+        </div>
+      </ion-col>
+      <ion-col size="5" size-md="5" size-sm="5">
+        <div class="ion-text-center" *ngIf="row.price">
+          {{row.price | currency:'FCFA':'symbol':'3.0-0':'fr'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div *ngIf="!commande && totalAmount">
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngIf="!tabRoles.includes(8)">
+          <ion-button
+            expand="block"
+            color="success"
+            (click)="afterBuyItems()"
+            *ngIf="!commande && !tabRoles.includes(8)"
+            >{{ 'MENU.send' | translate}}
+          </ion-button>
+        </ion-col>
+        <ion-col *ngIf="tabRoles.includes(8) && customer">
+          <ion-button expand="block" color="success" (click)="afterBuyItems()"
+            >{{ 'MENU.send' | translate}}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+
+<ion-content *ngIf="commande">
+  <div *ngIf="commande">
+    <ion-row class="header-row">
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center">{{ 'MENU.name' | translate}}</div>
+      </ion-col>
+
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center">{{ 'MENU.price' | translate}}</div>
+      </ion-col>
+
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">Qty</div>
+      </ion-col>
+      <ion-col size="1" class="ion-align-self-center">
+        <div class="ion-text-center">Btl</div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center">T.{{ 'MENU.price' | translate}}</div>
+      </ion-col>
+      <ion-col size="1" class="ion-align-self-center">
+        <div *ngIf="setting.use_Ristourne" class="ion-text-center">rist</div>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let prod of allCart.products; let i= index"
+      class="data-row data-update"
+    >
+      <ion-col size="3" class="ion-align-self-center">
+        <div class="ion-text-center commande">{{ prod.item.name }}</div>
+      </ion-col>
+
+      <ion-col size="3" class="ion-align-self-center">
+        <div
+          class="ion-text-center commande"
+          *ngIf="prod.item.nbrBtl && prod.item.nbrCassier"
+        >
+          {{ (prod.item.packPrice )+ ( prod.item.purchasingPrice ) |
+          currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+        <div
+          class="ion-text-center commande"
+          *ngIf="prod.item.nbrBtl && !prod.item.nbrCassier"
+        >
+          {{ ( prod.item.purchasingPrice ) | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+        <div
+          class="ion-text-center commande"
+          *ngIf="!prod.item.nbrBtl && prod.item.nbrCassier"
+        >
+          {{ (prod.item.packPrice ) | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+
+        <div class="ion-text-center commande" *ngIf="prod.item.resourceType">
+          {{ (prod.item.packPrice ? prod.item.packPrice :
+          prod.item.purchasingPrice)| currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+        <div
+          class="ion-text-center commande"
+          *ngIf="prod.item.productType == 'billard' || prod.item.productType == 'shoplist'"
+        >
+          {{ (prod.item.purchasingPrice ? prod.item.purchasingPrice : 0)|
+          currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="2" class="ion-align-self-center">
+        <div class="ion-text-center commande">
+          {{prod.qty}}
+          <ion-badge
+            *ngIf="prod.item.unitName && prod.item.sizeUnit"
+            color="warning"
+          >
+            * {{prod.item.sizeUnit}}{{prod.item.unitName}}
+          </ion-badge>
+        </div>
+      </ion-col>
+      <ion-col size="1" class="ion-align-self-center">
+        <div class="ion-text-center commande" *ngIf="prod.item.nbrBtl">
+          + {{prod.item.nbrBtl}}
+        </div>
+      </ion-col>
+
+      <ion-col
+        size="2"
+        class="ion-align-self-center"
+        *ngIf="prod.item.resourceType"
+      >
+        <div class="ion-text-center commande" *ngIf="prod.item.resourceType">
+          {{(prod.item.packPrice ?prod.qty * prod.item.packPrice :
+          (prod.item.purchasingPrice * prod.qty )) |
+          currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="2"
+        class="ion-align-self-center"
+        *ngIf="!prod.item.nbrBtl && prod.item.nbrCassier"
+      >
+        <div class="ion-text-center commande" *ngIf="prod.item.packPrice ">
+          {{prod.item.nbrCassier * prod.item.packPrice |
+          currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="2"
+        class="ion-align-self-center"
+        *ngIf="prod.item.nbrBtl && !prod.item.nbrCassier"
+      >
+        <div class="ion-text-center commande">
+          {{prod.item.nbrBtl * prod.item.purchasingPrice |
+          currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="2"
+        class="ion-align-self-center"
+        *ngIf="prod.item.nbrBtl && prod.item.nbrCassier"
+      >
+        <div class="ion-text-center commande">
+          {{prod.item.nbrBtl * prod.item.purchasingPrice + (prod.item.nbrCassier
+          * prod.item.packPrice) | currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col
+        size="2"
+        class="ion-align-self-center"
+        *ngIf="!prod.item.nbrBtl && !prod.item.nbrCassier && !prod.item.resourceType"
+      >
+        <div class="ion-text-center commande">
+          {{prod.qty * prod.item.purchasingPrice |
+          currency:'CFA':'symbol':'3.0-0'}}
+        </div>
+      </ion-col>
+      <ion-col size="1" class="ion-align-self-center">
+        <div class="commande ion-text-center" *ngIf="setting.use_Ristourne">
+          <ion-checkbox
+            *ngIf="!prod.item.noRistourne"
+            checked="true"
+            color="danger"
+            (ionChange)="ristouneChecked(prod)"
+          ></ion-checkbox>
+          <ion-checkbox
+            *ngIf="prod.item.noRistourne"
+            (ionChange)="ristouneChecked(prod)"
+          ></ion-checkbox>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="commandeResume">
+      <ion-col>
+        <div class="ion-text-center inte">
+          TOTAL:
+          <small class="smalle"
+            >{{ commandeResume.totalPrice |
+            currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div *ngIf="isRetailer">
+    <ion-row>
+      <ion-col size="4" class="calcul pad">
+        <div class="ion-text-center inte">
+          TOTAL:
+          <small class="smalle"
+            >{{ totalAmount | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+      <ion-col size="4" class="calcul">
+        <div class="ion-text-center inte">
+          <div class="ion-text-center inte">
+            <ion-input
+              (ionChange)="montabtPercu($event)"
+              debounce="500"
+              placeholder="montant perçu"
+              type="number"
+            ></ion-input>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="4" class="calcul pad">
+        <div class="ion-text-center inte">
+          {{ 'MENU.reste' | translate}}:
+          <small class="smalle"
+            >{{ reste | currency:'FCFA':'symbol':'3.0-0':'fr'}}</small
+          >
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div *ngIf="customer">
+    <div style="text-align: center">
+      <h3 style="font-weight: bold">{{ 'MENU.customer' | translate}}:</h3>
+    </div>
+
+    <ion-grid *ngIf="customer">
+      <ion-row>
+        <ion-col>
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.name' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                padding: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.name"
+              type="text"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.phone' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                padding: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.phone"
+              type="text"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.town' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.ville"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="full">
+            <ion-label position="floating"
+              >{{ 'MENU.district' | translate}}</ion-label
+            >
+            <ion-input
+              style="
+                --padding-start: 0px;
+                --padding-end: 0px;
+                --padding-top: 0px;
+                --padding-bottom: 0px;
+                margin-top: 5px;
+                margin-bottom: 3px;
+              "
+              [(ngModel)]="customer.quartier"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

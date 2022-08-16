@@ -1,0 +1,276 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ 'MENU.stock' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        size="small"
+        (click)="goToRefueling()"
+        *ngIf="setting && setting.multi_store"
+      >
+        {{ 'MENU.refueling' | translate}}
+      </ion-button>
+      <ion-button
+        size="small"
+        (click)="displayResource()"
+        *ngIf="setting && setting.use_resource && storeTypeTab[0] !== 'resto' "
+      >
+        resources
+      </ion-button>
+      <ion-button size="small">
+        {{ userName }}
+        <ion-icon slot="end" name="contact"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <!--<ion-menu-button autoHide="false"></ion-menu-button>  *ngIf="!vendorRole && !warehousman"-->
+      <ion-back-button
+        *ngIf="!vendorRole && !warehousman"
+        defaultHref="/start"
+      ></ion-back-button>
+      <ion-back-button
+        *ngIf="vendorRole && !warehousman"
+        defaultHref="/vendor-start"
+      ></ion-back-button>
+      <ion-back-button
+        *ngIf="warehousman"
+        defaultHref="/warehouse"
+      ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment
+    *ngIf="storeTypeTab && storeTypeTab.length > 1"
+    (ionChange)="segmentChanged($event)"
+    scrollable
+    value="{{ pet }}"
+    [(ngModel)]="pet"
+  >
+    <ion-segment-button
+      class="btnseg"
+      *ngFor="let elt of storeTypeTab; let i = index"
+      value="{{ elt }}"
+    >
+      {{ elt }}
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-slides pager="true" *ngIf="pet === 'bar' && !afficheResource">
+    <ion-slide
+      *ngFor="let productsItem of multiStoreProductitem; let i = index"
+    >
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>store {{productsItem.storeName}}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <div class="nodejs">
+          <ion-list>
+            <ion-item
+              *ngFor="let prod of productsItem; let j = index"
+              lines="full"
+              [ngClass]="{'stock-alert':prod.quantityItems <= prod.quantityToAlert}"
+            >
+              <ion-avatar slot="start">
+                <img src="{{ prod.url }}" />
+              </ion-avatar>
+              <ion-button
+                class="btnWarehouse"
+                fill="outline"
+                size="small"
+                slot="end"
+                (click)="updateStore(prod, i)"
+                *ngIf="setting && !setting.refueling_from_warehouse_production"
+                >{{ 'MENU.update_store' | translate}}</ion-button
+              >
+
+              <ion-button
+                fill="outline"
+                slot="end"
+                (click)="presentActionSheet(prod)"
+                *ngIf="setting && setting.reset_product"
+                >Reset</ion-button
+              >
+
+              <ion-label>
+                <h3>{{prod.name}}</h3>
+                <small class="confirm" *ngIf="prod.quantityToConfirm"
+                  >waiting ...{{prod.quantityToConfirm}}</small
+                >
+                <small class="instock">
+                  {{ 'MENU.in_stock' | translate}}: {{ prod.cassier ?
+                  prod.cassier: 0}} cassier {{ prod.btls ? prod.btls: 0}}
+                  btl</small
+                >
+                <small class="instore">
+                  {{ 'MENU.in_store' | translate}}: {{prod.cassierStore ?
+                  prod.cassierStore: 0}} cassier {{ prod.btlsStore ?
+                  prod.btlsStore: 0}} btl
+                </small>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+
+  <ion-slides pager="true" *ngIf="afficheResource">
+    <ion-slide
+      *ngFor="let productResource of multiStoreResourceitem; let i = index"
+    >
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>store {{productResource.storeName}}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-list lines="full">
+          <ion-item *ngFor="let prod of productResource" lines="full">
+            <ion-button
+              fill="outline"
+              slot="end"
+              (click)="updateStoreResto(prod)"
+              *ngIf="setting && !setting.refueling_from_warehouse_production"
+              >{{ 'MENU.update_store' | translate}}</ion-button
+            >
+
+            <!--
+                <ion-label *ngIf="prod.unitName == 'cl' || prod.unitName == 'g'">
+                <p class="instock">
+                  {{ 'MENU.in_stock' | translate}}: {{ prod.quantityItems }}
+                  <ion-badge *ngIf="prod.unitName" color="warning">
+                    {{prod.unitNameProvisoire}}
+                  </ion-badge>
+                </p>
+                <p class="instore">
+                  {{ 'MENU.in_store' | translate}}: {{ prod.quantityStore }}
+                </p>
+              </ion-label>
+             -->
+            <ion-label>
+              <p class="instock">
+                {{ 'MENU.in_stock' | translate}}: {{ prod.quantityItems}}
+              </p>
+              <p class="instore">
+                {{ 'MENU.in_store' | translate}}: {{ prod.quantityStore }}
+              </p>
+            </ion-label>
+            <ion-label>
+              <small>{{ prod.name }}</small>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+
+  <ion-slides pager="true" *ngIf="pet === 'shop' && !afficheResource">
+    <ion-slide *ngFor="let productResource of multiStoreList; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>store {{productResource.storeName}}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-list lines="full">
+          <ion-item
+            *ngFor="let prod of productResource; let j= index"
+            lines="full"
+            [ngClass]="{'stock-alert':prod.quantityStore <= prod.quantityToAlert}"
+          >
+            <ion-button
+              fill="outline"
+              slot="end"
+              (click)="updateShopList(prod, i, j)"
+              *ngIf="setting && !setting.refueling_from_warehouse_production"
+              >{{ 'MENU.update_store' | translate}}</ion-button
+            >
+
+            <ion-label>
+              <p class="instock">
+                {{ 'MENU.in_stock' | translate}}: {{ prod.quantityItems}}
+              </p>
+              <p class="instore">
+                {{ 'MENU.in_store' | translate}}: {{ prod.quantityStore }}
+              </p>
+              <p class="instock" *ngIf="saveRandom.getSetting().sale_Gaz">
+                pleine: {{prod.bottle_full ? prod.bottle_full : 0}}
+              </p>
+              <p class="instock" *ngIf="saveRandom.getSetting().sale_Gaz">
+                vide: {{prod.bottle_empty ? prod.bottle_empty : 0}}
+              </p>
+            </ion-label>
+            <ion-label>
+              <small>{{ prod.name }}</small> <br />
+              <small class="confirm" *ngIf="prod.quantityToConfirm"
+                >waiting ...{{prod.quantityToConfirm}}</small
+              >
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+
+  <ion-slides pager="true" *ngIf="pet === 'services' && !afficheResource">
+    <ion-slide *ngFor="let productResource of multiStoreService; let i = index">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center ion-text-uppercase">
+              <h4>store {{productResource.storeName}}</h4>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-list>
+          <ion-item
+            *ngFor="let prod of productResource ; let j = index"
+            lines="full"
+            [ngClass]="{'stock-alert':prod.quantityStore <= prod.quantityToAlert}"
+          >
+            <ion-avatar slot="start">
+              <img src="{{ prod.url }}" />
+            </ion-avatar>
+            <ion-button
+              fill="outline"
+              slot="end"
+              (click)="presentActionSheet3(prod)"
+              *ngIf="setting && setting.reset_product"
+              >Reset</ion-button
+            >
+
+            <ion-button
+              class="btnWarehouse"
+              fill="outline"
+              size="small"
+              slot="end"
+              (click)="updateServicesList(prod, i, j)"
+              *ngIf="setting && !setting.refueling_from_warehouse_production"
+              >{{ 'MENU.update_store' | translate}}</ion-button
+            >
+            <ion-label>
+              <h3>{{prod.name}}</h3>
+
+              <small class="instock">
+                {{ 'MENU.in_stock' | translate}}: {{ prod.quantityItems}}</small
+              >
+              <small class="instore">
+                {{ 'MENU.in_store' | translate}}: {{ prod.quantityStore }}
+              </small>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

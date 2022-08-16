@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/admin-page"></ion-back-button>
+    </ion-buttons>
+    <ion-title>products</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button (click)="addCategorie()">add categorie</ion-button>
+  <ion-button (click)="addProduct()">add product</ion-button>
+  <ion-button (click)="addMadeBy()">add made by</ion-button>
+
+  <ion-list *ngIf="products">
+    <div *ngFor="let prod of products; let i = index">
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-img
+            (ionError)="noImageLoad(prod)"
+            (click)="loading(prod)"
+            [src]="prod.url"
+          ></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <p class="packName">{{ prod.name }}</p>
+        </ion-label>
+        <ion-button class="divBtnUpdate" (click)="updateProduct(prod, i)"
+          >Update</ion-button
+        >
+        <ion-button
+          class="divBtnDelete"
+          (click)="deleteProduct(prod)"
+          color="danger"
+        >
+          <ion-icon slot="icon-only" name="trash"></ion-icon
+        ></ion-button>
+      </ion-item>
+    </div>
+  </ion-list>
+</ion-content>

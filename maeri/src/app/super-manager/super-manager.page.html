@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start" class="btnmenu">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="storeList.length > 1">
+    <ion-row class="header-main">
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.store' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.status' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.waiting' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.wharehouse' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">{{ 'MENU.onsale' | translate}}</div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">TOTAL</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="3"></ion-col>
+    </ion-row>
+    <ion-row
+      *ngFor="let stores of arr; let i = index"
+      class="data-row data-update table-row"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? 'white' : 'white' }"
+    >
+      <ion-col size="2">
+        <div
+          class="ion-text-center"
+          style="color: var(--ion-color-primary); font-weight: bold"
+        >
+          <button (click)="goToWarehouse()" class="link">
+            {{stores.store.name}}
+          </button>
+        </div>
+      </ion-col>
+
+      <ion-col size="2">
+        <div
+          *ngIf="stores.openCash.open"
+          class="ion-text-center"
+          style="color: var(--ion-color-success)"
+        >
+          {{ 'MENU.isopen' | translate}}
+        </div>
+        <div
+          *ngIf="!stores.openCash.open"
+          class="ion-text-center"
+          style="color: var(--ion-color-danger)"
+        >
+          {{ 'MENU.isclose' | translate}}
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">
+          <button (click)="goToRefueling()" class="link">
+            {{stores.newquantity ? stores.newquantity : '0'}}
+          </button>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">
+          {{stores.quantityItems ? stores.quantityItems : '0' }}
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">
+          {{stores.quantityStore ? stores.quantityStore : '0'}}
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div class="ion-text-center">
+          {{(stores.quantityStore + stores.quantityItems)? (stores.quantityStore
+          + stores.quantityItems): '0'}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,31 @@
+<div class="row">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">welcome to maeri </a>
+
+    <button type="button" class="btn btn-primary" id="myBtn">
+      cart <span class="badge bg-secondary" id="panier">0</span>
+    </button>
+    <h5>
+      Montant: <span class="badge bg-secondary" id="montant">0 </span> CFA
+    </h5>
+  </nav>
+</div>
+
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="shopcontent" class="shop"></div>
+    <button type="button" class="btn btn-primary" onclick="sendInvoices()">
+      BUY
+    </button>
+  </div>
+</div>
+
+<div id="alertModal" class="alertmyModal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close2">&times;</span>
+    <h2>commande reçu!!!</h2>
+  </div>
+</div>
