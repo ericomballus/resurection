@@ -3,6 +3,7 @@ const packItem = require("../api/models/ProductPackItem");
 const Manufactureitem = require("../api/models/Product-manufactured-item");
 const billardSchema = require("../api/models/Billard");
 const productListSchema = require("../api/models/Product-List");
+const mongoose = require("mongoose");
 
 const Maeri = require("../api/models/Maeri_Product");
 const tenant = require("../getTenant");
@@ -74,11 +75,7 @@ countPackItemSc = async (req, elt) => {
 };
 
 countProductItemesSc = async (req, elt) => {
-  let a = await req.tenancy.getModelByTenant(
-    req.dbUse,
-    "productitems",
-    productItemsSchema
-  );
+  let a = mongoose.model("productitems", productItemsSchema);
   const tenant = a;
 
   tenant
@@ -312,7 +309,8 @@ countManufacturedItemsSc = (req, elt) => {};
 countBillardItemsFromSc = async (req, elt, res) => {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = await req.tenancy.getModelByTenant(db, "billard", billardSchema);
+    let a = mongoose.model("billard", billardSchema);
+    //await req.tenancy.getModelByTenant(db, "billard", billardSchema);
     const tenant = a;
     tenant
       .findById({ _id: elt["avaible"]["_id"] })
@@ -384,7 +382,8 @@ countBillardItemsGamme = async (req, elt, qty) => {
   console.log("quantity  ===>", qty);
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = await req.tenancy.getModelByTenant(db, "billard", billardSchema);
+    let a = mongoose.model("billard", billardSchema);
+    // await req.tenancy.getModelByTenant(db, "billard", billardSchema);
     const tenant = a;
     tenant
       .findById({ _id: elt["_id"] })
@@ -440,11 +439,12 @@ countBillardItemsGamme = async (req, elt, qty) => {
 
 countProductListItems = async (req, elt) => {
   db = req.dbUse;
-  let a = await req.tenancy.getModelByTenant(
+  let a = mongoose.model("productlist", productListSchema);
+  /* await req.tenancy.getModelByTenant(
     db,
     "productlist",
     productListSchema
-  );
+  );*/
   const tenant = a;
   tenant
     .findById({ _id: elt["item"]["_id"] })

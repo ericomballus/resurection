@@ -13,17 +13,9 @@ const productItemsSchema = require("../models/ProductItem");
 const createProductAndPack = require("../../utils/createProductItem");
 const updateProductAndPack = require("../../utils/updateProduct");
 const router = express.Router();
-const resizer = require("node-image-resizer");
+//const resizer = require("node-image-resizer");
 let io = require("socket.io");
 let UPLOAD_PATH = "uploads";
-
-if (process.platform === "win32") {
-  UPLOAD_PATH = "uploads";
-} else if (process.platform === "linux") {
-  //found = "/home/ubuntu/elpis/server/uploads/" + images.filename;
-  //  UPLOAD_PATH = "/home/ubuntu/elpis/server/uploads/";
-  UPLOAD_PATH = require("../../config").IMAGE_URL_PATH;
-}
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -309,16 +301,8 @@ router.get("/:id", (req, res, next) => {
   let imgId = req.params.id;
 
   req.tenant.findById(imgId, (err, images) => {
-    //console.log(images);
     if (!err && images) {
-      //fs.access(path.join(UPLOAD_PATH, images.filename), fs.F_OK, (err) => {
-      let found = "";
-      if (process.platform === "win32") {
-        found = path.join(UPLOAD_PATH, images.filename);
-      } else if (process.platform === "linux") {
-        // found = "/home/ubuntu/elpis/server/uploads/" + images.filename;
-        found = require("../../config").IMAGE_URL_PATH + images.filename;
-      }
+      let found = path.join(UPLOAD_PATH, images.filename);
       fs.access(found, fs.F_OK, (error) => {
         if (error) {
           console.log(error);
@@ -330,29 +314,9 @@ router.get("/:id", (req, res, next) => {
         }
 
         res.setHeader("Content-Type", "image/jpeg");
-        /* fs.createReadStream(path.join(UPLOAD_PATH, images.filename)).pipe(
-            res
-          );*/
+
         fs.createReadStream(found).pipe(res);
       });
-      /* fs.access(
-        "/home/ubuntu/elpis/server/uploads/" + images.filename,
-        fs.F_OK,
-        (err) => {
-          if (err) {
-            console.error(err);
-            res.status(400).json({
-              error: "image inexistante",
-            });
-            return;
-          }
-
-         
-          fs.createReadStream(
-            "/home/ubuntu/elpis/server/uploads/" + images.filename
-          ).pipe(res);
-        }
-      );*/
     } else {
       console.log(err);
 
@@ -364,9 +328,6 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.get("/adminId/get/one/:id", (req, res, next) => {
-  //Product.find({ adminId: req.params.numid }, "-__v")
-  // req.test3.subleaseMiddleware();
-
   req.tenant
     .find({ _id: req.params.id, desabled: false }, "-__v")
     .lean()
@@ -552,11 +513,11 @@ router.patch("/", (req, res, next) => {
 });
 
 router.patch("/image/db", upload1.single("image"), async (req, res, next) => {
-  await resizer(
+  /* await resizer(
     // path.join(UPLOAD_PATH, req.file.filename),
     "/home/ubuntu/elpis/server/uploads/" + req.file.filename,
     require("../../utils/imageSetUp")
-  );
+  );*/
   const id = req.body._id;
   (req.body["filename"] = req.file.filename),
     (req.body["originalName"] = req.file.originalname);

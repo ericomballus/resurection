@@ -1,26 +1,29 @@
 const productItemsSchema = require("../api/models/ProductItem");
 const packItem = require("../api/models/ProductPackItem");
 const Manufactureitem = require("../api/models/Product-manufactured-item");
+const mongoose = require("mongoose");
 cancelerManager2 = (req, docs) => {
   return new Promise((resolve, reject) => {
     let products = docs;
     products.forEach(async (elt) => {
       if (elt.item.productType == "manufacturedItems") {
         db = req.dbUse;
-        let a = await req.tenancy.getModelByTenant(
+        let a = mongoose.model("manufactureditemSchema", Manufactureitem);
+        /*  await req.tenancy.getModelByTenant(
           db,
           "manufactureditemSchema",
           Manufactureitem
-        );
+        );*/
         const tenant = a;
       }
 
       if (elt.item.productType == "productItems") {
-        let a = await req.tenancy.getModelByTenant(
+        let a = mongoose.model("productitems", productItemsSchema);
+        /* await req.tenancy.getModelByTenant(
           req.dbUse,
           "productitems",
           productItemsSchema
-        );
+        );*/
         const tenant = a;
         if (elt.item._id) {
           tenant

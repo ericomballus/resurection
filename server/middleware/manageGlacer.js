@@ -14,12 +14,7 @@ function glacerManager(req, res) {
       let quantityInStore = parseInt(doc.quantityStore);
       let nonglace = quantityInStore - parseInt(req.body.quantity);
       if (doc.glace) {
-        console.log("ajout:======", parseInt(req.body.quantity));
-
-        console.log("avant:====>", doc.glace);
-
         prod_glace = parseInt(req.body.quantity) + doc.glace;
-        console.log("resultat:====>", prod_glace);
       } else {
         prod_glace = parseInt(req.body.quantity);
       }

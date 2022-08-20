@@ -64,6 +64,7 @@ const companySchema = new mongoose.Schema({
   reset_product: { type: Boolean, default: false },
   ResellerPercentPrice: { type: Boolean, default: false },
   customerPercentPrice: { type: Boolean, default: false },
-  is_Hopital: { type: Boolean, default: false },
+  is_Hospital: { type: Boolean, default: false },
+  use_fifo: { type: Boolean, default: false }
 });
 module.exports = companySchema;

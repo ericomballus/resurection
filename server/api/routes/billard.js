@@ -14,12 +14,7 @@ const router = express.Router();
 let io = require("socket.io");
 
 let UPLOAD_PATH = "uploads";
-if (process.platform === "win32") {
-  UPLOAD_PATH = "uploads";
-} else if (process.platform === "linux") {
-  //found = "/home/ubuntu/elpis/server/uploads/" + images.filename;
-  UPLOAD_PATH = require("../../config").IMAGE_URL_PATH;
-}
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, UPLOAD_PATH);
@@ -150,11 +145,7 @@ router.get(
         // fs.access(path.join(UPLOAD_PATH, images.filename), fs.F_OK, (error) => {
         let found = "";
         found = path.join(UPLOAD_PATH, images.filename);
-        if (process.platform === "win32") {
-          found = path.join(UPLOAD_PATH, images.filename);
-        } else if (process.platform === "linux") {
-          found = require("../../config").IMAGE_URL_PATH + images.filename;
-        }
+
         fs.access(found, fs.F_OK, (error) => {
           if (error) {
             console.log(error);
@@ -164,11 +155,7 @@ router.get(
             });
             return;
           }
-
           res.setHeader("Content-Type", "image/jpeg");
-          /* fs.createReadStream(path.join(UPLOAD_PATH, images.filename)).pipe(
-            res
-          );*/
           fs.createReadStream(found).pipe(res);
         });
       } else {

@@ -1,11 +1,10 @@
 const ResourceItemSchema = require("../api/models/Resource_item");
 const productItemsSchema = require("../api/models/ProductItem");
+const mongoose = require("mongoose");
+
 function updateStock(id, nbr, req, ResourceItem) {
-  let a = req.tenancy.getModelByTenant(
-    req.dbUse,
-    "Resourceitem",
-    ResourceItemSchema
-  );
+  let a = mongoose.model("Resourceitem", ResourceItemSchema);
+
   const tenant2 = a;
   tenant2.findOneAndUpdate(
     { _id: id },
@@ -26,11 +25,12 @@ function updateStock(id, nbr, req, ResourceItem) {
 }
 
 function updateItemStock(id, nbr, req) {
-  let a = req.tenancy.getModelByTenant(
+  let a = mongoose.model("productitems", productItemsSchema);
+  /* req.tenancy.getModelByTenant(
     req.dbUse,
     "productitems",
     productItemsSchema
-  );
+  );*/
   const tenant2 = a;
   tenant2.findOneAndUpdate(
     { _id: id },
@@ -66,11 +66,12 @@ function resourceManager(req, tab, ResourceItem) {
 }
 
 function manageStcok(req, resource, qty, ResourceItem) {
-  let a = req.tenancy.getModelByTenant(
+  let a = mongoose.model("Resourceitem", ResourceItemSchema);
+  /* req.tenancy.getModelByTenant(
     req.dbUse,
     "Resourceitem",
     ResourceItemSchema
-  );
+  );*/
   const tenant2 = a;
   tenant2
     // .find({}, "-__v")
@@ -136,11 +137,12 @@ function manageStcok(req, resource, qty, ResourceItem) {
 }
 
 function manageProductItemStcok(req, resource, qty) {
-  let a = req.tenancy.getModelByTenant(
+  let a = mongoose.model("productitems", productItemsSchema);
+  /*req.tenancy.getModelByTenant(
     req.dbUse,
     "productitems",
     productItemsSchema
-  );
+  );*/
   const tenant2 = a;
   tenant2
     // .find({}, "-__v")

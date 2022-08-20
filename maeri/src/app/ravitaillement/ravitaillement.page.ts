@@ -28,6 +28,8 @@ import { FichepointageService } from '../services/fichepointage.service';
 import { FichePointage } from '../models/fichepointage.model';
 import { Product } from '../models/product.model';
 import { ElectronService } from '../services/electron.service';
+import { FifoService } from '../services/fifo.service';
+import { SelectStockPage } from '../modals/select-stock/select-stock.page';
 
 @Component({
   selector: 'app-ravitaillement',
@@ -114,7 +116,8 @@ export class RavitaillementPage implements OnInit {
     private notifi: NotificationService,
     private ficheService: FichepointageService,
     private electronService: ElectronService,
-    private plt: Platform
+    private plt: Platform,
+    private fifoService: FifoService
   ) {
     if (
       JSON.parse(localStorage.getItem('user'))[0] &&
@@ -444,6 +447,15 @@ export class RavitaillementPage implements OnInit {
       let childArr: any[] = this.multiStoreList[this.supIndex];
       childArr.splice(this.minIndex, 1, data);
       // this.takeProductServiceList();
+    });
+
+    this.sockets.on(`${id}FifoProductlist`, async (data) => {
+      this.multiStoreList.forEach((arr: any[]) => {
+        let index = arr.findIndex((p) => p._id == data._id);
+        if (index >= 0) {
+          arr.splice(index, 1, data);
+        }
+      });
     });
 
     this.sockets.on(`${id}${storeId}billardItem`, async (data: Product) => {
@@ -1234,5 +1246,34 @@ export class RavitaillementPage implements OnInit {
   }
   sendNotification(msg) {
     this.electronService.showNotification(msg);
+  }
+  async refueling(prod, i, j) {
+    this.notifi.presentLoading();
+    this.fifoService.getProductAvaibleStock(prod._id).subscribe(
+      (docs: any[]) => {
+        console.log(docs);
+        this.notifi.dismissLoading();
+        if (docs.length) {
+          this.saveRandom.setAvaibleStock(docs);
+          this.openStockManager();
+        }
+      },
+      (err) => {
+        this.notifi.dismissLoading();
+        this.notifi.presentError('some error found', 'danger');
+      }
+    );
+  }
+
+  async openStockManager() {
+    const modal = await this.modalController.create({
+      component: SelectStockPage,
+      componentProps: {},
+      backdropDismiss: false,
+    });
+    modal.onDidDismiss().then((data) => {
+      console.log(data);
+    });
+    return await modal.present();
   }
 }

@@ -3,9 +3,19 @@ ion-segment-button {
   --background-checked: var(--ion-color-danger);
   --color: var(--ion-color-light);
   --color-checked: var(--ion-color-dark);
+  font-size: 10px;
+  //
 }
 .myIcon {
   ion-icon {
     font-size: 64px;
   }
+}
+
+ion-segment {
+  padding: 2px;
+}
+
+.myCustomBtns {
+  font-size: 12px;
 }

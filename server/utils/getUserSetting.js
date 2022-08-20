@@ -8,8 +8,8 @@ const userSetting = async (id, req) => {
     if (req.dbUse) {
       db = req.dbUse;
     }
-
-    let Company = await tenant.getModelByTenant(db, "company", companySchema);
+    let Company = mongoose.model("company", companySchema);
+    // let Company = await tenant.getModelByTenant(db, "company", companySchema);
     try {
       let user = await User.find({ _id: id });
       // let storeType = user[0].storeType;

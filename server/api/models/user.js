@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema({
   montant: { type: Number, default: 5000 },
   storeId: Array,
   venderRole: { type: Boolean, default: false },
-  storeType: Array,
+  storeType: { type: Array, default: [] },
   userConnection: {
     lastConnection: { type: Date },
     // allConnection: [],

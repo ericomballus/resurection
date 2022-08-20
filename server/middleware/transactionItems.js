@@ -1,5 +1,7 @@
 const transactionSchema = require("../api/models/Transaction");
 //const tenant = require("../getTenant");
+const mongoose = require("mongoose");
+
 warehouseTransaction = async (req, obj, data) => {
   console.log("incomming data is  here ===>", obj);
   delete obj["_id"];
@@ -8,11 +10,8 @@ warehouseTransaction = async (req, obj, data) => {
     obj["storeId"] = obj.prod["storeId"];
   }
 
-  let a = await req.tenancy.getModelByTenant(
-    req.dbUse,
-    "transaction",
-    transactionSchema
-  );
+  let a = mongoose.model("transaction", transactionSchema);
+
   const tenant = a;
   tenant
     .create(obj)

@@ -3,11 +3,12 @@ const User = require("../api/models/user");
 const companySchema = require("../api/models/Company_Setting");
 const checkIfRefuelingFromWarehouse = async (id, req) => {
   return new Promise(async (resolve, reject) => {
-    let Company = await req.tenancy.getModelByTenant(
+    let Company = mongoose.model("company", companySchema);
+    /* await req.tenancy.getModelByTenant(
       req.dbUse,
       "company",
       companySchema
-    );
+    );*/
     try {
       let user = await User.find({ _id: id });
       let storeType = user[0].storeType;

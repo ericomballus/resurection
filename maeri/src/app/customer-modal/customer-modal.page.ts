@@ -409,6 +409,10 @@ export class CustomerModalPage implements OnInit {
     this.custumer.displayType = ev.detail.value;
   }
 
+  enableFifo() {
+    this.custumerSetting['use_fifo'] = !this.custumerSetting['use_fifo'];
+  }
+
   async presentActionSheet(store) {
     const actionSheet = await this.actionSheetController.create({
       header: 'Albums',

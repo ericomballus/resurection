@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const EmployeSchema = require("../api/models/Employe");
-const tenant = require("../getTenant");
+
 //const companySchema = require("../api/models/Company_Setting");
 const employeAccount = async (req) => {
   return new Promise(async (resolve, reject) => {

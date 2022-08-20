@@ -1,18 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" fill="outline" color="light">
-        <ion-icon color="light" slot="icon-only" name="close"></ion-icon>
-      </ion-button>
-      <ion-button
-        (click)="addOrdonnance()"
-        fill="outline"
-        color="light"
-        *ngIf="pet == 'ordonnance'"
-      >
-        ordonnance
-        <ion-icon color="light" slot="icon-only" name="add"></ion-icon>
-      </ion-button>
+      <button *ngIf="pet == 'ordonnance'" (click)="addOrdonnance()">
+        ajouter ordonnance
+      </button>
+      <button (click)="closeModal()">
+        <ion-icon color="dark" slot="icon-only" name="close"></ion-icon>
+      </button>
     </ion-buttons>
 
     <ion-segment
@@ -73,9 +67,14 @@
       <ion-col size-sm="3" size-md="3" size-lg="3">
         <div class="ion-text-center">température</div>
       </ion-col>
-      <ion-col size-sm="3" size-md="3" size-lg="3">
-        <div class="ion-text-center" (click)="addParameter()">
-          tension <ion-icon color="light" slot="end" name="add"></ion-icon>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center">tension</div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center">
+          <button (click)="addParameter()">
+            <ion-icon color="dark" slot="end" name="add"></ion-icon>
+          </button>
         </div>
       </ion-col>
     </ion-row>
@@ -189,23 +188,23 @@
   </ion-grid>
   <ion-grid *ngIf="pet == 'facture'">
     <ion-row class="header-component2">
-      <ion-col size-sm="3">
+      <ion-col size="3">
         <div class="ion-text-center">
           <small>Le: </small>
         </div>
       </ion-col>
 
-      <ion-col size-sm="3">
+      <ion-col size="3">
         <div class="ion-text-center">
           <small>montant</small>
         </div>
       </ion-col>
-      <ion-col size-sm="3">
+      <ion-col size="3">
         <div class="ion-text-center">
           <small></small>
         </div>
       </ion-col>
-      <ion-col size-sm="3"> </ion-col>
+      <ion-col size="3"> </ion-col>
     </ion-row>
     <ion-row
       class="data-row data-update"
@@ -326,32 +325,29 @@
 
   <ion-grid *ngIf="pet == 'hospitalisation'">
     <ion-row class="header-component2">
-      <ion-col size-sm="2">
+      <ion-col size-sm="2" size-md="2" size-lg="2">
         <div class="ion-text-center ion-text-uppercase">debut</div>
       </ion-col>
-      <ion-col size-sm="2">
+      <ion-col size-sm="2" size-md="2" size-lg="2">
         <div class="ion-text-center ion-text-uppercase">fin</div>
       </ion-col>
-      <ion-col size-sm="2">
+      <ion-col size-sm="2" size-md="2" size-lg="2">
         <div class="ion-text-center ion-text-uppercase">Autorisé Par</div>
       </ion-col>
-      <ion-col size-sm="2">
+      <ion-col size-sm="2" size-md="2" size-lg="2">
         <div class="ion-text-center ion-text-uppercase">enregistré par:</div>
       </ion-col>
 
-      <ion-col size-sm="2">
+      <ion-col size-sm="2" size-md="2" size-lg="2">
         <div class="ion-text-center ion-text-uppercase">status</div>
       </ion-col>
 
-      <ion-col size-sm="2">
-        <div class="ion-text-center ion-text-uppercase">
-          <ion-button
-            (click)="addHosPitalisation()"
-            fill="outline"
-            color="light"
-          >
-            ajouter
-          </ion-button>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div
+          class="ion-text-center ion-text-uppercase"
+          (click)="addHosPitalisation()"
+        >
+          <button class="myCustomBtns">ajouter</button>
         </div>
       </ion-col>
     </ion-row>
@@ -396,13 +392,13 @@
 
       <ion-col size="2">
         <div class="ion-text-center ion-text-uppercase" *ngIf="hospi.actif">
-          <ion-button
+          <button
             (click)="stopHosP(hospi, i)"
-            fill="outline"
-            color="danger"
+            class="myCustomBtns"
+            style="background-color: rgb(248, 62, 62)"
           >
             arreter ?
-          </ion-button>
+          </button>
         </div></ion-col
       >
     </ion-row>

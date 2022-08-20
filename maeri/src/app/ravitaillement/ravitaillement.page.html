@@ -194,6 +194,13 @@
               *ngIf="setting && !setting.refueling_from_warehouse_production"
               >{{ 'MENU.update_store' | translate}}</ion-button
             >
+            <ion-button
+              fill="outline"
+              slot="end"
+              (click)="refueling(prod, i, j)"
+              *ngIf="setting && !setting.refueling_from_warehouse_production && setting.use_fifo"
+              >gerer le stcok</ion-button
+            >
 
             <ion-label>
               <p class="instock">

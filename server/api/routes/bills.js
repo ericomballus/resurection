@@ -50,7 +50,21 @@ router.get("/for_inventory", (req, res, next) => {
 });
 
 router.get("/admin/:adminId", async (req, res, next) => {
-  if (req.query.cancel == true || req.query.cancel == "true") {
+  if (req.query.isPatient) {
+    try {
+      let list = await req.tenant
+        .find({
+          customerId: req.query.customerId,
+        })
+        .sort({ _id: 1 })
+        .exec();
+      res.json(list);
+    } catch (err) {
+      res.status(500).json({
+        error: err,
+      });
+    }
+  } else if (req.query.cancel == true || req.query.cancel == "true") {
     console.log("=====get all invoice=====");
     let today = new Date();
     let d = new Date().toISOString().substring(0, 10);
@@ -419,6 +433,9 @@ router.post("/createBill", (req, res, next) => {
             })
           );
         } else {
+          if (!req.body.commande.customer) {
+            req.body.commande.customer = { _id: "" };
+          }
           req.tenant
             .create({
               adminId: req.body.adminId,
@@ -432,7 +449,7 @@ router.post("/createBill", (req, res, next) => {
               localId: req.body.localId,
               reimbursed: req.body.reimbursed,
               rembourse: req.body.rembourse,
-              customerId: req.body.customerId,
+              customerId: req.body.commande.customer._id,
               customer: req.body.commande.customer,
               trancheList: req.body.trancheList,
               storeId: req.body.storeId,
@@ -930,7 +947,6 @@ saveProd = (arr, Inventory, index) => {
 };
 
 function onlyBydateSelect(req, res) {
-  console.log("hello hello");
   req.tenant
     .find({
       $or: [{ adminId: req.query.db }, { adminId: new ObjectId(req.query.db) }],

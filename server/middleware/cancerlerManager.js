@@ -2,6 +2,7 @@ const productItemsSchema = require("../api/models/ProductItem");
 const productListSchema = require("../api/models/Product-List");
 const Manufactureitem = require("../api/models/Product-manufactured-item");
 const billardSchema = require("../api/models/Billard");
+const mongoose = require("mongoose");
 
 cancelerManager = (tenant, req, res, invoice) => {
   let products = [];
@@ -16,11 +17,12 @@ cancelerManager = (tenant, req, res, invoice) => {
   console.log(invoice);
   if (invoice.ristourneProd && invoice.ristourneProd.length) {
     let tab = invoice.ristourneProd;
-    let a = req.tenancy.getModelByTenant(
+    let a = mongoose.model("productitems", productItemsSchema);
+    /* req.tenancy.getModelByTenant(
       req.dbUse,
       "productitems",
       productItemsSchema
-    );
+    );*/
     const tenant = a;
     tab.forEach((elt) => {
       tenant
@@ -53,11 +55,12 @@ cancelerManager = (tenant, req, res, invoice) => {
   products.forEach(async (elt) => {
     if (elt.item.productType == "manufacturedItems") {
       db = req.dbUse;
-      let a = await req.tenancy.getModelByTenant(
+      let a = mongoose.model("manufactureditemSchema", Manufactureitem);
+      /* await req.tenancy.getModelByTenant(
         db,
         "manufactureditemSchema",
         Manufactureitem
-      );
+      );*/
       const tenant = a;
       if (elt.item._id) {
         tenant
@@ -97,11 +100,12 @@ cancelerManager = (tenant, req, res, invoice) => {
 
     if (elt.item.productType == "shoplist") {
       db = req.dbUse;
-      let a = await req.tenancy.getModelByTenant(
+      let a = mongoose.model("productlist", productListSchema);
+      /*await req.tenancy.getModelByTenant(
         db,
         "productlist",
         productListSchema
-      );
+      );*/
       const tenant = a;
       if (elt.item._id) {
         let doc = await tenant.findById({ _id: elt.item._id }).exec();
@@ -134,7 +138,8 @@ cancelerManager = (tenant, req, res, invoice) => {
 
     if (elt.item.productType == "billard") {
       db = req.dbUse;
-      let a = await req.tenancy.getModelByTenant(db, "billard", billardSchema);
+      let a = mongoose.model("billard", billardSchema);
+      //await req.tenancy.getModelByTenant(db, "billard", billardSchema);
       const tenant = a;
       let query = {};
       if (elt.item._id) {
@@ -185,11 +190,12 @@ cancelerManager = (tenant, req, res, invoice) => {
     }
 
     if (elt.item.productType == "productItems") {
-      let a = await req.tenancy.getModelByTenant(
+      let a = mongoose.model("productitems", productItemsSchema);
+      /* await req.tenancy.getModelByTenant(
         req.dbUse,
         "productitems",
         productItemsSchema
-      );
+      );*/
       const tenant = a;
 
       // tenant;
@@ -284,7 +290,8 @@ cancelerManager = (tenant, req, res, invoice) => {
 };
 returnBillardItemsGamme = async (req, elt, nbr, invoice) => {
   db = req.dbUse;
-  let a = await req.tenancy.getModelByTenant(db, "billard", billardSchema);
+  let a = mongoose.model("billard", billardSchema);
+  //await req.tenancy.getModelByTenant(db, "billard", billardSchema);
   const tenant = a;
   let query = {};
   if (elt._id) {

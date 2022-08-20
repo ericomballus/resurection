@@ -3,11 +3,8 @@ const User = require("../api/models/user");
 const companySchema = require("../api/models/Company_Setting");
 const checkIfCount = async (id, req) => {
   return new Promise(async (resolve, reject) => {
-    let Company = await req.tenancy.getModelByTenant(
-      req.dbUse,
-      "company",
-      companySchema
-    );
+    let Company = mongoose.model("company", companySchema);
+
     try {
       let user = await User.find({ _id: id });
       let storeType = user[0].storeType;

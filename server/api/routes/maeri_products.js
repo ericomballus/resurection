@@ -1,4 +1,3 @@
-require("dotenv").config({ path: "/root/home/ubuntu/elpis/server/.env" });
 const express = require("express");
 const multer = require("multer");
 const mongoose = require("mongoose");
@@ -13,12 +12,13 @@ let io = require("socket.io");
 //console.log(Product.model("Product"));
 
 let UPLOAD_PATH = "uploads";
+/*
 if (process.platform === "win32") {
   UPLOAD_PATH = "uploads";
 } else if (process.platform === "linux") {
-  UPLOAD_PATH = require("../../config").IMAGE_URL_PATH;
+  UPLOAD_PATH = "/root/home/ubuntu/elpis/server/uploads/";
 }
-
+*/
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, UPLOAD_PATH);
@@ -133,14 +133,8 @@ router.get("/:id", (req, res, next) => {
     console.log(images);
     if (!err && images) {
       // fs.access(path.join(UPLOAD_PATH, images.filename), fs.F_OK, (err) => {
-      let found = "";
+      let found = path.join(UPLOAD_PATH, images.filename);
 
-      if (process.platform === "win32") {
-        found = path.join(UPLOAD_PATH, images.filename);
-      } else if (process.platform === "linux") {
-        found = require("../../config").IMAGE_URL_PATH + images.filename;
-        // found = path.join(UPLOAD_PATHs, images.filename);
-      }
       fs.access(found, fs.F_OK, (err) => {
         if (err) {
           console.error(err);
@@ -151,10 +145,6 @@ router.get("/:id", (req, res, next) => {
         }
         res.setHeader("Content-Type", "image/jpeg");
         fs.createReadStream(path.join(UPLOAD_PATH, images.filename)).pipe(res);
-        /*  fs.createReadStream(
-          // "/home/ubuntu/elpis/server/uploads/" + images.filename
-          found
-        ).pipe(res);*/
       });
     } else {
       //ici j'ecris sur le fichier log

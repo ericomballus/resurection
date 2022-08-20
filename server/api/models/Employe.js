@@ -22,6 +22,7 @@ const EmployeSchema = new Schema({
   productsToSale: { type: Array, default: [] },
   percentage: { type: Number, default: 0 },
   container_info: { type: Object, default: { test: true } },
+  created: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Employe", EmployeSchema);

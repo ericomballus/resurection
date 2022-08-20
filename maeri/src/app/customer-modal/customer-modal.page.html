@@ -594,6 +594,26 @@
               checked="true"
             ></ion-checkbox>
           </ion-item>
+
+          <ion-item *ngIf="this.custumerSetting">
+            <ion-label class="ion-text-wrap"> use FiFO ? </ion-label>
+            <ion-checkbox
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableFifo()"
+              *ngIf="!this.custumerSetting['use_fifo']"
+            ></ion-checkbox>
+
+            <ion-checkbox
+              *ngIf="this.custumerSetting['use_fifo']"
+              color="primary"
+              mode="md"
+              slot="end"
+              (ionChange)="enableFifo()"
+              checked="true"
+            ></ion-checkbox>
+          </ion-item>
           <!--
             <ion-item *ngIf="this.custumerSetting">
             <ion-label class="ion-text-wrap">

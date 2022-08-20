@@ -13,7 +13,8 @@ let cmp = 0;
 const inventoryBuilder = async (req, response, success) => {
   success = success;
   response = response;
-  const tenant2 = req.tenancy.getModelByTenant(req.dbUse, "bill", billSchema);
+  const tenant2 = mongoose.model("bill", billSchema);
+  //req.tenancy.getModelByTenant(req.dbUse, "bill", billSchema);
 
   tenant2
     .aggregate([
@@ -93,11 +94,12 @@ const inventoryBuilder = async (req, response, success) => {
     //.lean()
     //.exec()
     .then((docs) => {
-      const Inventory = req.tenancy.getModelByTenant(
+      const Inventory = mongoose.model("inventory", InventorySchema);
+      /* req.tenancy.getModelByTenant(
         req.dbUse,
         "inventory",
         InventorySchema
-      );
+      );*/
       Inventory.find({ cashOpening: req.body._id })
         .exec()
         .then(async (result) => {
@@ -241,11 +243,12 @@ confirm = (row, d, req) => {
 
 saveInventory = (row, req) => {
   return new Promise((resolve, reject) => {
-    const tenant = req.tenancy.getModelByTenant(
+    const tenant = mongoose.model("admininventory", AdminInventorySchema);
+    /* req.tenancy.getModelByTenant(
       req.dbUse,
       "admininventory",
       AdminInventorySchema
-    );
+    );*/
 
     tenant
       .find({

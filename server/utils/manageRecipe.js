@@ -29,7 +29,8 @@ module.exports = async (bill, req) => {
 async function OpenCashDate(req, bill) {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = await req.tenancy.getModelByTenant(db, "cashopens", cashOpenSchema);
+    let a = mongoose.model("cashopens", cashOpenSchema);
+    // await req.tenancy.getModelByTenant(db, "cashopens", cashOpenSchema);
 
     const tenant = a;
     tenant
@@ -52,7 +53,8 @@ async function OpenCashDate(req, bill) {
 async function UpdateOpenCashDate(doc, req) {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = req.tenancy.getModelByTenant(db, "cashopens", cashOpenSchema);
+    let a = mongoose.model("cashopens", cashOpenSchema);
+    //req.tenancy.getModelByTenant(db, "cashopens", cashOpenSchema);
 
     const tenant = a;
     tenant

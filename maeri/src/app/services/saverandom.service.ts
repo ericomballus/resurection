@@ -30,6 +30,7 @@ export class SaverandomService {
   userAdmin: Admin;
   patient: Patient;
   parameters: any[];
+  avaibleStock: any[];
   contrat: Contrat;
   AgenceCommande: AgenceCommande[];
   purchaseData: any;
@@ -413,6 +414,18 @@ export class SaverandomService {
       return null;
     } else {
       return this.parameters;
+    }
+  }
+
+  setAvaibleStock(data: any[]) {
+    this.avaibleStock = data;
+  }
+
+  getAvaibleStock(): any[] {
+    if (this.avaibleStock == null || this.avaibleStock == undefined) {
+      return null;
+    } else {
+      return this.avaibleStock;
     }
   }
 

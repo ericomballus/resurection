@@ -41,7 +41,8 @@ router.get("/admin/:adminId", (req, res, next) => {
           });
         }
         console.log("hello inventaire ici here ===>", result);
-        let Cash = tenant.getModelByTenant(db, "cashopens", cashOpeningSchema);
+        let Cash = mongoose.model("cashopens", cashOpeningSchema);
+        // tenant.getModelByTenant(db, "cashopens", cashOpeningSchema);
         Cash.findById(req.query.cashOpening, function (err, cash) {
           if (err) {
             console.log(err);

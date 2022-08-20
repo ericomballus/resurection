@@ -23,6 +23,7 @@ import { NotificationService } from '../services/notification.service';
 import { GetStoreNameService } from '../services/get-store-name.service';
 import { SaverandomService } from '../services/saverandom.service';
 import { Setting } from '../models/setting.models';
+import { PickDateTimePage } from '../modals/pick-date-time/pick-date-time.page';
 
 @Component({
   selector: 'app-courses',
@@ -578,7 +579,13 @@ export class CoursesComponent implements OnInit {
       }
     }
 
-    this.buyProduct.emit(this.randomObj);
+    if (this.saveRandom.getSetting().use_fifo) {
+      if (value && value > 0) {
+        this.selectDate(id);
+      }
+    } else {
+      this.buyProduct.emit(this.randomObj);
+    }
   }
   changePrice(ev, prod) {
     let value = parseInt(ev.target['value']);
@@ -610,5 +617,22 @@ export class CoursesComponent implements OnInit {
       }
       this.displayItems.emit(this.randomObj);
     }
+  }
+
+  async selectDate(id) {
+    const modal = await this.modalController.create({
+      component: PickDateTimePage,
+      componentProps: {},
+    });
+    modal.onDidDismiss().then((data) => {
+      console.log(data);
+
+      if (data['data']) {
+        this.randomObj[id]['expireAt'] = data['data'];
+      }
+
+      this.buyProduct.emit(this.randomObj);
+    });
+    return await modal.present();
   }
 }

@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <button (click)="closeModal()">
+        <ion-icon color="dark" slot="icon-only" name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="header-component2">
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase">ajouté Le</div>
+      </ion-col>
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase">expire Le</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase">JJ -</div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase">Ini.</div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase">Disp.</div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase"></div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      *ngFor="let stock of stockArr; let i = index"
+      class="data-row data-update"
+      [ngStyle]="{ 'background-color': i % 2 == 0 ? '#f1f1f1' : 'white' }"
+    >
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-start ion-text-uppercase">
+          {{stock.created | date: "short" }}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="3" size-md="3" size-lg="3">
+        <div class="ion-text-center ion-text-uppercase">
+          {{stock.expireAt | date: "short" }}
+        </div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div
+          class="ion-text-center ion-text-uppercase"
+          *ngIf="stock.remainingTime && stock.remainingTime.day > 10"
+        >
+          {{stock.remainingTime.day }}
+        </div>
+        <div
+          style="background-color: rgb(250, 56, 56)"
+          class="ion-text-center ion-text-uppercase"
+          *ngIf="stock.remainingTime && stock.remainingTime.day < 10"
+        >
+          {{stock.remainingTime.day }}
+        </div>
+      </ion-col>
+
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ stock.quantityInit}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="1" size-md="1" size-lg="1">
+        <div class="ion-text-center ion-text-uppercase">
+          {{ stock.quantity}}
+        </div>
+      </ion-col>
+      <ion-col size-sm="2" size-md="2" size-lg="2">
+        <div class="ion-text-center ion-text-uppercase">
+          <button
+            *ngIf="!stock.actif"
+            style="font-size: 10px; background-color: rgb(64, 255, 47)"
+            (click)="useStock(stock, i)"
+          >
+            activer
+          </button>
+
+          <button
+            *ngIf="stock.actif"
+            style="font-size: 10px; background-color: rgb(250, 74, 74)"
+            (click)="desableStock(stock, i)"
+          >
+            desactiver
+          </button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

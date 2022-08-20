@@ -23,11 +23,12 @@ function randomInventory(req, res) {
   allDocs = 0;
   //resp = res;
   tabNoSelectItem = [];
-  const tenant2 = req.tenancy.getModelByTenant(
+  const tenant2 = mongoose.model("invoice", invoiceSchema);
+  /* req.tenancy.getModelByTenant(
     req.dbUse,
     "invoice",
     invoiceSchema
-  );
+  );*/
 
   tenant2
     .aggregate([
@@ -130,11 +131,12 @@ function randomInventory(req, res) {
           //cash: cash,
         });
       } else {
-        const Inventory = req.tenancy.getModelByTenant(
+        const Inventory = mongoose.model("inventory", InventorySchema);
+        /* req.tenancy.getModelByTenant(
           req.dbUse,
           "inventory",
           InventorySchema
-        );
+        );*/
         Inventory.find({ cashOpening: req.query.cashOpening })
           .exec()
           .then(async (result) => {

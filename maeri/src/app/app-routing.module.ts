@@ -1179,6 +1179,14 @@ const routes: Routes = [
     path: 'hospitalisation-add',
     loadChildren: () => import('./hospital/hospitalisation-add/hospitalisation-add.module').then( m => m.HospitalisationAddPageModule)
   },
+  {
+    path: 'pick-date-time',
+    loadChildren: () => import('./modals/pick-date-time/pick-date-time.module').then( m => m.PickDateTimePageModule)
+  },
+  {
+    path: 'select-stock',
+    loadChildren: () => import('./modals/select-stock/select-stock.module').then( m => m.SelectStockPageModule)
+  },
 
 ];
 

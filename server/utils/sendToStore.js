@@ -7,7 +7,7 @@ const CompanySetting = require("../api/models/Company_Setting");
 const Maeri = require("../api/models/Maeri_Product");
 const tenant = require("../getTenant");
 let db = "maeri";
-
+const mongoose = require("mongoose");
 sendToStore = (req, doc) => {
   console.log(doc);
   if (doc.productType && doc.productType == "billard") {
@@ -22,11 +22,12 @@ sendToStore = (req, doc) => {
 };
 
 confirmProductItems = async (req, doc) => {
-  let a = await req.tenancy.getModelByTenant(
+  let a = mongoose.model("productitems", productItemsSchema);
+  /* await req.tenancy.getModelByTenant(
     req.dbUse,
     "productitems",
     productItemsSchema
-  );
+  );*/
   const tenant = a;
 
   tenant
@@ -67,7 +68,8 @@ countManufacturedItems = (req, elt) => {};
 
 confirmBillardItems = async (req, doc) => {
   db = req.dbUse;
-  let a = await req.tenancy.getModelByTenant(db, "billard", billardSchema);
+  let a = mongoose.model("billard", billardSchema);
+  //await req.tenancy.getModelByTenant(db, "billard", billardSchema);
   const tenant = a;
   tenant;
   tenant
@@ -110,7 +112,8 @@ confirmBillardItems = async (req, doc) => {
 countBillardItemsGamme = async (req, elt, qty) => {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = await req.tenancy.getModelByTenant(db, "billard", billardSchema);
+    let a = mongoose.model("billard", billardSchema);
+    // await req.tenancy.getModelByTenant(db, "billard", billardSchema);
     const tenant = a;
     tenant
       .findById({ _id: elt["_id"] })
@@ -162,11 +165,12 @@ countBillardItemsGamme = async (req, elt, qty) => {
 
 confirmProductList = async (req, doc) => {
   db = req.dbUse;
-  let a = await req.tenancy.getModelByTenant(
+  let a = mongoose.model("productlist", productListSchema);
+  /* await req.tenancy.getModelByTenant(
     db,
     "productlist",
     productListSchema
-  );
+  );*/
   const tenant = a;
   tenant
     .findById({ _id: doc.idprod })

@@ -8,10 +8,7 @@ let io = require("socket.io");
 
 router.post("/:adminId", checkDatabase.db, (req, res, next) => {
   const custumer = new Custumer(req.body);
-
-  //console.log("ici tenant1", tenant1);
   custumer.save().then((data) => {
-    console.log("custumer created", data);
     req.io.sockets.emit(`${req.params.adminId}customerAdd`, data);
     res.status(201).json({ message: "custumer", data: data });
   });

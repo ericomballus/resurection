@@ -14,7 +14,7 @@ if (process.platform === "win32") {
   UPLOAD_PATH = "uploads";
 } else if (process.platform === "linux") {
   //found = "/home/ubuntu/elpis/server/uploads/" + images.filename;
-  UPLOAD_PATH = require("../../config").IMAGE_URL_PATH;
+  UPLOAD_PATH = "/home/ubuntu/elpis/server/uploads/";
 }
 
 var storage = multer.diskStorage({
@@ -156,7 +156,7 @@ router.get("/:id", (req, res, next) => {
       if (process.platform === "win32") {
         found = path.join(UPLOAD_PATH, images.filename);
       } else if (process.platform === "linux") {
-        found = require("../../config").IMAGE_URL_PATH + images.filename;
+        found = "/home/ubuntu/elpis/server/uploads/" + images.filename;
       }
       fs.access(found, fs.F_OK, (error) => {
         if (error) {

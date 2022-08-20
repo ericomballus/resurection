@@ -7,6 +7,7 @@ const CompanySetting = require("../api/models/Company_Setting");
 const Maeri = require("../api/models/Maeri_Product");
 const tenant = require("../getTenant");
 let db = "maeri";
+const mongoose = require("mongoose");
 
 countItems = (req, tab) => {
   tab.forEach((elt) => {
@@ -17,11 +18,8 @@ countItems = (req, tab) => {
       // countPackItems(req, elt);
     } else if (elt["item"]["productType"] === "manufacturedItems") {
       db = req.dbUse;
-      let a = req.tenancy.getModelByTenant(
-        db,
-        "manufactureditemSchema",
-        Manufactureitem
-      );
+      let a = mongoose.model("manufactureditemSchema", Manufactureitem);
+
       const tenant = a;
       tenant
         .findById({ _id: elt["item"]["_id"] })
@@ -61,11 +59,8 @@ countItems = (req, tab) => {
       countProductItemes22(req, elt);
       setTimeout(() => {}, 1500);
     } else if (elt["item"]["productType"] === "billard") {
-      let Company = tenant.getModelByTenant(
-        req.dbUse,
-        "company",
-        CompanySetting
-      );
+      let Company = mongoose.model("company", CompanySetting);
+
       Company.find(
         {
           adminId: req.query.db,
@@ -85,11 +80,7 @@ countItems = (req, tab) => {
           }
         });
     } else if (elt["item"]["productType"] === "shoplist") {
-      let Company = tenant.getModelByTenant(
-        req.dbUse,
-        "company",
-        CompanySetting
-      );
+      let Company = mongoose.model("company", CompanySetting);
       Company.find(
         {
           adminId: req.query.db,
@@ -157,11 +148,8 @@ countPackItem = async (req, elt) => {
 };
 
 countProductItemes22 = async (req, elt) => {
-  let a = await req.tenancy.getModelByTenant(
-    req.dbUse,
-    "productitems",
-    productItemsSchema
-  );
+  let a = mongoose.model("productitems", productItemsSchema);
+
   const tenant = a;
 
   tenant
@@ -394,7 +382,8 @@ countManufacturedItems = (req, elt) => {};
 
 countBillardItemsNew = async (req, elt, count_bottle) => {
   db = req.dbUse;
-  let a = await req.tenancy.getModelByTenant(db, "billard", billardSchema);
+  let a = mongoose.model("billard", billardSchema);
+  // await req.tenancy.getModelByTenant(db, "billard", billardSchema);
   const tenant = a;
   tenant
     .findById({ _id: elt["item"]["_id"] })
@@ -465,7 +454,8 @@ countBillardItemsNew = async (req, elt, count_bottle) => {
 countBillardItemsGamme = async (req, elt, qty) => {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = await req.tenancy.getModelByTenant(db, "billard", billardSchema);
+    let a = mongoose.model("billard", billardSchema);
+    // await req.tenancy.getModelByTenant(db, "billard", billardSchema);
     const tenant = a;
     tenant
       .findById({ _id: elt["_id"] })
@@ -521,17 +511,15 @@ countProductListItemsNew = async (req, elt, count_bottle) => {
     elt.item._id = elt.item.originId;
   }
   db = req.dbUse;
-  let a = await req.tenancy.getModelByTenant(
-    db,
-    "productlist",
-    productListSchema
-  );
+  let a = mongoose.model("productlist", productListSchema);
+
   const tenant = a;
   tenant
     .findById({ _id: elt["item"]["_id"] })
     .exec()
     .then((doc) => {
       let newQuantity = doc.quantityStore - parseInt(elt["qty"]);
+      console.log("productitemsCount line 522====>", parseInt(elt["qty"]));
       if (newQuantity < 0) {
         newQuantity = 0;
       }
@@ -584,6 +572,11 @@ countProductListItemsNew = async (req, elt, count_bottle) => {
           if (error) {
             console.log("billard items", error.message);
           } else {
+            require("../utils/handleFifo").decrementFifoStock(
+              parseInt(elt["qty"]),
+              req.params.adminId,
+              elt["item"]["_id"]
+            );
             req.io.sockets.emit(`${req.params.adminId}productlist`, success);
           }
         }

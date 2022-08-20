@@ -226,142 +226,161 @@ router.patch(
   "/:adminId",
 
   async (req, res, next) => {
-    console.log(req.body);
-    try {
-      let doc = await req.tenant.findById({ _id: req.body.id }).exec();
-      let settingArr = await userSetting(doc.adminId, req);
-
-      let setting = settingArr[0];
-      if (doc["tabitem"] && doc["tabitem"][doc["tabitem"].length - 1]) {
-        let oldpack = doc["tabitem"][doc["tabitem"].length - 1];
-
-        let oldQuantity = parseInt(oldpack.newstock);
-        let newpackitems = {
-          oldstock: oldpack.newstock,
-          newstock: parseInt(req.body.newquantity) + oldQuantity,
-          //quantity est le stock ajouté
-          quantity: parseInt(req.body.newquantity),
-        };
-
-        let bottle_full = 0;
-        let bottle_empty = 0;
-        let bottle_total = 0;
-
-        if (setting.sale_Gaz) {
-          if (doc.bottle_empty) {
-            bottle_empty = doc.bottle_empty;
-          }
-          if (req.body.bottle_return) {
-            bottle_empty = bottle_empty - req.body.newquantity;
-          }
-          if (bottle_empty < 0) {
-            bottle_empty = 0;
-          }
-          if (doc.bottle_full) {
-            bottle_full = doc.bottle_full;
-          }
-          if (doc.bottle_total) {
-            bottle_total = doc.bottle_total;
-          }
-          bottle_full = doc.bottle_full + parseInt(req.body.newquantity);
-          // doc.quantityStore;
-          bottle_total = bottle_full + bottle_empty;
-        }
-
-        req.tenant.findOneAndUpdate(
-          { _id: req.body.id },
-          {
-            $push: { tabitem: newpackitems },
-            $set: {
-              quantityItems: doc.quantityItems + parseInt(req.body.newquantity),
-              bottle_full: bottle_full,
-              bottle_total: bottle_total,
-              bottle_empty: bottle_empty,
-            },
-          },
-          { new: true },
-          (error, success) => {
-            if (error) {
-              console.log(error);
-            } else {
-              req.io.sockets.emit(`${req.query.db}productlist`, success);
-              res.status(201).json({
-                message: "update ",
-                resultat: success,
-                // professeur: prof
-              });
-            }
-          }
-        );
-      } else {
-        //first add productitems
-        let newpackitems = {
-          newstock: req.body.newquantity,
-          oldstock: 0,
-          quantity: req.body.newquantity,
-        };
-        let bottle_full = 0;
-        let bottle_empty = 0;
-        let bottle_total = 0;
-
-        if (setting.sale_Gaz) {
-          if (doc.bottle_total) {
-            bottle_total = doc.bottle_total;
-          }
-          if (doc.bottle_empty) {
-            bottle_empty = doc.bottle_empty;
-          }
-          if (req.body.bottle_return) {
-            bottle_empty = bottle_empty - req.body.newquantity;
-          }
-
-          if (bottle_empty < 0) {
-            bottle_empty = 0;
-          }
-          if (doc.bottle_full) {
-            bottle_full = doc.bottle_full;
-          }
-          if (doc.bottle_total) {
-            bottle_total = doc.bottle_total;
-          }
-
-          bottle_full = doc.bottle_full + parseInt(req.body.newquantity);
-          // doc.quantityStore;
-          bottle_total = bottle_full + bottle_empty;
-        }
-
-        req.tenant.findOneAndUpdate(
-          { _id: req.body.id },
-          {
-            $push: { tabitem: newpackitems },
-            $set: {
-              quantityItems: parseInt(req.body.newquantity),
-              bottle_full: bottle_full,
-              bottle_total: bottle_total,
-              bottle_empty: bottle_empty,
-            },
-          },
-          { new: true },
-          (error, success) => {
-            if (error) {
-              console.log(error);
-            } else {
-              req.io.sockets.emit(`${req.params.adminId}billardItem`, success);
-              res.status(201).json({
-                message: "update ",
-                resultat: success,
-                // professeur: prof
-              });
-            }
-          }
-        );
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(400).json({
-        error: err,
+    // expireAt
+    let FIFO = require("../models/Fifo");
+    let doc = await req.tenant.findById({ _id: req.body.id }).exec();
+    let settingArr = await userSetting(doc.adminId, req);
+    let setting = settingArr[0];
+    if (setting.use_fifo && req.body.item.expireAt) {
+      const fifo = new FIFO({
+        adminId: req.body.adminId,
+        productId: req.body.item._id,
+        quantity: parseInt(req.body.newquantity),
+        expireAt: req.body.item.expireAt,
+        storeId: req.body.storeId,
+        senderId: req.body.senderId,
+        quantityInit: parseInt(req.body.newquantity),
       });
+      const doc = await fifo.save();
+      res.status(201).json(doc);
+    } else {
+      try {
+        if (doc["tabitem"] && doc["tabitem"][doc["tabitem"].length - 1]) {
+          let oldpack = doc["tabitem"][doc["tabitem"].length - 1];
+
+          let oldQuantity = parseInt(oldpack.newstock);
+          let newpackitems = {
+            oldstock: oldpack.newstock,
+            newstock: parseInt(req.body.newquantity) + oldQuantity,
+            //quantity est le stock ajouté
+            quantity: parseInt(req.body.newquantity),
+          };
+
+          let bottle_full = 0;
+          let bottle_empty = 0;
+          let bottle_total = 0;
+
+          if (setting.sale_Gaz) {
+            if (doc.bottle_empty) {
+              bottle_empty = doc.bottle_empty;
+            }
+            if (req.body.bottle_return) {
+              bottle_empty = bottle_empty - req.body.newquantity;
+            }
+            if (bottle_empty < 0) {
+              bottle_empty = 0;
+            }
+            if (doc.bottle_full) {
+              bottle_full = doc.bottle_full;
+            }
+            if (doc.bottle_total) {
+              bottle_total = doc.bottle_total;
+            }
+            bottle_full = doc.bottle_full + parseInt(req.body.newquantity);
+            // doc.quantityStore;
+            bottle_total = bottle_full + bottle_empty;
+          }
+
+          req.tenant.findOneAndUpdate(
+            { _id: req.body.id },
+            {
+              $push: { tabitem: newpackitems },
+              $set: {
+                quantityItems:
+                  doc.quantityItems + parseInt(req.body.newquantity),
+                bottle_full: bottle_full,
+                bottle_total: bottle_total,
+                bottle_empty: bottle_empty,
+              },
+            },
+            { new: true },
+            (error, success) => {
+              if (error) {
+                console.log(error);
+              } else {
+                req.io.sockets.emit(`${req.query.db}productlist`, success);
+                res.status(201).json({
+                  message: "update ",
+                  resultat: success,
+                  // professeur: prof
+                });
+              }
+            }
+          );
+        } else {
+          //first add productitems
+          let newpackitems = {
+            newstock: req.body.newquantity,
+            oldstock: 0,
+            quantity: req.body.newquantity,
+          };
+          let bottle_full = 0;
+          let bottle_empty = 0;
+          let bottle_total = 0;
+
+          if (setting.sale_Gaz) {
+            if (doc.bottle_total) {
+              bottle_total = doc.bottle_total;
+            }
+            if (doc.bottle_empty) {
+              bottle_empty = doc.bottle_empty;
+            }
+            if (req.body.bottle_return) {
+              bottle_empty = bottle_empty - req.body.newquantity;
+            }
+
+            if (bottle_empty < 0) {
+              bottle_empty = 0;
+            }
+            if (doc.bottle_full) {
+              bottle_full = doc.bottle_full;
+            }
+            if (doc.bottle_total) {
+              bottle_total = doc.bottle_total;
+            }
+
+            bottle_full = doc.bottle_full + parseInt(req.body.newquantity);
+            // doc.quantityStore;
+            bottle_total = bottle_full + bottle_empty;
+          }
+
+          req.tenant.findOneAndUpdate(
+            { _id: req.body.id },
+            {
+              $push: { tabitem: newpackitems },
+              $set: {
+                quantityItems: parseInt(req.body.newquantity),
+                bottle_full: bottle_full,
+                bottle_total: bottle_total,
+                bottle_empty: bottle_empty,
+              },
+            },
+            { new: true },
+            (error, success) => {
+              if (error) {
+                console.log(error);
+              } else {
+                req.io.sockets.emit(
+                  `${req.params.adminId}billardItem`,
+                  success
+                );
+                res.status(201).json({
+                  message: "update ",
+                  resultat: success,
+                  // professeur: prof
+                });
+              }
+            }
+          );
+        }
+      } catch (err) {
+        console.log(err);
+        res.status(400).json({
+          error: err,
+        });
+      }
     }
+
     /*
     req.tenant
       .findById({ _id: req.body.id })
@@ -504,7 +523,7 @@ router.patch(
             {
               $set: {
                 quantityItems: newquantity,
-                quantityStore: quantityInStore,
+                // quantityStore: quantityInStore,
                 confirm: false,
                 sender: req.body.sender,
                 quantityToConfirm: quantityToConfirm,

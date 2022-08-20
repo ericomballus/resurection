@@ -1,14 +1,17 @@
 const productItemsSchema = require("../api/models/ProductItem");
 const Pack = require("../api/models/ProductPack");
+const mongoose = require("mongoose");
 module.exports = (req, res, product, next) => {
   return new Promise(async (resolve, reject) => {
     resolve(true);
     try {
-      let ProductItem = req.tenancy.getModelByTenant(
+      let ProductItem = mongoose.model("productitems", productItemsSchema);
+      /*req.tenancy.getModelByTenant(
         req.dbUse,
         "productitems",
         productItemsSchema
       );
+      */
 
       let productitem = await ProductItem.find({ productId: product._id });
       let idi = productitem[0]["_id"];
@@ -56,7 +59,8 @@ module.exports = (req, res, product, next) => {
         unitNamePack: product.unitName,
       };
       //let obj = result;
-      let Packs = req.tenancy.getModelByTenant(req.dbUse, "packs", Pack);
+      let Packs = mongoose.model("packs", Pack);
+      //req.tenancy.getModelByTenant(req.dbUse, "packs", Pack);
       let pack = await Packs.find({ productId: resultat.productId });
       let idPack = pack[0]["_id"];
       Packs.findOneAndUpdate(

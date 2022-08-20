@@ -264,7 +264,7 @@ export class ProductBuyPage implements OnInit {
 
   buyItem(obj) {
     let a = Object.keys(obj);
-
+    console.log('enter here ===>>>>', obj);
     this.restApiService.saveCart({});
     this.totalItems = 0;
     this.totalPrice = 0;
@@ -273,16 +273,19 @@ export class ProductBuyPage implements OnInit {
       obj[prop]['prod']['removeQuantity'] = obj[prop]['sale'];
       this.totalItems = this.totalItems + obj[prop]['sale'];
       this.totalPrice = this.totalPrice + obj[prop]['coast'];
-
+      if (obj[prop]['expireAt']) {
+        obj[prop]['prod']['expireAt'] = obj[prop]['expireAt'];
+      }
+      console.log('prod ===>>>>', obj[prop]['prod']);
       this.buyPackProduct(obj[prop]['prod']);
     }
-    return;
-    for (const key in obj) {
+
+    /* for (const key in obj) {
       let prod = obj[key]['prod'];
       let id = prod._id;
 
       this.cartValue = this.restApiService.getCart2();
-      // console.log("la valeur du cart", this.cartValue);
+      
 
       if (this.cartValue && this.cartValue['cart']) {
         let data = {};
@@ -308,10 +311,9 @@ export class ProductBuyPage implements OnInit {
           products: cart.generateArray(),
         });
       } else {
-        //let cart = this.manageCartService.addToCart(prod);
+        
         let cart = this.manageCartService.addToCart(prod);
-        //  console.log(cart);
-        //  console.log(cart.generateArray());
+        
         this.totalItems = cart['totalQty'];
         this.totalPrice = cart['totalPrice'];
         let b = [];
@@ -332,7 +334,7 @@ export class ProductBuyPage implements OnInit {
           products: cart.generateArray(),
         });
       }
-    }
+    }*/
   }
   updatePackProduct(prod) {
     let id = prod._id;
@@ -342,7 +344,7 @@ export class ProductBuyPage implements OnInit {
   }
 
   buyPackProduct(prod) {
-    // console.log(prod);
+    console.log('result ===>>>>', prod);
     let id = prod._id;
 
     this.cartValue = this.restApiService.getCart2();

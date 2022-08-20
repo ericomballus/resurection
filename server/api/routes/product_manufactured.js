@@ -14,11 +14,6 @@ const router = express.Router();
 let io = require("socket.io");
 
 let UPLOAD_PATH = "uploads";
-if (process.platform === "win32") {
-  UPLOAD_PATH = "uploads";
-} else if (process.platform === "linux") {
-  UPLOAD_PATH = require("../../config").IMAGE_URL_PATH;
-}
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -92,6 +87,7 @@ router.post("/imagemaeri/:adminId", (req, res, next) => {
       size: req.body.size,
     })
     .then((data) => {
+      console.log("first add", data);
       let result = data;
       result._id = data._id;
       req.io.sockets.emit(`${req.params.adminId}manufactured`, data);
@@ -183,13 +179,7 @@ router.get("/:id", (req, res, next) => {
     }
 
     if (doc) {
-      let found = "";
-      if (process.platform === "win32") {
-        found = path.join(UPLOAD_PATH, doc.filename);
-      } else if (process.platform === "linux") {
-        // found = "/home/ubuntu/elpis/server/uploads/" + doc.filename;
-        found = require("../../config").IMAGE_URL_PATH + doc.filename;
-      }
+      let found = path.join(UPLOAD_PATH, doc.filename);
       res.setHeader("Content-Type", "image/jpeg");
       // fs.createReadStream(path.join(UPLOAD_PATH, structure.filename)).pipe(res);
       fs.createReadStream(found).pipe(res);

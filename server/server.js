@@ -1,4 +1,3 @@
-require("dotenv").config({ path: "./.env" });
 const Module = require("module");
 //module load vladimir
 /*const load = Module._load;
@@ -73,6 +72,12 @@ const expansesRoutes = require("./api/routes/expenses");
 const expansesTypesRoutes = require("./api/routes/expenses-types");
 const productTransactionRoutes = require("./api/routes/productionTransactions");
 //const printerRoutes = require("./api/routes/printe-invoice");
+const patientRoutes = require("./api/routes/patient");
+const parameterRoutes = require("./api/routes/parameters");
+const ordonnanceRoutes = require("./api/routes/ordonnace");
+const hospitalisationRoutes = require("./api/routes/hospitalisation");
+const fifoRoutes = require("./api/routes/fifo");
+
 // import schema
 const billardSchema = require("./api/models/Billard");
 const cashOpeningSchema = require("./api/models/Cash-opening");
@@ -108,7 +113,7 @@ const ObserverSchema = require("./api/models/Observer");
 const ExpenseSchema = require("./api/models/Expenses");
 const ExpenseTypeSchema = require("./api/models/Expenses-types");
 
-const tenant = require("./getTenant");
+const tenant = "";
 const userHandler = require("./utils/userConnection");
 const offlineHandler = require("./utils/offlineManager");
 
@@ -141,46 +146,33 @@ var myWriteStream = fs.createWriteStream(
 const port = process.env.PORT || 3000;
 let io = require("socket.io").listen(
   app.listen(port, () => {
-    let opt = {
-      useUnifiedTopology: true,
-    };
-    MongoClient.connect("mongodb://localhost:27017/", opt, async (err, db) => {
-      if (err) {
-        console.log(err);
-      } else {
-        try {
-          let admin = db.db("admin").admin();
-          // await admin.removeUser("foo");
-          /* await admin.addUser("foo", "bar", {
-            useUnifiedTopology: true,
-            roles: ["userAdminAnyDatabase"],
-          });*/
-
-          const options = {
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-          };
-          let uri = "mongodb://foo:bar@localhost/admin?authSource=admin";
-          mongoose.connect(uri, options, (err) => {
-            if (err) {
-              console.log(err);
-              // process.exit(1);
-            } else {
-              console.log("connected to MongoDB OK");
-              console.log("env variable", process.env.IMAGE_URL_PATH);
-              console.log("file upload path==>", process.env.IMAGE_URL_PATH);
-              // require("./utils/userPaiement")();
-            }
-          });
-          mongoose.connection.on("error", (err) => {
-            console.log("il ya erreur ====>");
-            console.log(err);
-          });
-        } catch (error) {
-          console.log(error);
+    try {
+      const options = {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+      };
+      // let uri = "mongodb://foo:bar@localhost/admin?authSource=admin";
+      const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
+      mongoose.connect(uri, options, (err) => {
+        if (err) {
+          console.log(err);
+          // process.exit(1);
+        } else {
+          console.log(
+            "connected to MongoDB Port",
+            port,
+            "and plateForm",
+            process.platform
+          );
+          console.log("path found here", __dirname);
         }
-      }
-    });
+      });
+      mongoose.connection.on("error", (err) => {
+        console.log(err);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   })
 );
 
@@ -227,48 +219,9 @@ app.use(function (req, res, next) {
   next();
 });
 app.use(userHandler);
-//app.use(require("./utils/userPaiement"));
 app.use(offlineHandler);
-/*app.use("/", (req, res, next) => {
-  let found = "";
-  if (process.platform === "win32") {
-    console.log(__dirname);
-    res.sendFile("C:/Users/erico/conop/elpis/server/www/index.html");
-  } else if (process.platform === "linux") {
-    found = "/home/ubuntu/elpis/server/www/";
-  }
-  next();
-});*/
-//
-//
-//app.use("/", express.static(__dirname + "www"));
 
-/*app.use("/", (req, res, next) => {
-  console.log(process.platform);
-  if (process.platform == "win32") {
-    var fileServer = new require("node-static").Server(
-      'C:/Users/erico/conop/elpis/server" + "/www'
-    );
-    fileServer.serve(req, res);
-  }
-
-  next();
-});*/
-/*
-if (process.platform == "win32") {
-  console.log(__dirname);
-  console.log("hello hello");
-  app.use("/", express.static(__dirname + "www"));
-} else if (process.platform == "linux") {
-  app.use("/", express.static("/home/ubuntu/elpis/server/www/"));
-} else {
- 
-} 
-*/
-//app.use("/", express.static("C:/Users/erico/conop/elpis/server" + "/www"));
 app.use("/uploads", express.static("uploads/lena"));
-//app.use("/invoicefile/", static("invoices"));
-
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -285,10 +238,11 @@ app.use((req, res, next) => {
 
 //Routes which should handle requests
 app.use("/database", (req, res, next) => {
+  let uri =
+    process.env.MONGODB_URI ||
+    "mongodb://foo:bar@localhost/admin?authSource=admin";
   var adminId = req.query.adminId;
-  var connection = mongoose.createConnection(
-    "mongodb://foo:bar@localhost/admin?authSource=admin"
-  );
+  var connection = mongoose.createConnection(uri);
   connection.on("open", function () {
     // connection established
     connection.db;
@@ -307,147 +261,156 @@ app.use("/database", (req, res, next) => {
   //  next();
 });
 app.use("/databaseCollections", (req, res, next) => {
-  MongoClient.connect("mongodb://localhost:27017/", (err, db) => {
-    if (err) {
-      console.log(err);
-    } else {
-      // let dbo = db.db(`${req.query.dbName}`).collection("erico");
-      let dbo = db.db(`${req.query.dbName}`);
-      dbo.listCollections().toArray((err, collectionsInfos) => {
-        console.log(collectionsInfos);
-        if (err) {
-          console.log(err);
-        } else {
-          res.status(200).json(collectionsInfos);
-        }
-        // dbo.close();
-      });
-    }
-  });
-});
-
-app.use("/databaseCollectionsGetDocs", (req, res, next) => {
-  MongoClient.connect("mongodb://localhost:27017/", (err, db) => {
-    if (err) {
-      console.log(err);
-    } else {
-      let dbo = db.db(`${req.query.dbName}`);
-      // let dbo = db.db(`${req.query.dbName}`).collection('erico').deleteMany();
-      dbo
-        .collection(`${req.query.collectionName}`)
-        .find()
-        .toArray((err, docs) => {
-          console.log(docs);
+  MongoClient.connect(
+    process.env.MONGODB_URI || "mongodb://localhost:27017/",
+    (err, db) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // let dbo = db.db(`${req.query.dbName}`).collection("erico");
+        let dbo = db.db(`${req.query.dbName}`);
+        dbo.listCollections().toArray((err, collectionsInfos) => {
+          console.log(collectionsInfos);
           if (err) {
             console.log(err);
           } else {
-            res.status(200).json(docs);
+            res.status(200).json(collectionsInfos);
           }
           // dbo.close();
         });
+      }
     }
-  });
+  );
+});
+
+app.use("/databaseCollectionsGetDocs", (req, res, next) => {
+  MongoClient.connect(
+    process.env.MONGODB_URI || "mongodb://localhost:27017/",
+    (err, db) => {
+      if (err) {
+        console.log(err);
+      } else {
+        let dbo = db.db(`${req.query.dbName}`);
+        // let dbo = db.db(`${req.query.dbName}`).collection('erico').deleteMany();
+        dbo
+          .collection(`${req.query.collectionName}`)
+          .find()
+          .toArray((err, docs) => {
+            console.log(docs);
+            if (err) {
+              console.log(err);
+            } else {
+              res.status(200).json(docs);
+            }
+            // dbo.close();
+          });
+      }
+    }
+  );
 });
 
 app.use("/databaseCollectionsDeleteDocs", (req, res, next) => {
-  MongoClient.connect("mongodb://localhost:27017/", async (err, db) => {
-    if (err) {
-      // console.log(err);
-    } else {
-      if (req.query.collectionName == "productlists") {
-        let tab = [];
-        let dbo = db.db(`${req.query.dbName}`);
-        dbo
-          .collection(`${req.query.collectionName}`)
-          .find({ storeId: req.body.storeId })
-          .toArray((err, docs) => {
-            docs.forEach((doc) => {
-              console.log(doc);
-              dbo
-                .collection(`${req.query.collectionName}`)
-                .findOneAndUpdate(
-                  { _id: doc._id },
-
-                  {
-                    $set: {
-                      quantityItems: 0,
-                      quantityStore: 0,
-                      bottle_full: 0,
-                      bottle_empty: 0,
-                      bottle_total: 0,
-                      tabitem: [],
-                    },
-                  },
-                  { new: true, upsert: true, returnOriginal: false }
-                )
-                .then((result) => {
-                  tab.push(result);
-                });
-            });
-            res.status(200).json(tab);
-          });
-      } else if (
-        req.query.collectionName == "billards" ||
-        //req.query.collectionName == "productlists" ||
-        req.query.collectionName == "productitems"
-      ) {
-        let tab = [];
-        let dbo = db.db(`${req.query.dbName}`);
-        dbo
-          .collection(`${req.query.collectionName}`)
-          .find({ storeId: req.body.storeId })
-          .toArray((err, docs) => {
-            docs.forEach((doc) => {
-              console.log(doc);
-              dbo
-                .collection(`${req.query.collectionName}`)
-                .findOneAndUpdate(
-                  { _id: doc._id },
-
-                  {
-                    $set: {
-                      quantityItems: 0,
-                      quantityStore: 0,
-                      tabitem: [],
-                    },
-                  },
-                  { new: true, upsert: true, returnOriginal: false }
-                )
-                .then((result) => {
-                  tab.push(result);
-                });
-            });
-            res.status(200).json(tab);
-          });
+  MongoClient.connect(
+    process.env.MONGODB_URI || "mongodb://localhost:27017/",
+    async (err, db) => {
+      if (err) {
+        // console.log(err);
       } else {
-        try {
+        if (req.query.collectionName == "productlists") {
+          let tab = [];
           let dbo = db.db(`${req.query.dbName}`);
-          let result = await dbo
+          dbo
             .collection(`${req.query.collectionName}`)
-            .deleteMany({
-              $or: [
-                { adminId: req.body.adminId },
-                { adminId: new ObjectId(req.body.adminId) },
-                // { cancel: { $exists: false } },
-              ],
+            .find({ storeId: req.body.storeId })
+            .toArray((err, docs) => {
+              docs.forEach((doc) => {
+                console.log(doc);
+                dbo
+                  .collection(`${req.query.collectionName}`)
+                  .findOneAndUpdate(
+                    { _id: doc._id },
+
+                    {
+                      $set: {
+                        quantityItems: 0,
+                        quantityStore: 0,
+                        bottle_full: 0,
+                        bottle_empty: 0,
+                        bottle_total: 0,
+                        tabitem: [],
+                      },
+                    },
+                    { new: true, upsert: true, returnOriginal: false }
+                  )
+                  .then((result) => {
+                    tab.push(result);
+                  });
+              });
+              res.status(200).json(tab);
             });
-          // .deleteMany({ adminId: req.body.adminId });
-          if (result.result.n == 0) {
-            let result2 = await dbo
+        } else if (
+          req.query.collectionName == "billards" ||
+          //req.query.collectionName == "productlists" ||
+          req.query.collectionName == "productitems"
+        ) {
+          let tab = [];
+          let dbo = db.db(`${req.query.dbName}`);
+          dbo
+            .collection(`${req.query.collectionName}`)
+            .find({ storeId: req.body.storeId })
+            .toArray((err, docs) => {
+              docs.forEach((doc) => {
+                console.log(doc);
+                dbo
+                  .collection(`${req.query.collectionName}`)
+                  .findOneAndUpdate(
+                    { _id: doc._id },
+
+                    {
+                      $set: {
+                        quantityItems: 0,
+                        quantityStore: 0,
+                        tabitem: [],
+                      },
+                    },
+                    { new: true, upsert: true, returnOriginal: false }
+                  )
+                  .then((result) => {
+                    tab.push(result);
+                  });
+              });
+              res.status(200).json(tab);
+            });
+        } else {
+          try {
+            let dbo = db.db(`${req.query.dbName}`);
+            let result = await dbo
               .collection(`${req.query.collectionName}`)
-              .deleteMany({ storeId: req.body.storeId });
-            res.status(200).json(result2);
-          } else {
-            res.status(200).json(result);
+              .deleteMany({
+                $or: [
+                  { adminId: req.body.adminId },
+                  { adminId: new ObjectId(req.body.adminId) },
+                  // { cancel: { $exists: false } },
+                ],
+              });
+            // .deleteMany({ adminId: req.body.adminId });
+            if (result.result.n == 0) {
+              let result2 = await dbo
+                .collection(`${req.query.collectionName}`)
+                .deleteMany({ storeId: req.body.storeId });
+              res.status(200).json(result2);
+            } else {
+              res.status(200).json(result);
+            }
+          } catch (e) {
+            console.error(e);
+            res.status(500).json(e);
+          } finally {
           }
-        } catch (e) {
-          console.error(e);
-          res.status(500).json(e);
-        } finally {
         }
       }
     }
-  });
+  );
 });
 app.use("/employe", employeRoutes);
 app.use("/images", imagesRoutes);
@@ -457,6 +420,7 @@ app.use("/Role", roleRoutes);
 app.use("/maeriproducts", maeriProductRoutes);
 app.use("/madeby", madeRoutes);
 app.use("/custumer", custumerRoutes);
+ordonnanceRoutes;
 app.use("/balance", balanceRoutes);
 //app.use("/maeriproducts", maeri_productRoutes);
 app.use("/maericategorie", maeri_categoryRoutes);
@@ -464,14 +428,17 @@ app.use("/maericategorie", maeri_categoryRoutes);
 app.use("/users", userRoutes);
 app.use("/contrat", contratRoutes);
 app.use("/vendor", vendorRoutes);
+// hospital routes
+
+app.use("/patient", patientRoutes);
+app.use("/parameter", parameterRoutes);
+app.use("/ordonnance", ordonnanceRoutes);
+app.use("/hospitalisation", hospitalisationRoutes);
+app.use("/fifo", fifoRoutes);
 app.use(
   "/managerinventory",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "managerinventorie",
-      managerinventorySchema
-    );
+    let a = mongoose.model("managerinventorie", managerinventorySchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -482,11 +449,7 @@ app.use(
 app.use(
   "/retailerOrder",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "productitems",
-      productItemsSchema
-    );
+    let a = mongoose.model("productitems", productItemsSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -494,21 +457,7 @@ app.use(
   },
   retailerOrderRoutes
 );
-app.use(
-  "/proposalOrder",
-  async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "productitems",
-      productItemsSchema
-    );
-    req.tenant = a;
-    req.dbUse = db;
-    req.tenancy = tenant;
-    next();
-  },
-  proposalOrderRoutes
-);
+
 app.use("/employe", employeRoutes);
 app.use("/taxi", DriverTaxiRoutes);
 app.use("/passengertransaction", PassengerTransactionRoutes);
@@ -516,7 +465,7 @@ app.use("/maeritaxipassenger", MaeriTaxiPassengerRoutes);
 app.use(
   "/products",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "products", productSchema);
+    let a = mongoose.model("products", productSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -529,11 +478,7 @@ app.use(
 app.use(
   "/products_resto",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "manufacturedUserSchema",
-      manufactureduserschemas
-    );
+    let a = mongoose.model("manufacturedUserSchema", manufactureduserschemas);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -544,8 +489,7 @@ app.use(
 app.use(
   "/products_resto_item",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
+    let a = mongoose.model(
       "manufactureditemSchema",
       manufactureditemuserschemas
     );
@@ -559,22 +503,19 @@ app.use(
 app.use(
   "/pack",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "packs", packSchema);
+    let a = mongoose.model("packs", packSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
     next();
   },
+
   packRoutes
 );
 app.use(
   "/productsitem",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "productitems",
-      productItemsSchema
-    );
+    let a = mongoose.model("productitems", productItemsSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -585,7 +526,7 @@ app.use(
 app.use(
   "/packitems",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "packitems", packitemsSchema);
+    let a = mongoose.model("packitems", packitemsSchema);
     req.tenant = a;
     next();
   },
@@ -596,7 +537,7 @@ app.use("/cart", cartRoutes);
 app.use(
   "/invoice",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "invoice", invoiceSchema);
+    let a = mongoose.model("invoice", invoiceSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -607,7 +548,7 @@ app.use(
 app.use(
   "/bill",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "bill", billSchema);
+    let a = mongoose.model("bill", billSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -618,7 +559,7 @@ app.use(
 app.use(
   "/inventory",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "inventory", inventorySchema);
+    let a = mongoose.model("inventory", inventorySchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -629,11 +570,7 @@ app.use(
 app.use(
   "/admininventory",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "admininventory",
-      admininventorySchema
-    );
+    let a = mongoose.model("admininventory", admininventorySchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -644,7 +581,7 @@ app.use(
 app.use(
   "/category",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "categorie", categorySchema);
+    let a = mongoose.model("categorie", categorySchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -655,11 +592,7 @@ app.use(
 app.use(
   "/supcategory",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "supercategorie",
-      categorySupSchema
-    );
+    let a = mongoose.model("supercategorie", categorySupSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -670,7 +603,7 @@ app.use(
 app.use(
   "/transaction",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "transaction", transactionSchema);
+    let a = mongoose.model("transaction", transactionSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -681,7 +614,7 @@ app.use(
 app.use(
   "/cashOpen",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "cashopens", cashOpeningSchema);
+    let a = mongoose.model("cashopens", cashOpeningSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -692,7 +625,7 @@ app.use(
 app.use(
   "/resource",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "resource", resourceSchema);
+    let a = mongoose.model("resource", resourceSchema);
     req.tenant = a;
     req.tenant = a;
     req.dbUse = db;
@@ -704,11 +637,7 @@ app.use(
 app.use(
   "/resourceitem",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "resourceitem",
-      resourceitemSchema
-    );
+    let a = mongoose.model("resourceitem", resourceitemSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -719,7 +648,7 @@ app.use(
 app.use(
   "/company",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "company", companySettingSchema);
+    let a = mongoose.model("company", companySettingSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -730,7 +659,7 @@ app.use(
 app.use(
   "/purchase",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "purchase", purshaseSchema);
+    let a = mongoose.model("purchase", purshaseSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -741,7 +670,7 @@ app.use(
 app.use(
   "/billard",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "billard", billardSchema);
+    let a = mongoose.model("billard", billardSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -752,7 +681,7 @@ app.use(
 app.use(
   "/productlist",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "productlist", productListSchema);
+    let a = mongoose.model("productlist", productListSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -764,7 +693,7 @@ app.use(
 app.use(
   "/gamme",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "gamme", gammeSchema);
+    let a = mongoose.model("gamme", gammeSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -776,11 +705,7 @@ app.use(
 app.use(
   "/purchaseorder",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "purchaseOrder",
-      PurchaseOrderSchema
-    );
+    let a = mongoose.model("purchaseOrder", PurchaseOrderSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -792,7 +717,7 @@ app.use(
 app.use(
   "/childbill",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "childBill", ChildBillSchema);
+    let a = mongoose.model("childBill", ChildBillSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -804,7 +729,7 @@ app.use(
 app.use(
   "/refueling",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "refueling", RefuelingSchema);
+    let a = mongoose.model("refueling", RefuelingSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -816,7 +741,7 @@ app.use(
 app.use(
   "/expenses",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "expenses", ExpenseSchema);
+    let a = mongoose.model("expenses", ExpenseSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -828,11 +753,7 @@ app.use(
 app.use(
   "/expenses_type",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "expensesTypes",
-      ExpenseTypeSchema
-    );
+    let a = mongoose.model("expensesTypes", ExpenseTypeSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -842,24 +763,9 @@ app.use(
 );
 
 app.use(
-  "/fichepointage",
-  async (req, res, next) => {
-    let a = await tenant.getModelByTenant(
-      db,
-      "fichepointage",
-      FichePointageSchema
-    );
-    req.tenant = a;
-    req.dbUse = db;
-    req.tenancy = tenant;
-    next();
-  },
-  fichePointageRoutes
-);
-app.use(
   "/consigne",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "consigne", consigneSchema);
+    let a = mongoose.model("consigne", consigneSchema);
     req.tenant = a;
     next();
   },
@@ -869,12 +775,7 @@ app.use(
 app.use(
   "/custumerlogo",
   async (req, res, next) => {
-    console.log("la requete est la ===:::");
-    let a = await tenant.getModelByTenant(
-      db,
-      "logoimage",
-      backgroundImageSchema
-    );
+    let a = mongoose.model("logoimage", backgroundImageSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
@@ -886,12 +787,13 @@ app.use(
 app.use(
   "/observer",
   async (req, res, next) => {
-    let a = await tenant.getModelByTenant(db, "observer", ObserverSchema);
+    let a = mongoose.model("observer", ObserverSchema);
     req.tenant = a;
     req.dbUse = db;
     req.tenancy = tenant;
     next();
   },
+
   observerRoutes
 );
 

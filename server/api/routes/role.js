@@ -4,6 +4,7 @@ const router = express.Router();
 let io = require("socket.io");
 
 router.post("/", (req, res, next) => {
+  console.log(req.body);
   const role = new UserRole(req.body);
   role.save().then((data) => {
     res.status(201).json({ message: "role add", data: data });
@@ -29,6 +30,12 @@ router.get("/", (req, res, next) => {
           tabRoles = result;
         } else {
           result.forEach((r) => {
+            if (r.numberId == 11 && setting[0].is_Hospital) {
+              tabRoles.push(r);
+            }
+            if (r.numberId == 12 && setting[0].is_Hospital) {
+              tabRoles.push(r);
+            }
             if (
               (r.numberId == 6 ||
                 r.numberId == 7 ||

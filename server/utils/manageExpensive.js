@@ -60,11 +60,12 @@ module.exports = async (req, res, next) => {
 async function findExpense(req) {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let Expense = await req.tenancy.getModelByTenant(
+    let Expense = mongoose.model("expenses", ExpenseSchema);
+    /* await req.tenancy.getModelByTenant(
       db,
       "expenses",
       ExpenseSchema
-    );
+    );*/
 
     Expense.find({ _id: req.body._id })
       .lean()
@@ -81,7 +82,8 @@ async function findExpense(req) {
 async function OpenCash(req) {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = await req.tenancy.getModelByTenant(db, "cashopens", cashOpenSchema);
+    let a = mongoose.model("cashopens", cashOpenSchema);
+    //await req.tenancy.getModelByTenant(db, "cashopens", cashOpenSchema);
 
     const tenant = a;
     tenant
@@ -104,7 +106,7 @@ async function OpenCash(req) {
 async function OpenCashExist(req, openCashDateId) {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = await req.tenancy.getModelByTenant(db, "cashopens", cashOpenSchema);
+    let a = mongoose.model("cashopens", cashOpenSchema);
 
     const tenant = a;
     tenant
@@ -124,7 +126,7 @@ async function OpenCashExist(req, openCashDateId) {
 async function UpdateOpenCash(doc, req) {
   return new Promise(async (resolve, reject) => {
     db = req.dbUse;
-    let a = req.tenancy.getModelByTenant(db, "cashopens", cashOpenSchema);
+    let a = mongoose.model("cashopens", cashOpenSchema);
 
     const tenant = a;
     tenant

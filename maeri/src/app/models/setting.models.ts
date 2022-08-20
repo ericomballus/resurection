@@ -53,4 +53,5 @@ export interface Setting {
   ResellerPercentPrice: boolean;
   is_Hospital: boolean;
   customerPercentPrice: boolean;
+  use_fifo: boolean;
 }

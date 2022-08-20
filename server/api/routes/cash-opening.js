@@ -161,49 +161,49 @@ router.post("/:adminId", (req, res, next) => {
             storeId: req.body.storeId,
             user: user,
           });
-          const Products = req.tenancy.getModelByTenant(
-            req.dbUse,
-            "productitems",
-            productItemsSchema
-          );
+          const Products = mongoose.model("productitems", productItemsSchema);
+
           const docs = await Products.find({
             adminId: req.params.adminId,
             storeId: req.body.storeId,
           }).exec();
-          const Manufactured = req.tenancy.getModelByTenant(
-            req.dbUse,
+          const Manufactured = mongoose.model(
             "manufactureditemSchema",
             manufacturedSchema
           );
+          /* req.tenancy.getModelByTenant(
+            req.dbUse,
+            "manufactureditemSchema",
+            manufacturedSchema
+          );*/
           const resto = await Manufactured.find({
             adminId: req.params.adminId,
             storeId: req.body.storeId,
           }).exec();
-          const Billard = req.tenancy.getModelByTenant(
-            req.dbUse,
-            "billard",
-            billardSchema
-          );
+          const Billard = mongoose.model("billard", billardSchema);
+          // req.tenancy.getModelByTenant(req.dbUse, "billard", billardSchema);
           const Service = await Billard.find({
             adminId: req.params.adminId,
             storeId: req.body.storeId,
           }).exec();
 
-          const ProductList = req.tenancy.getModelByTenant(
+          const ProductList = mongoose.model("productlist", productListSchema);
+          /*req.tenancy.getModelByTenant(
             req.dbUse,
             "productlist",
             productListSchema
-          );
+          );*/
           const List = await ProductList.find({
             adminId: req.params.adminId,
             storeId: req.body.storeId,
           }).exec();
 
-          const GammeList = req.tenancy.getModelByTenant(
+          const GammeList = mongoose.model("gamme", gammeSchema);
+          /* req.tenancy.getModelByTenant(
             req.dbUse,
             "gamme",
             gammeSchema
-          );
+          );*/
           const Gamme = await GammeList.find({
             adminId: req.params.adminId,
             storeId: req.body.storeId,
@@ -211,11 +211,12 @@ router.post("/:adminId", (req, res, next) => {
 
           let tab = [];
           tab = [...docs, ...resto, ...Service, ...List, ...Gamme];
-          const tenant = req.tenancy.getModelByTenant(
+          const tenant = mongoose.model("inventory", InventorySchema);
+          /* req.tenancy.getModelByTenant(
             req.dbUse,
             "inventory",
             InventorySchema
-          );
+          );*/
 
           const end = await tenant.create({
             _id: new mongoose.Types.ObjectId(),
@@ -285,11 +286,12 @@ router.patch("/:adminId", (req, res, next) => {
       if (error) {
         console.log(error);
       } else {
-        const Products = req.tenancy.getModelByTenant(
+        const Products = mongoose.model("productitems", productItemsSchema);
+        /* req.tenancy.getModelByTenant(
           req.dbUse,
           "productitems",
           productItemsSchema
-        );
+        );*/
         Products.find({
           adminId: req.params.adminId,
           storeId: req.query.storeId,
@@ -297,42 +299,52 @@ router.patch("/:adminId", (req, res, next) => {
           .exec()
           .then(async (docs) => {
             //  console.log("=============", docs);
-            const Manufactured = req.tenancy.getModelByTenant(
-              req.dbUse,
+            const Manufactured = mongoose.model(
               "manufactureditemSchema",
               manufacturedSchema
             );
+            /* req.tenancy.getModelByTenant(
+              req.dbUse,
+              "manufactureditemSchema",
+              manufacturedSchema
+            );*/
             Manufactured.find({
               adminId: req.params.adminId,
               storeId: req.query.storeId,
             })
               .exec()
               .then(async (resto) => {
-                const Billard = req.tenancy.getModelByTenant(
+                const Billard = mongoose.model("billard", billardSchema);
+                /* req.tenancy.getModelByTenant(
                   req.dbUse,
                   "billard",
                   billardSchema
-                );
+                );*/
                 const Service = await Billard.find({
                   adminId: req.params.adminId,
                   storeId: req.query.storeId,
                 }).exec();
 
-                const ProductList = req.tenancy.getModelByTenant(
-                  req.dbUse,
+                const ProductList = mongoose.model(
                   "productlist",
                   productListSchema
                 );
+                /* req.tenancy.getModelByTenant(
+                  req.dbUse,
+                  "productlist",
+                  productListSchema
+                );*/
                 const List = await ProductList.find({
                   adminId: req.params.adminId,
                   storeId: req.query.storeId,
                 }).exec();
 
-                const GammeList = req.tenancy.getModelByTenant(
+                const GammeList = mongoose.model("gamme", gammeSchema);
+                /* req.tenancy.getModelByTenant(
                   req.dbUse,
                   "gamme",
                   gammeSchema
-                );
+                );*/
                 const Gamme = await GammeList.find({
                   adminId: req.params.adminId,
                   storeId: req.query.storeId,
@@ -340,12 +352,12 @@ router.patch("/:adminId", (req, res, next) => {
 
                 let tab = [];
                 tab = [...docs, ...resto, ...Service, ...List, ...Gamme];
-                const tenant2 = req.tenancy.getModelByTenant(
+                const tenant2 = mongoose.model("inventory", InventorySchema);
+                /* req.tenancy.getModelByTenant(
                   req.dbUse,
                   "inventory",
                   InventorySchema
-                );
-
+                );*/
                 tenant2.findOneAndUpdate(
                   { open: true, storeId: req.query.storeId },
                   {

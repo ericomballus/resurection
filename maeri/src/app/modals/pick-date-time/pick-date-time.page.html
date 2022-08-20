@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="outline" color="light">
+        <ion-icon color="light" slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="display: flex; justify-content: space-between">
+    <div style="flex-grow: 1">
+      <form class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              style="display: none"
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="dp"
+              [(ngModel)]="model"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+            <div class="input-group-append">
+              <ion-button
+                fill="clear"
+                size="small"
+                class="btn btn-outline-secondary calendar"
+                (click)="d.toggle()"
+                type="button"
+                >Date de péremtion <ion-icon name="calendar"></ion-icon
+              ></ion-button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div style="flex-grow: 2; text-align: right; font-weight: bold">
+      <pre>{{model.day}}/{{model.month}}/{{model.year}}</pre>
+    </div>
+  </div>
+
+  <ion-button (click)="valider()" color="success" expand="block"
+    >Valider</ion-button
+  >
+</ion-content>

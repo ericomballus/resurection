@@ -9,11 +9,16 @@ const findEmploye = require("../../middleware/findemploye");
 const QRCode = require("qrcode");
 const deleteEmployes = require("../../utils/removeEmployes");
 router.post("/signup", async (req, res, next) => {
+  console.log(req.body.telephone);
+  console.log(req.body);
+
   User.find({ telephone: req.body.telephone })
     // User.find({ email: req.body.email })
     .exec()
     .then((user) => {
+      console.log(user.length);
       if (user.length >= 1) {
+        console.log("existe deja");
         res.status(500).json({
           message: "Numero de telephone deja utilisé par un autre client",
         });

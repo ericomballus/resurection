@@ -10,11 +10,12 @@ const createProductItem = async (req, obj, id) => {
   console.log(obj);
 
   db = req.dbUse;
-  let a = await req.tenancy.getModelByTenant(
+  let a = mongoose.model("productitems", productItemSchema);
+  /* await req.tenancy.getModelByTenant(
     "maeri",
     "productitems",
     productItemSchema
-  );
+  );*/
   const tenant = a;
   return new Promise((resolve, reject) => {
     // console.log("je 'envoi", data["data"]);
@@ -57,7 +58,8 @@ const createProductItem = async (req, obj, id) => {
 };
 
 const createPack = async (req, data) => {
-  let a = await req.tenancy.getModelByTenant(req.dbUse, "pack", PackSchema);
+  let a = mongoose.model("pack", PackSchema);
+  //await req.tenancy.getModelByTenant(req.dbUse, "pack", PackSchema);
   const tenant = a;
 
   tenant
@@ -89,11 +91,12 @@ const createPack = async (req, data) => {
 };
 
 const createPackItems = async (req, data) => {
-  let a = await req.tenancy.getModelByTenant(
+  let a = mongoose.model("packitems", packItemSchema);
+  /* await req.tenancy.getModelByTenant(
     req.dbUse,
     "packitems",
     packItemSchema
-  );
+  );*/
   const tenant = a;
 
   tenant

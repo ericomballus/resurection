@@ -897,6 +897,7 @@ export class CartPage implements OnInit {
               name: tab[i]['item']['name'],
               item: tab[i]['item'],
               price: tab[i]['price'],
+              senderId: JSON.parse(localStorage.getItem('user'))['_id'],
             };
             if (this.saveRandom.getSetting().sale_Gaz) {
               let storeId = tab[i]['item']['storeId'];

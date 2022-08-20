@@ -1,5 +1,6 @@
 const productItemsSchema = require("../api/models/ProductItem");
 const Pack = require("../api/models/ProductPack");
+const mongoose = require("mongoose");
 module.exports = (req, res, body, next) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -30,11 +31,12 @@ module.exports = (req, res, body, next) => {
       if (body["unitName"]) {
         body["unitNameProduct"] = body["unitName"];
       }
-      let ProductItem = req.tenancy.getModelByTenant(
+      let ProductItem = mongoose.model("productitems", productItemsSchema);
+      /* req.tenancy.getModelByTenant(
         req.dbUse,
         "productitems",
         productItemsSchema
-      );
+      );*/
 
       let prod = await ProductItem.create(obj);
 
@@ -62,7 +64,8 @@ module.exports = (req, res, body, next) => {
         unitNamePack: body.unitName,
       };
       let pack = resultat;
-      let Packs = req.tenancy.getModelByTenant(req.dbUse, "packs", Pack);
+      let Packs = mongoose.model("packs", Pack);
+      // req.tenancy.getModelByTenant(req.dbUse, "packs", Pack);
 
       let packResult = await Packs.create(pack);
       resolve("ok");

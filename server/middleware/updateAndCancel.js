@@ -2,6 +2,8 @@ const productItemsSchema = require("../api/models/ProductItem");
 const packItem = require("../api/models/ProductPackItem");
 const Manufactureitem = require("../api/models/Product-manufactured-item");
 const Maeri = require("../api/models/Maeri_Product");
+const mongoose = require("mongoose");
+
 updateAndcancelerManager = (tenant, req, res, oldCommande) => {
   let orders = oldCommande;
 
@@ -9,11 +11,8 @@ updateAndcancelerManager = (tenant, req, res, oldCommande) => {
     com.products.forEach(async (elt) => {
       if (elt.item.productType == "manufacturedItems") {
         db = req.dbUse;
-        let a = await req.tenancy.getModelByTenant(
-          db,
-          "manufactureditemSchema",
-          Manufactureitem
-        );
+        let a = mongoose.model("manufactureditemSchema", Manufactureitem);
+
         const tenant = a;
         if (elt.item._id) {
           tenant
@@ -53,11 +52,8 @@ updateAndcancelerManager = (tenant, req, res, oldCommande) => {
       }
 
       if (elt.item.productType == "productItems") {
-        let a = await req.tenancy.getModelByTenant(
-          req.dbUse,
-          "productitems",
-          productItemsSchema
-        );
+        let a = mongoose.model("productitems", productItemsSchema);
+
         const tenant = a;
 
         // tenant;

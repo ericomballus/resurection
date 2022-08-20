@@ -1,4 +1,5 @@
 const manufacturedItemSchema = require("../api/models/Product-manufactured-item");
+const mongoose = require("mongoose");
 
 module.exports = (req, res, body, next) => {
   return new Promise(async (resolve, reject) => {
@@ -23,11 +24,15 @@ module.exports = (req, res, body, next) => {
         productId: productId,
       };
 
-      let manufacturedItem = req.tenancy.getModelByTenant(
-        req.dbUse,
+      let manufacturedItem = mongoose.model(
         "manufactureditemSchema",
         manufacturedItemSchema
       );
+      /* req.tenancy.getModelByTenant(
+        req.dbUse,
+        "manufactureditemSchema",
+        manufacturedItemSchema
+      );*/
 
       let prod = await manufacturedItem.create(obj);
       resolve(prod);
